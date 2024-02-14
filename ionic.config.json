@@ -1,0 +1,7 @@
+{
+  "name": "wedding-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
