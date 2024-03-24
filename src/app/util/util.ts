@@ -4,12 +4,26 @@ const homeIcon = faHome;
 const blogIcon = faBlog;
 const calenderIcon = faCalendarDays;
 
+const availableLoaders: any = {
+    dots: 'dots',
+    lines: 'lines',
+    smallLines: 'lines-small',
+    sharpLines: 'lines-sharp',
+    smallSharpLines: 'lines-sharp-small',
+    bubbles: 'bubbles',
+    circles: 'circles',
+    circular: 'circular',
+    crescent: 'crescent'
+}
+
+export const APP_LOADER = availableLoaders.dots;
+
 export const tabItems = {
     displayed: [
         {
             "id": 1,
             "title": "Home",
-            "route": "home",
+            "route": "",
             "isActive": false,
             "icon": homeIcon
         },

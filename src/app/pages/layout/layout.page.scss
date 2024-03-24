@@ -1,3 +1,5 @@
 .active {
-    @apply text-blue-500 border-b-2 border-blue-500
+    // @apply text-blue-500 border-b-2 border-blue-500;
+
+    @apply bg-wr-500 text-white shadow-md rounded-md px-2;
 }

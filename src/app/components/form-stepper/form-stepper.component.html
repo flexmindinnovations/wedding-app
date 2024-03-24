@@ -1,0 +1,24 @@
+<div class="stepper-container w-full md:lg:max-w-[90%] md:lg:h-28 flex items-center justify-center px-3 py-2">
+  @if (isDataAvailable) {
+  <ol class="flex items-center w-full mb-0 md:lgmb-4" [ngClass]="isDataAvailable ? 'transition-opacity delay-200 opacity-100' : 'opacity-0'">
+    @for (item of registrationSteps; track item.id) {
+    <li (click)="handleOnStepperClick(item)" [attr.title]="item.title" class="select-none cursor-pointer"
+      [ngClass]="item.id !== registrationSteps.length ? item?.isCompleted ? colorVarients.line.complete : item?.isActive ? colorVarients.line.active : colorVarients.line.inactive : item?.isActive ? themesParams.line.active : themesParams.line.inactive">
+      <div
+        [ngClass]="item?.isCompleted ? colorVarients.bg.complete : item?.isActive ? colorVarients.bg.active : colorVarients.bg.inactive">
+        <div class="info-container flex-col relative flex items-center justify-center">
+          <ion-icon [name]="item.isCompleted ? 'checkmark-outline' : item.icon" />
+          <div class="title">
+            <p class="select-none hidden md:lg:block">
+              {{item.title}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </li>
+    }
+  </ol>
+  } @else {
+  <ion-spinner class="h-12 w-12" [name]="loaderType"></ion-spinner>
+  }
+</div>

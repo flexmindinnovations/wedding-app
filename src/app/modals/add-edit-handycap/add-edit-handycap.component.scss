@@ -1,0 +1,15 @@
+::ng-deep .handycap-modal::part(content) {
+    min-width: 40%;
+    // min-height: 90%;
+    position: relative;
+
+    --height: auto;
+    border-radius: 6px;
+}
+
+::ng-deep ion-modal>.ion-page {
+    position: relative;
+    contain: layout style;
+    height: 100%;
+    transition: height 0.3s ease-in-out;
+}

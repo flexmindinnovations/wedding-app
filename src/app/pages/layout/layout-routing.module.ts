@@ -9,12 +9,23 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
+        matcher: url => {
+          const token = localStorage.getItem('token');
+          if (token) {
+            return url.length ? { consumed: [] } : { consumed: url };
+          }
+          return null
+        },
+        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
       {
-        path: 'home',
+        matcher: url => {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            return url.length ? { consumed: [] } : { consumed: url };
+          }
+          return null
+        },
         loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
       },
       {
@@ -28,6 +39,10 @@ const routes: Routes = [
       {
         path: 'about',
         loadChildren: () => import('../about/about.module').then(m => m.AboutPageModule)
+      },
+      {
+        path: 'contact',
+        loadChildren: () => import('../contact/contact.module').then(m => m.ContactPageModule)
       },
       {
         path: 'profile',

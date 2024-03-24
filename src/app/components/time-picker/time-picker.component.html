@@ -1,0 +1,25 @@
+<div class="w-full bg-transparent dark:bg-gray-700 grid grid-cols-3 gap-1">
+  @if (hoursData && minutesData && ampm) {
+  <div class="hour flex-grow w-full flex items-center">
+    <select name="hours" [id]="timePickerHourId" (change)="handleSelectionChange($event, 'hour')"
+      class="bg-gray-50 dark:bg-gray-700 flex-grow w-full outline-none text-sm border-gray-200 rounded-md appearance-none">
+      @for (item of hoursData; track $index) {
+      <option [selected]="item.value === hour" class="text-sm" [value]="item.value">{{item?.title}}</option>
+      }
+    </select>
+    <!-- <span>:</span> -->
+  </div>
+  <select name="minutes" [id]="timePickerMinuteId" (change)="handleSelectionChange($event, 'minutes')"
+    class="bg-gray-50 dark:bg-gray-700 w-full outline-none text-sm border-gray-200 rounded-md appearance-none">
+    @for (item of minutesData; track $index) {
+    <option [selected]="item.value === minute" class="text-sm" [value]="item.value">{{item?.title}}</option>
+    }
+  </select>
+  <select name="ampm" [id]="timePickerAMPMId" (change)="handleSelectionChange($event, 'ampm')"
+    class="bg-gray-50 dark:bg-gray-700 w-full outline-none text-sm border-gray-200 rounded-md appearance-none">
+    @for (item of amPmData; track $index) {
+    <option [selected]="item.value === ampm" class="text-sm" [value]="item.value">{{item?.title}}</option>
+    }
+  </select>
+  }
+</div>

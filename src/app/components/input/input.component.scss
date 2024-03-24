@@ -1,0 +1,57 @@
+:host(app-input) {
+    @apply bg-transparent border-none p-1 dark:bg-gray-700;
+}
+
+::ng-deep ion-input {
+    .native-wrapper {
+        input {
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+::ng-deep ion-text-area {
+    .native-wrapper {
+        textarea {
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+textarea {
+    resize: none;
+}
+
+::ng-deep [type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    @apply text-base select-none w-full;
+
+    &:focus {
+        @apply shadow-none outline-none ring-0 border-none;
+    }
+}
+
+::ng-deep .datepicker-picker.inline-block {
+    @apply bg-white dark:bg-gray-700;
+
+    .datepicker-main {
+        .datepicker-view.flex {
+            @apply w-auto;
+        }
+    }
+}
+
+input[type="date"] {
+    &::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+}

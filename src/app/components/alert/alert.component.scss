@@ -1,0 +1,30 @@
+::ng-deep #alertContainer {
+    @apply min-w-80;
+    position: absolute;
+    top: 15%;
+    z-index: 100;
+}
+
+.success {
+    @apply text-green-900 border-t-4 border-green-400 bg-green-50 dark:text-green-400 dark:bg-gray-900 dark:border-green-900;
+
+    button {
+        @apply bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-900 dark:text-green-400 dark:hover:bg-gray-700;
+    }
+}
+
+.error {
+    @apply text-red-900 border-t-4 border-red-400 bg-red-50 dark:text-red-400 dark:bg-gray-900 dark:border-red-900;
+
+    button {
+        @apply bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-900 dark:text-red-400 dark:hover:bg-gray-700;
+    }
+}
+
+.warning {
+    @apply text-yellow-900 border-t-4 border-yellow-400 bg-yellow-50 dark:text-yellow-400 dark:bg-gray-900 dark:border-yellow-900;
+
+    button {
+        @apply bg-yellow-50 text-yellow-500 rounded-lg focus:ring-2 focus:ring-yellow-400 p-1.5 hover:bg-yellow-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-900 dark:text-yellow-400 dark:hover:bg-gray-700;
+    }
+}

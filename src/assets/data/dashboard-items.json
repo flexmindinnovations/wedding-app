@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "title": "Total Customers",
+        "count": 0,
+        "isLink": true,
+        "hasRoute": true,
+        "route": "customers",
+        "icon": "share-outline"
+    },
+    {
+        "id": 2,
+        "title": "Active Customers",
+        "count": 0
+    },
+    {
+        "id": 3,
+        "title": "Total Branches",
+        "count": 0,
+        "isLink": true,
+        "hasRoute": true,
+        "route": "branch",
+        "icon": "share-outline"
+    },
+    {
+        "id": 4,
+        "title": "Active Branches",
+        "count": 0
+    }
+]

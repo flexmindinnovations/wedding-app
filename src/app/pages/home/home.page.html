@@ -7,7 +7,33 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">home</ion-title>
+      <ion-title size="large">Home</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div class="content">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="intro col-span-2 grid grid-cols-2">
+        <div class="left overflow-x-hidden relative">
+          <!-- <div class="py-12 animate-marquee whitespace-nowrap">
+            <span class="mx-4 text-4xl">Marquee Item 1</span>
+            <span class="mx-4 text-4xl">Marquee Item 2</span>
+            <span class="mx-4 text-4xl">Marquee Item 3</span>
+            <span class="mx-4 text-4xl">Marquee Item 4</span>
+            <span class="mx-4 text-4xl">Marquee Item 5</span>
+          </div> -->
+
+          <div class="absolute top-0 py-12 animate-marquee whitespace-nowrap">
+            <p class="mx-4 text-4xl">Marquee Item 1</p>
+            <p class="mx-4 text-4xl">Marquee Item 2</p>
+            <p class="mx-4 text-4xl">Marquee Item 3</p>
+            <p class="mx-4 text-4xl">Marquee Item 4</p>
+            <p class="mx-4 text-4xl">Marquee Item 5</p>
+          </div>
+        </div>
+        <div class="right">
+          <video src="/assets/videos/intro.mp4" muted autoplay width="400px" height="300px"></video>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

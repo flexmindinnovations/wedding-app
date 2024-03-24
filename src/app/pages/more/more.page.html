@@ -1,13 +1,26 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>more</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button icon="caret-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Susangam</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">more</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list [inset]="true" lines="inset">
+    @for (item of listItems; track $index) {
+    <ion-item (click)="handleItemClick(item)">
+      <ion-icon slot="start" [name]="item?.icon"></ion-icon> <ion-label>{{item?.title}}</ion-label>
+    </ion-item>
+    }
+  </ion-list>
+
+  <ion-list [inset]="true" lines="none">
+    <ion-item>
+      <ion-note class="w-full text-center">
+        Copyright&nbsp;&copy;&nbsp;{{getCurrentYear()}}. All rights are reserved.
+      </ion-note>
+    </ion-item>
+  </ion-list>
 </ion-content>

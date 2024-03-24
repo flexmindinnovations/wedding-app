@@ -32,11 +32,16 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@ionic/angular": "^7.0.0",
+    "@types/uuid": "^9.0.8",
     "ionicons": "^7.0.0",
+    "moment": "^2.30.1",
     "ngx-device-detector": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.2"
+    "uuid": "^9.0.1",
+    "zone.js": "~0.14.2",
+    "flowbite": "^2.2.1",
+    "flowbite-datepicker": "^1.2.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.0",

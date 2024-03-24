@@ -4,6 +4,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { MENU_ITEMS, tabItems } from 'src/app/util/util';
 import { faGem } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-layout',
@@ -13,6 +14,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class LayoutPage implements OnInit {
   tabs = tabItems.displayed;
   router = inject(Router);
+  navController = inject(NavController);
   cdr = inject(ChangeDetectorRef);
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
@@ -21,6 +23,7 @@ export class LayoutPage implements OnInit {
 
   menuItems = MENU_ITEMS;
   loginIcon: IconProp = faGem;
+  isLoginPage: boolean = false;
 
   ngOnInit() {
     this.setActivePageOnRefresh();
@@ -46,7 +49,8 @@ export class LayoutPage implements OnInit {
 
   navigateToPage(item: any) {
     this.setActivePageById(item.id);
-    this.router.navigateByUrl('app/' + item.route);
+    this.navController.navigateForward(item.route);
+    this.isLoginPage = false;
   }
 
   setActivePageByRoute(param: string) {
@@ -59,7 +63,8 @@ export class LayoutPage implements OnInit {
   }
 
   navigateToLogin() {
-    this.router.navigateByUrl('/login');
+    this.navController.navigateForward('login');
+    this.isLoginPage = true;
   }
 
   setActivePageById(pageId: number) {
@@ -74,6 +79,11 @@ export class LayoutPage implements OnInit {
   redirectToHome() {
     this.resetActiveClass();
     this.router.navigateByUrl('/');
+  }
+
+  handleLogoLoadError(event: any) {
+    console.log('event: ', event);
+    
   }
 
   resetActiveClass() {

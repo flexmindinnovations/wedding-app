@@ -1,0 +1,44 @@
+<div class="personal-info-container lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
+  <form [formGroup]="formGroup" class="w-full flex-grow">
+    <div class="grid gap-4 lg:gap-5 grid-cols-1 md:lg:grid-cols-4">
+      <app-input label="Father Name" type="text" class="flex-grow-1" [control]="formGroupControl['fatherName']"
+        formControlName="fatherName" [required]="true" />
+
+      <app-input label="Father Occupation" class="flex-grow-1" type="text"
+        [control]="formGroupControl['fatherOccupation']" formControlName="fatherOccupation" />
+
+      <app-input label="Mother Name" class="flex-grow-1" type="text" [control]="formGroupControl['motherName']"
+        formControlName="motherName" />
+
+      <app-input label="Mother Occupation" class="flex-grow-1" type="text"
+        [control]="formGroupControl['motherOccupation']" formControlName="motherOccupation" />
+
+      <app-input label="No Of Brothers" class="flex-grow-1" type="number" [control]="formGroupControl['noOfBrothers']"
+        formControlName="noOfBrothers" />
+
+
+      <app-input label="No Of Married Brothers" type="number" [control]="formGroupControl['noOfMarriedBrothers']"
+        formControlName="noOfMarriedBrothers" />
+
+      <app-input label="No Of Sisters" type="number" [control]="formGroupControl['noOfSisters']"
+        formControlName="noOfSisters" />
+
+      <app-input label="No Of Married Sisters" type="number" class="" [control]="formGroupControl['noOfMarriedSisters']"
+        formControlName="noOfMarriedSisters" />
+
+      @if (castListOptions.length) {
+      <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId"
+        [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"
+        [options]="castListOptions" />
+      }
+
+      @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+        <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
+          [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
+          (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions" />
+        }
+
+    </div>
+
+  </form>
+</div>

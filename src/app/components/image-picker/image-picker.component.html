@@ -1,0 +1,19 @@
+<div
+  class="image-picker bg-gray-100 dark:bg-gray-800 p-3 w-full md:lg:min-w-96 rounded-md flex items-center justify-between gap-2">
+  @if (showPreview) {
+  <div class="preview h-36 max-w-36 w-[50%] rounded-md flex items-start justify-center gap-4 bg-gray-200">
+    <img [src]="src" class="h-full rounded-md shadow-md min-w-32 w-full object-center" [alt]="label" />
+  </div>
+  }
+  <div class="dark:bg-gray-800 flex flex-col items-start justify-start px-1 flex-grow gap-4">
+    <label class="flex items-start justify-center flex-col gap-2 dark:bg-gray-800">
+      <!-- <span>{{label}}</span> -->
+    </label>
+    <input #filePicker type="file" [name]="label" (change)="handleImageChange($event)" accept="image/*"
+      class="hidden" />
+    <div class="action flex flex-col items-start justify-start gap-2">
+      <mt-button title="Choose file" [size]="'sm'" [textOnly]="true" (action)="filePicker.click()" />
+    </div>
+    <span class="text-xs opacity-60 font-thin italic">{{imagePath}}</span>
+  </div>
+</div>

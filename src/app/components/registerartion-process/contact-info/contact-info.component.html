@@ -1,0 +1,42 @@
+<div class="conact-info-container md:lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
+  <form [formGroup]="formGroup" class="w-full flex-grow">
+    <div class="flex flex-col lg:grid gap-3 md:gap-4 lg:gap-5 grid-cols-1 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4">
+      <!-- <app-dropdown label="Contact Of" class="" [control]="formGroupControl['contactOf']" formControlName="contactOf"
+        [options]="[]" /> -->
+
+      <app-input label="Contact Number" [controlValue]="formGroup.get('contactNumber')?.value" class="flex-grow"
+        type="number" [control]="formGroupControl['contactNumber']" formControlName="contactNumber" />
+
+      <app-input label="WhatsApp Number" class="flex-grow" type="number"
+        [controlValue]="formGroup.get('whatsUpNumber')?.value" [control]="formGroupControl['whatsUpNumber']"
+        formControlName="whatsUpNumber" />
+
+        <app-input label="Email" class="flex-grow" type="email"
+        [controlValue]="formGroup.get('emailId')?.value" [control]="formGroupControl['emailId']"
+        formControlName="emailId" />
+
+      @if (countryList.length) {
+      <app-dropdown label="Country" class="" [control]="formGroupControl['countryId']"
+        [controlValue]="formGroup.get('countryId')?.value"
+        (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
+        [options]="countryList" />
+      }
+
+      @if (stateList.length) {
+      <app-dropdown label="State" class="" [control]="formGroupControl['stateId']" formControlName="stateId"
+        [controlValue]="formGroup.get('stateId')?.value"
+        (onSelectionChange)="onSelectionChange($event, 'stateId')" [options]="stateList" />
+      }
+
+      @if (cityList.length) {
+      <app-dropdown label="City" class="" [control]="formGroupControl['cityId']" formControlName="cityId"
+        [controlValue]="formGroup.get('cityId')?.value" (onSelectionChange)="onSelectionChange($event, 'cityId')"
+        [options]="cityList" />
+      }
+
+      <app-input label="Home Address"  class="col-span-3 lg:col-span-4" type="text"
+        [control]="formGroupControl['homeAddress']" [controlValue]="formGroup.get('homeAddress')?.value"
+        formControlName="homeAddress" [isMultiline]=true />
+    </div>
+  </form>
+</div>

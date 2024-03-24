@@ -1,0 +1,34 @@
+<button [id]="buttonId" [attr.data-dropdown-toggle]="menuId" (click)="openUserMenu()"
+  class="flex text-sm bg-gray-100 w-8 h-8 p-2 hover:bg-gray-300 rounded-full md:me-0 focus:ring-4 focus:ring-gray-400 dark:focus:ring-gray-600"
+  type="button">
+  <span class="sr-only">Open user menu</span>
+  <img [src]="iconSrc" (error)="handleImageLoadError($event)" alt="user photo">
+</button>
+
+<div [id]="menuId"
+  class="z-[10000000] bg-white divide-y divide-gray-100 rounded-lg shadow w-60 dark:bg-gray-700 dark:divide-gray-600"
+  [ngClass]="isOpen ? 'block absolute' : 'hidden'"
+  >
+  <div class="px-4 py-3 flex items-start gap-1 flex-col text-sm text-gray-900 dark:text-white">
+    <div>
+      @if(profileInfo) {
+      <p class="text-lg">{{profileInfo?.firstName}} {{profileInfo?.middleName}}</p>
+      } @else {
+      <p>Could not load user</p>
+      }
+    </div>
+    <div class="font-extralight opacity-80 truncate select-none text-sm">{{profileInfo?.emailId}}</div>
+  </div>
+  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUserAvatarButton">
+    <li>
+      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+    </li>
+    <li>
+
+    </li>
+  </ul>
+  <div (click)="handleUserSignOut()" class="py-2 cursor-pointer">
+    <a
+      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+  </div>
+</div>
