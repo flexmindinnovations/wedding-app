@@ -1,39 +1,62 @@
-<ion-header [translucent]="true" class="ion-no-border">
+<ion-header *ngIf="isMobile" [translucent]="true" class="md:lg:2xl:hidden ion-no-border">
   <ion-toolbar>
     <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header *ngIf="isMobile" class="md:lg:2xl:hidden" collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Home</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div class="content">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="intro col-span-2 grid grid-cols-2">
-        <div class="left overflow-x-hidden relative">
-          <!-- <div class="py-12 animate-marquee whitespace-nowrap">
-            <span class="mx-4 text-4xl">Marquee Item 1</span>
-            <span class="mx-4 text-4xl">Marquee Item 2</span>
-            <span class="mx-4 text-4xl">Marquee Item 3</span>
-            <span class="mx-4 text-4xl">Marquee Item 4</span>
-            <span class="mx-4 text-4xl">Marquee Item 5</span>
-          </div> -->
-
-          <div class="absolute top-0 py-12 animate-marquee whitespace-nowrap">
-            <p class="mx-4 text-4xl">Marquee Item 1</p>
-            <p class="mx-4 text-4xl">Marquee Item 2</p>
-            <p class="mx-4 text-4xl">Marquee Item 3</p>
-            <p class="mx-4 text-4xl">Marquee Item 4</p>
-            <p class="mx-4 text-4xl">Marquee Item 5</p>
-          </div>
-        </div>
-        <div class="right">
-          <video src="/assets/videos/intro.mp4" muted autoplay width="400px" height="300px"></video>
+  <div class="content h-full w-full">
+    <section class="video">
+      <video autoplay muted loop>
+        <source src="/assets/videos/intro.mp4" type="video/mp4">
+      </video>
+      <div class="overlay">
+        <div class="marquee-text">
+          <p>हृदयात् हृदयं यावत्</p>
+          <p>दिल का दिल से</p>
+          <p>Heart to Heart</p>
+          <p>دل سے دل كا</p>
+          <p>हृदय देखि हृदय सम्म</p>
+          <p>হৃদয় থেকে হৃদয়</p>
+          <p>இதயம் இதயத்திற்கு</p>
+          <p>హృదయం నుంచి హృదయం</p>
+          <p>ಹೃದಯದಿಂದ ಹೃದಯಕ್ಕೆ</p>
+          <p>ഹൃദയം ഹൃദയത്തിനേക്ക്</p>
+          <p>હૃદયથી હૃદયને</p>
+          <p>ਦਿਲ ਤੋਂ ਦਿਲ</p>
+          <p>ହୃଦୟ ହୃଦୟ</p>
+          <p>تائين دل كاندل</p>
+          <p>القلب إلى القلبمن</p>
         </div>
       </div>
-    </div>
+    </section>
+    <section>
+      <div class="search-box border-b border-b-gray-100">
+        <search-box class="w-full" />
+      </div>
+    </section>
+
+    <section class="meet-members col-span-2 py-5  w-full bg-gray-100">
+      <div class="header">
+        <h1>
+          Meet Our Members
+        </h1>
+        <p class="ion-padding">
+          The largest Matrimonial Website with 1 lakhs+ of Manglik profiles. Find Matches. Join FREE!
+        </p>
+      </div>
+      <div class="member-list-container md:lg:p-5 flex items-start justify-center flex-wrap gap-5 relative">
+        @if (profileList.length) {
+        <carousel class="w-full" [slides]="profileList" />
+        }
+      </div>
+    </section>
+
+
   </div>
 </ion-content>

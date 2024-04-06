@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, Self, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { SharedService } from 'src/app/services/shared.service';
 import { COLOR_SCHEME, inputThemeVariables } from 'src/app/util/theme';
@@ -12,9 +12,9 @@ declare var Datepicker: any;
 })
 
 export class InputComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
-
   @Input() label: string = '';
-  @Input() type: 'text' | 'password' | 'email' | 'number' | 'date' = 'text';
+  @Input() labelColor: string = 'text-white';
+  @Input() type: InputType = 'text';
   @Input() formControlName: string = '';
   @Input() control!: FormControl | any;
   @Input() fill: 'solid' | 'outline' = 'outline';
@@ -24,7 +24,9 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
   @Input() controlValue: string = '';
   @Input() presentaion: 'date' | 'time' | 'date-time' | undefined;
   @Output() inputValue: EventEmitter<string> = new EventEmitter();
+  @Output() handleEnterKeyEvent: EventEmitter<any> = new EventEmitter();
   value: any;
+  id = uuidv4();
   pickerFormat: string = 'DD MM YYYY';
   hasValue: boolean = false;
   cdr = inject(ChangeDetectorRef);
@@ -59,38 +61,23 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
   }
 
   ngAfterViewInit(): void {
-    const control: any = this.control;
-    const controlName = (Object.keys(control.parent.controls).find(key => control.parent.controls[key] === control));
-    if (this.value || this.controlValue) this.formatInputData(controlName);
+    this.formatInputData();
     this.cdr.detectChanges();
-    const dtEl: any = document.getElementById(this.datePickerId);
-    if (this.type === 'date') this.initDatePicker(dtEl);
-
     this.inputSubscription = this.sharedService.resetControl().subscribe((reset: any) => {
-      console.log('reset: ', reset);
-      
       this.inputValue.emit('');
       this.control.reset();
-      // this.control.patchValue('');
-      // this.control.setValue('');
       this.hasValue = false;
-
       setTimeout(() => {
         this.inputSubscription.unsubscribe();
       }, 2000)
     })
   }
 
-  formatInputData(controlName: any) {
+  formatInputData() {
     this.hasValue = true;
     if (this.type === 'date') {
-      this.value = this.value ? new Date(this.value).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+      this.value = this.value ? new Date(this.value) : new Date();
     }
-  }
-
-  initDatePicker(element: any) {
-    const today = new Date();
-    element.value = this.value ? new Date(this.value).toISOString().split('T')[0] : today.toISOString().split('T')[0];
   }
 
   setCurrentClass() {
@@ -125,9 +112,15 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
     this.type = this.showPassword ? 'text' : 'password';
   }
 
+  onEnterKeyPressed() {
+    this.handleEnterKeyEvent.emit(true);
+  }
+
   ngOnDestroy(): void {
     this.value = '';
     this.controlValue = '';
     this.inputSubscription.unsubscribe();
   }
 }
+
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'date' | 'time';

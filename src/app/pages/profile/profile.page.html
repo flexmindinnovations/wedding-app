@@ -1,13 +1,52 @@
-<ion-header [translucent]="true" class="ion-no-border">
+<ion-header *ngIf="isMobile" [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="content profile-page h-full w-full flex flex-col items-start justify-center">
+    <div class="profile-info-container">
+      <h1>
+        Profile Information
+      </h1>
+
+      <div class="card flex justify-content-center">
+        <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
+          (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'"></p-toggleButton>
+      </div>
+    </div>
+    <div class="form-container flex-grow w-full">
+      <p-splitter [panelSizes]="[18, 85]" [minSizes]="[15, 80]" class="flex-grow h-full p-4">
+        <ng-template pTemplate>
+          <div class="w-full h-full">
+            <p-listbox (ngModelChange)="handleListItemChange($event)" class="h-full shadow-none"
+              [options]="profileSteps" [(ngModel)]="selectedStep" optionLabel="name"></p-listbox>
+          </div>
+        </ng-template>
+        <ng-template pTemplate>
+          <div class="p-4 w-full h-full">
+            @switch(selectedStep.code) {
+            @case ('PI') {
+            <personal-info [isReadOnly]="isReadOnly" (isCancelled)="handleCancelAction($event)"
+              (isCompleted)="handleCompleteAction($event)" />
+            }
+            @case ('FI') {
+            <family-info />
+            }
+            @case ('CI') {
+            <contact-info />
+            }
+            @case ('OI') {
+            <other-info />
+            }
+            @case ('PH') {
+            <photos />
+            }
+            }
+          </div>
+        </ng-template>
+      </p-splitter>
+    </div>
+  </div>
 </ion-content>

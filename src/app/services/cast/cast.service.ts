@@ -11,6 +11,11 @@ export class CastService {
   endpoint = environment.endpoint + '/api/Cast';
   http = inject(HttpConfigService);
 
+  getReligionList(): Observable<any> {
+    const endpoint = `${environment.endpoint}/api/Religion/getReligionList`;
+    return this.http.get(endpoint);
+  }
+
   getCastList(): Observable<any> {
     return this.http.get(`${this.endpoint}/GetCastList`);
   }

@@ -1,6 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { MessageService } from 'primeng/api';
+import { delay, of } from 'rxjs';
+import { AuthService } from 'src/app/services/auth//auth.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { COLOR_SCHEME, inputThemeVariables } from 'src/app/util/theme';
 
 @Component({
@@ -13,7 +18,9 @@ export class LoginPage implements OnInit {
   formGroup!: FormGroup;
   fb = inject(FormBuilder);
   router = inject(NavController);
-
+  deviceService = inject(DeviceDetectorService);
+  authService = inject(AuthService);
+  sharedService = inject(SharedService);
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
   colorScheme: any = COLOR_SCHEME;
@@ -22,12 +29,26 @@ export class LoginPage implements OnInit {
   passwordToggleIcon = 'eye-outline';
   invalidControl = ' border-red-700 bg-red-200';
   validControl = ' border-gray-300 bg-gray-50';
+  userName = '';
+  userPassword = '';
+  host = inject(ElementRef);
+  isMobile: boolean = false;
 
-  constructor() { }
+  constructor(
+    private messageService: MessageService
+  ) { }
 
   ngOnInit() {
     this.setCurrentClass();
     this.initFormGroup();
+
+    const observer = new ResizeObserver((rect) => {
+      rect.forEach((box) => {
+        this.isMobile = this.deviceService.isMobile();
+      })
+    });
+
+    observer.observe(this.host.nativeElement);
   }
 
   setCurrentClass() {
@@ -38,8 +59,8 @@ export class LoginPage implements OnInit {
 
   initFormGroup() {
     this.formGroup = this.fb.group({
-      userName: ['', [Validators.required]],
-      userPassword: ['', [Validators.required, Validators.minLength(3)]]
+      customerUserName: ['', [Validators.required]],
+      customerPassword: ['', [Validators.required, Validators.minLength(3)]]
     })
   }
 
@@ -49,15 +70,98 @@ export class LoginPage implements OnInit {
 
   handleSignIn() {
     const formVal = this.formGroup.value;
+    this.isLoading = true;
+    this.formGroup.disable();
+    this.authService.loginCustomer(formVal).subscribe({
+      next: (response) => {
+        if (response) {
+          const data = response?.customerResponse;
+          const { token, customerId, profileStatus } = data;
+          localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
+          localStorage.setItem('token', token);
+          this.sharedService.customerData.set('profileStatusData', data);
+          this.showAlert('Successfully Logged in', 'success');
+          of(true)
+            .pipe(
+              delay(500)
+            ).subscribe(() => {
+              this.isLoading = false;
+              this.isLoggedIn = true;
+              of(true).
+                pipe(
+                  delay(2000)
+                ).subscribe(() => {
+                  this.messageService.clear();
+                  this.router.navigateForward('');
+                  this.sharedService.isLoggedInCompleted.next(true);
+                });
+            });
+        }
+      },
+      error: (error: any) => {
+        const err = error?.error;
+        const errorMessage = err.message ? err?.message : 'Something went wrong';
+        this.showAlert(errorMessage, 'error');
+        of(true)
+          .pipe(
+            delay(1000)
+          ).subscribe(() => {
+            this.isLoading = false;
+            this.isLoggedIn = false;
+            this.formGroup.enable();
+            of(true).
+              pipe(
+                delay(2000)
+              ).subscribe(() => {
+                this.messageService.clear();
+              });
+          });
+      }
+    })
   }
 
-  handlePasswordVisiblity() {
-    this.showPassword = !this.showPassword;
-    this.passwordToggleIcon = this.passwordToggleIcon === 'eye-outline' ? 'eye-off-outline' : 'eye-outline';
+  showAlert(message: string, type: string) {
+    this.messageService.add({ severity: type, summary: type === 'success' ? 'Success' : 'Error', detail: message });
+  }
+
+  handlePasswordVisiblity(event?: any) {
+    this.showPassword = event;
+  }
+
+  validateForm() {
+    if (this.formGroup.get('userName')?.touched && this.formGroup.get('userName')?.invalid) {
+      // notify("Please enter username", "warning", 500);
+    } else if (this.formGroup.get('userPassword')?.touched && this.formGroup.get('userName')?.invalid) {
+      // notify("Please enter password", "warning", 500);
+    }
   }
 
   handleRegister() {
     this.router.navigateForward('register');
+  }
+
+  getSeverity() {
+    let severity = '';
+    if (this.isLoading) {
+      severity = 'secondary';
+    } else if (this.isLoggedIn) {
+      severity = 'success';
+    } else {
+      severity = '';
+    }
+    return severity;
+  }
+
+  getIcon() {
+    let icon = '';
+    if (this.isLoading) {
+      icon = 'pi pi-spin pi-spinner';
+    } else if (this.isLoggedIn) {
+      icon = 'pi pi-check';
+    } else {
+      icon = 'pi pi-lock';
+    }
+    return icon;
   }
 
 }

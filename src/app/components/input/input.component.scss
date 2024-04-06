@@ -1,57 +1,50 @@
 :host(app-input) {
-    @apply bg-transparent border-none p-1 dark:bg-gray-700;
+    @apply bg-transparent border-none w-full p-0 dark:bg-dark-950;
 }
 
-::ng-deep ion-input {
-    .native-wrapper {
-        input {
-            &:focus {
-                box-shadow: none;
-            }
-        }
-    }
+::ng-deep label {
+    @apply dark:bg-dark-950 dark:text-white;
 }
 
-::ng-deep ion-text-area {
-    .native-wrapper {
-        textarea {
-            &:focus {
-                box-shadow: none;
-            }
-        }
-    }
+input[type=number].numberInput::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+     margin: 0; 
 }
 
-textarea {
-    resize: none;
+label {
+    @apply text-sm mb-2 mx-1 text-dark-700 dark:bg-dark-950 dark:text-white;
 }
 
-::ng-deep [type="date"] {
+.p-inputtext {
+    @apply p-2.5 dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    @apply text-base select-none w-full;
-
-    &:focus {
-        @apply shadow-none outline-none ring-0 border-none;
-    }
+    margin: 0;
 }
 
-::ng-deep .datepicker-picker.inline-block {
-    @apply bg-white dark:bg-gray-700;
-
-    .datepicker-main {
-        .datepicker-view.flex {
-            @apply w-auto;
-        }
-    }
+input[type=number]{
+    -moz-appearance: textfield;
 }
 
-input[type="date"] {
-    &::-webkit-calendar-picker-indicator {
-        display: none;
-    }
+.p-inputwrapper {
+	@apply w-full p-0 border-none;
+
+	::ng-deep .p-password {
+		@apply w-full;
+
+		.p-inputtext {
+			@apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+		}
+	}
+
+    ::ng-deep .p-calendar {
+		@apply w-full;
+
+		.p-inputtext {
+			@apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+		}
+	}
 }

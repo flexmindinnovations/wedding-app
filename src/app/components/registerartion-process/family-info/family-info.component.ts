@@ -19,6 +19,8 @@ export class FamilyInfoComponent implements OnInit {
   formGroup!: FormGroup;
   @ViewChild('dropdownInput') dropdownInput: any;
   @Input() customerData: any = null;
+  @Output() isCancelled = new EventEmitter();
+  @Output() isCompleted = new EventEmitter();
   isEditMode: boolean = false;
   familyData: any;
   alert = inject(AlertService);
@@ -85,38 +87,11 @@ export class FamilyInfoComponent implements OnInit {
     return this.formGroup.controls as { [key: string]: FormControl };
   }
 
-  handleClickOnPrevious(src: string) {
-    const formVal = this.formGroup.value;
-    // if (this.formGroup.valid) {
-    //   this.customerRegistrationService.saveFamilyInformation(formVal).subscribe({
-    //     next: (data: any) => {
-    //       if (data) {
-    //         this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
-    const props: FormStep = {
-      source: src,
-      data: formVal,
-      formId: 2,
-      action: ActionValue.previous,
-      isCompleted: this.formGroup.valid
-    }
-    this.familyInfoData.emit(props);
-    //       }
-    //     },
-    //     error: (error: any) => {
-    //       console.log('error: ', error);
-    //       this.alert.setAlertMessage('Personal Info: ' + error?.statusText, AlertType.error);
-    //     }
-    //   })
-    // } else {
-    //   const invalidFields = findInvalidControlsRecursive(this.formGroup);
-    //   console.log('invalidFields: ', invalidFields);
-    //   invalidFields.forEach((item: any) => {
-    //     this.alert.setAlertMessage(item, AlertType.error);
-    //   })
-    // }
+  handleCancelAction() {
+    this.isCancelled.emit(true);
   }
 
-  handleClickOnNext(src: string) {
+  handleClickOnNext(src: string = 'family') {
     const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId };
     this.cdref.detectChanges();
     if (this.formGroup.valid) {
@@ -157,6 +132,7 @@ export class FamilyInfoComponent implements OnInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
         }
       },
@@ -194,6 +170,7 @@ export class FamilyInfoComponent implements OnInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
         }
       },

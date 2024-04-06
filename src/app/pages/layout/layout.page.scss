@@ -1,5 +1,39 @@
-.active {
-    // @apply text-blue-500 border-b-2 border-blue-500;
+// .active {
+//     // @apply text-blue-500 border-b-2 border-blue-500;
 
-    @apply bg-wr-500 text-white shadow-md rounded-md px-2;
+//     @apply bg-wr-500 text-white shadow-md rounded-md px-2;
+// }
+
+::ng-deep ion-button::part(native) {
+    @apply bg-transparent text-dark-900 shadow-none;
 }
+
+::ng-deep ion-button {
+    &:not(.active):hover {
+        @apply rounded-md;
+        --background-hover-opacity: 1;
+    }
+}
+
+::ng-deep .active {
+    @apply bg-wr-500 rounded-md shadow-md;
+
+    &:hover {
+        @apply bg-wr-500;
+    }
+}
+::ng-deep .active::part(native) {
+    @apply text-white;
+}
+
+// ::ng-deep .p-avatar-image {
+//     @apply w-10 h-10;
+// }
+
+::ng-deep .p-menubar-end {
+    @apply flex items-center justify-center;
+}
+
+::ng-deep .p-element.p-submenu-header {
+    @apply p-0;
+} 

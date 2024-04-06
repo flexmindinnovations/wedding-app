@@ -8,12 +8,14 @@ import { BlogPageRoutingModule } from './blog-routing.module';
 
 import { BlogPage } from './blog.page';
 import { SharedModule } from 'src/app/shared.module';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    QuillModule.forRoot(),
     BlogPageRoutingModule,
     SharedModule,
   ],

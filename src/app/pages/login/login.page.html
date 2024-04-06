@@ -1,4 +1,4 @@
-<ion-header [translucent]="true" class="block md:lg:hidden ion-no-border">
+<ion-header *ngIf="isMobile" [translucent]="true" class="block md:lg:hidden ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button icon="arrow-back-outline"></ion-back-button>
@@ -7,102 +7,53 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <ion-header [translucent]="true" collapse="condense">
+  <p-messages class="absolute top-10 right-10 z-10"></p-messages>
+  <ion-header *ngIf="isMobile" [translucent]="true" collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Login</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div
-    class="content h-full w-full flex items-center justify-center
-  md:lg:bg-gradient-to-bl
-  md:lg:from-red-300 md:lg:via-br-300 md:lg:to-bo-200 md:lg:backdrop-blur-2xl ion-padding">
+  <div class="content h-full w-full flex items-center justify-center
+ md:lg:backdrop-blur-2xl ion-padding">
     <div
       class="login-box md:lg:bg-white dark:bg-gray-700 md:lg:shadow-lg rounded-md min-w-80 h-full backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
-      <div class="login-container md:lg:rounded-s-md ion-padding flex-grow md:lg:bg-gradient-to-tl md:lg:from-br-200 md:lg:to-red-200 md:lg:min-w-[40%] md:lg:flex-grow-0">
+      <div
+        class="login-container md:lg:rounded-s-md ion-padding flex-grow bg-transparent md:lg:min-w-[28%] md:lg:flex-grow-0">
         <div class="header my-5 w-full flex flex-col items-start justify-start gap-10">
           <!-- <img src="/assets/icon/logo.png" class="h-12 w-auto" /> -->
           <div class="text">
-            <h1 class="text-4xl font-extrabold text-left select-none
+            <h1 class="text-4xl !font-extrabold text-left select-none
           text-transparent bg-clip-text bg-gradient-to-r from-br-700 via-red-700 to-bo-700 dark:text-gray-400
           ">Welcome back,</h1>
             <p
-              class="font-thin text-sm indent-1 block w-full select-none text-transparent bg-clip-text bg-gradient-to-r from-br-700 via-red-700 via-50% to-bo-700 dark:bg-origin-content dark:text-gray-400">
+              class="font-normal text-sm indent-1 block w-full select-none text-transparent bg-clip-text bg-gradient-to-r from-br-700 via-red-700 via-50% to-bo-700 dark:bg-origin-content dark:text-gray-400">
               Enter your credentials to continue</p>
           </div>
         </div>
 
-        <div class="form-container">
-          <form [formGroup]="formGroup" class="flex flex-col items-center justify-center gap-5"
+        <div class="form-container h-[60%] flex flex-col gap-4 items-center justify-center">
+          <form [formGroup]="formGroup" class="flex flex-col items-center justify-center gap-5 w-full"
             (keydown.enter)="handleSignIn()">
-            <div class="userName w-full">
-              <div
-                class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-gray-700">
-                <label class="mb-2" for="username">Username
-                </label>
-                <input type="text" formControlName="userName" name="userName" id="userName" class="p-2.5 h-12"
-                  [ngClass]="formGroupControl['userName'].touched && formGroupControl['userName'].invalid ? colorVarients + invalidControl : colorVarients + validControl"
-                  [value]="formGroupControl['userName'].value" placeholder="Enter username" required>
-                @if (formGroupControl['userName'].touched && formGroupControl['userName'].invalid) {
-                <div class="validation-errors px-2 bg-transparent dark:bg-gray-700 mt-[2px]">
-                  @if (formGroupControl['userName'].hasError('required')) { <span
-                    class="text-xs font-light dark:bg-gray-700 text-red-700">Username is
-                    required</span> }
-                  @if (formGroupControl['userName'].hasError('min') || formGroupControl['userName'].hasError('max')) {
-                  <span class="text-xs dark:bg-gray-700 font-light text-red-700">Please
-                    provide valid input</span> }
-                  @if (formGroupControl['userName'].hasError('email')) { <span
-                    class="text-xs dark:bg-gray-700 font-light text-red-700">Invalid
-                    email</span> }
-                  @if (formGroupControl['userName'].hasError('pattern')) { <span
-                    class="text-xs font-light text-red-700">Invalid
-                    Mobile number</span> }
-                </div>
-                }
-              </div>
-            </div>
 
-            <div class="userPassword w-full relative">
-              <div
-                class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-gray-700">
-                <label class="mb-2" for="username">Password
-                </label>
-                <input [type]="showPassword ? 'text' : 'password'" name="userPassword" id="userPassword"
-                  class="p-2.5 h-12" formControlName="userPassword"
-                  [ngClass]="formGroup.get('userPassword')?.touched && formGroup.get('userPassword')?.invalid ? colorVarients + invalidControl : colorVarients + validControl"
-                  [value]="formGroup.get('userPassword')?.value" placeholder="Enter Password" required>
-                @if (formGroup.get('userPassword')?.value) {
-                <button type="button" (click)="handlePasswordVisiblity()" id="togglePassword"
-                  class="absolute top-11 right-4 focus:outline-none -ml-8">
-                  <ion-icon [name]="passwordToggleIcon"></ion-icon>
-                </button>
-                }
-                @if (formGroup.get('userPassword')?.touched && formGroup.get('userPassword')?.invalid) {
-                <div class="validation-errors px-2 bg-transparent dark:bg-gray-700 mt-[2px]">
-                  @if (formGroup.get('userPassword')?.hasError('required')) { <span
-                    class="text-xs font-light dark:bg-gray-700 text-red-700">Password is
-                    required</span> }
-                  @if (formGroup.get('userPassword')?.hasError('min') || formGroup.get('userPassword')?.hasError('max'))
-                  { <span class="text-xs dark:bg-gray-700 font-light text-red-700">Please
-                    provide valid input</span> }
-                </div>
-                }
-              </div>
-            </div>
+            <app-input label="Mobile Number" type="number" labelColor="text-gray-700"
+              [controlValue]="formGroup.get('customerUserName')?.value" [control]="formGroupControl['customerUserName']"
+              formControlName="customerUserName" class="flex-auto" />
 
-            <div class="actions flex flex-col gap-10 items-center w-full justify-center p-3">
-              <button type="button"
-                class="submitButton text-center select-none h-12 font-bold p-3 flex items-center justify-center rounded-md shadow-md hover:bg-br-700 bg-br-500 disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed w-full"
-                (click)="handleSignIn()" [disabled]="formGroup.invalid || isLoading">
-                <p class="text-white disabled:text-gray-400 disabled:dark:text-gray-500">{{isLoading ? 'Signing In ...'
-                  :
-                  'Sign In'}}</p>
-              </button>
+            <app-input label="Password" type="password" labelColor="text-gray-700"
+              [controlValue]="formGroup.get('customerPassword')?.value" [control]="formGroupControl['customerPassword']"
+              formControlName="customerPassword" class="flex-auto" />
 
-              <p class="font-thin text-sm">New to Susangam? <span class="text-blue-500 cursor-pointer"
-                  (click)="handleRegister()">Create new
-                  account.</span></p>
-            </div>
           </form>
+
+          <div class="action w-full">
+            <p-button [disabled]="formGroup.invalid || isLoading"
+              [ngClass]="isLoggedIn ? 'cursor-not-allowed pointer-events-none' : ''"
+              [label]="isLoading ? 'Signing In...' : isLoggedIn ? 'Successfully Signed In' : 'Sign In'" [severity]="getSeverity()" [icon]="getIcon()"
+              iconPos="right" (onClick)="handleSignIn()"></p-button>
+          </div>
+          <p class="text-wr-500 mt-5 cursor-pointer border-b border-b-transparent select-none hover:border-b hover:border-b-wr-500 text-xs"
+            (click)="handleRegister()">New here? Sign up
+            here for an account.</p>
         </div>
       </div>
       <div

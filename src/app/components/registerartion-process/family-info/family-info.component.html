@@ -1,19 +1,19 @@
 <div class="personal-info-container lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
   <form [formGroup]="formGroup" class="w-full flex-grow">
     <div class="grid gap-4 lg:gap-5 grid-cols-1 md:lg:grid-cols-4">
-      <app-input label="Father Name" type="text" class="flex-grow-1" [control]="formGroupControl['fatherName']"
+      <app-input label="Father Name" type="text" class="flex-grow" [control]="formGroupControl['fatherName']"
         formControlName="fatherName" [required]="true" />
 
-      <app-input label="Father Occupation" class="flex-grow-1" type="text"
+      <app-input label="Father Occupation" class="flex-grow" type="text"
         [control]="formGroupControl['fatherOccupation']" formControlName="fatherOccupation" />
 
-      <app-input label="Mother Name" class="flex-grow-1" type="text" [control]="formGroupControl['motherName']"
+      <app-input label="Mother Name" class="flex-grow" type="text" [control]="formGroupControl['motherName']"
         formControlName="motherName" />
 
-      <app-input label="Mother Occupation" class="flex-grow-1" type="text"
+      <app-input label="Mother Occupation" class="flex-grow" type="text"
         [control]="formGroupControl['motherOccupation']" formControlName="motherOccupation" />
 
-      <app-input label="No Of Brothers" class="flex-grow-1" type="number" [control]="formGroupControl['noOfBrothers']"
+      <app-input label="No Of Brothers" class="flex-grow" type="number" [control]="formGroupControl['noOfBrothers']"
         formControlName="noOfBrothers" />
 
 
@@ -29,16 +29,19 @@
       @if (castListOptions.length) {
       <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId"
         [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"
-        [options]="castListOptions" />
+        [options]="castListOptions" class="flex-auto" />
       }
 
       @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-        <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
-          [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
-          (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions" />
-        }
+      <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
+        [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
+        (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions" class="flex-auto" />
+      }
 
     </div>
-
   </form>
+  <div class="action w-full flex items-center justify-end gap-5 py-2 px-4 border-t border-t-gray-100">
+    <mt-button title="Cancel" [isCancel]="true" (action)="handleCancelAction()" />
+    <mt-button title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+  </div>
 </div>

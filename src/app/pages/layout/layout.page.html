@@ -1,4 +1,5 @@
 <div class="mobile-layout md:hidden lg:hidden xl:hidden 2xl:hidden">
+  <p-messages></p-messages>
   <ion-tabs>
     <ion-tab-bar slot="bottom">
       @for (item of tabs; track item.id) {
@@ -12,7 +13,7 @@
 </div>
 
 <div *ngIf="isDesktopMode" class="desktop-layout hidden md:flex lg:flex flex-col min-h-screen">
-  <ion-header [translucent]="true" class="max-h-16 ion-no-border">
+  <!-- <ion-header [translucent]="true" class="max-h-16 ion-no-border">
     <ion-toolbar>
       <ion-title slot="start" class="cursor-pointer pl-12 " (click)="redirectToHome()">
         <img src="/assets/icon/logo.png" class="h-14 w-14" alt="Logo" (error)="handleLogoLoadError($event)" />
@@ -26,16 +27,61 @@
           </p>
         </ion-button>
         }
+        @if (!isLoggedIn) {
         <ion-button (click)="navigateToLogin()">
           <p class="m-0 flex items-center justify-start gap-3">
             <fa-icon [icon]="loginIcon" />
             <span>Login</span>
           </p>
         </ion-button>
+        } @else {
+        <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
+        <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label="Show"></button>
+        }
       </ion-buttons>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
+  <p-menubar>
+    <ng-template pTemplate="start">
+      <img src="/assets/icon/logo.png" class="h-14 w-14" alt="Logo" (error)="handleLogoLoadError($event)" />
+    </ng-template>
+    <ng-template pTemplate="end">
+      @for (item of menuItems; track item.id) {
+      <ion-button class="px-2" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
+        <p class="m-0 flex items-center justify-start gap-2">
+          <fa-icon [icon]="item.icon" />
+          <span>{{item.title}}</span>
+        </p>
+      </ion-button>
+      }
+      @if (!isLoggedIn) {
+      <ion-button (click)="navigateToLogin()">
+        <p class="m-0 flex items-center justify-start gap-2">
+          <fa-icon [icon]="loginIcon" />
+          <span>Login</span>
+        </p>
+      </ion-button>
+      } @else {
+      <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
+      <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
+        shape="circle"></p-avatar>
+      }
+    </ng-template>
+  </p-menubar>
   <ion-content class="flex-grow bg-slate-300">
     <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
   </ion-content>
 </div>
+
+<ng-container>
+  <p-dialog [(visible)]="showLogoutModal" [modal]="true" [closable]="false" [style]="{ width: '30vw' }" [draggable]="false"
+    [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-3">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>
+        Logging out, please waite...
+      </p>
+    </div>
+  </p-dialog>
+</ng-container>

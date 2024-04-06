@@ -11,10 +11,43 @@
   <ion-list [inset]="true" lines="inset">
     @for (item of listItems; track $index) {
     <ion-item (click)="handleItemClick(item)">
-      <ion-icon slot="start" [name]="item?.icon"></ion-icon> <ion-label>{{item?.title}}</ion-label>
+      <ion-icon slot="start" [name]="item?.icon"></ion-icon>
+      <ion-label>{{item?.title}}</ion-label>
+    </ion-item>
+    }
+    @if (!isLoggedIn) {
+    <ion-item (click)="handleItemClick({
+        title: 'Login',
+        icon: 'log-in-outline',
+        route: 'login'
+      })">
+      <ion-icon slot="start" name="log-in-outline"></ion-icon>
+      <ion-label>Login</ion-label>
+    </ion-item>
+    } @else {
+    <ion-item lines="full" (click)="handleItemClick({
+        title: 'Profile',
+        icon: 'person-outline',
+        route: 'profile'
+      })">
+      <ion-icon slot="start" name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
     </ion-item>
     }
   </ion-list>
+
+  @if (isLoggedIn) {
+  <ion-list [inset]="true" lines="none">
+    <ion-item (click)="handleItemClick({
+      title: 'Logout',
+      icon: 'log-out-outline',
+      route: 'logout'
+    })">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      <ion-label>Logout</ion-label>
+    </ion-item>
+  </ion-list>
+  }
 
   <ion-list [inset]="true" lines="none">
     <ion-item>

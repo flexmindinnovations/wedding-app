@@ -8,6 +8,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
 import { SharedModule } from 'src/app/shared.module';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { SharedModule } from 'src/app/shared.module';
     SharedModule,
     LoginPageRoutingModule
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
+  providers: [MessageService]
 })
 export class LoginPageModule {}

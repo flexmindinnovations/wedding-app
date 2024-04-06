@@ -21,6 +21,8 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   isEditMode: boolean = false;
   contactData: any;
   @Output() contactInfoData = new EventEmitter();
+  @Output() isCancelled = new EventEmitter();
+  @Output() isCompleted = new EventEmitter();
 
   isCountryListAvailable = false;
   isStateListAvailable = false;
@@ -82,20 +84,12 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
     return this.formGroup.controls as { [key: string]: FormControl };
   }
 
-  handleClickOnPrevious(src: string) {
-    const formVal = this.formGroup.value;
-    const props: FormStep = {
-      source: src,
-      data: formVal,
-      formId: 3,
-      action: ActionValue.previous,
-      // isCompleted: this.formGroup.valid
-      isCompleted: true
-    }
-    this.contactInfoData.emit(props);
+
+  handleCancelAction() {
+    this.isCancelled.emit(true);
   }
 
-  handleClickOnNext(src: string) {
+  handleClickOnNext(src: string = 'contact') {
     const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId, contactInfoId: 0 };
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
@@ -135,6 +129,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
         }
       },
@@ -174,6 +169,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
         }
       },

@@ -13,7 +13,11 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('../app/pages/layout/layout.module').then(m => m.LayoutPageModule)
+  },  {
+    path: 'logout',
+    loadChildren: () => import('./pages/logout/logout.module').then( m => m.LogoutPageModule)
   },
+
   // {
   //   path: '**',
   //   loadChildren: () => import('../app/pages/not-found/not-found.module').then(m => m.NotFoundPageModule)

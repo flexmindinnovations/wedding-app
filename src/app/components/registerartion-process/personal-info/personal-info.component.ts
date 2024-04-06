@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { forkJoin, map } from 'rxjs';
@@ -18,7 +18,7 @@ import { APP_LOADER } from 'src/app/util/util';
   templateUrl: './personal-info.component.html',
   styleUrls: ['./personal-info.component.scss'],
 })
-export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
+export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterViewInit {
 
   formGroup!: FormGroup;
   genderOptions: any = [];
@@ -31,6 +31,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
   foodPreferencesListOptions: any = [];
   @ViewChild('dropdownInput') dropdownInput: any;
   @Input() customerData: any = null;
+  @Input() isReadOnly: any;
   showPatrika: boolean = false;
   spectacles: boolean = false;
   isEditMode: boolean = false;
@@ -40,6 +41,8 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() nextFormStep = new EventEmitter();
   @Output() personalInfoData = new EventEmitter();
   @Output() isDataAvailableEvent = new EventEmitter();
+  @Output() isCancelled = new EventEmitter();
+  @Output() isCompleted = new EventEmitter();
   educationService = inject(EducationService);
   heightService = inject(HeightService);
   alert = inject(AlertService);
@@ -87,11 +90,18 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges | any): void {
-    this.getMasterData();
-    if (changes?.customerData?.currentValue) this.personalData = JSON.parse(JSON.stringify(this.customerData['personalInfoModel']));
+    if (changes?.customerData?.currentValue) {
+      this.personalData = JSON.parse(JSON.stringify(this.customerData['personalInfoModel']));
+    }
+  }
+
+  ngDoCheck(): void {
+    if (this.isReadOnly === true) this.formGroup?.disable();
+    else this.formGroup?.enable();
   }
 
   ngAfterViewInit(): void {
+    this.getMasterData();
     this.isEditMode = this.customerData ? this.customerData['isPersonInfoFill'] : false;
     this.cdref.detectChanges();
   }
@@ -102,7 +112,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
       middleName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       locationOfBirth: ['', [Validators.required]],
-      shakeDate: !['', [Validators.required]],
+      shakeDate: ![new Date(), [Validators.required]],
       gender: ['', [Validators.required]],
       heightId: ['', [Validators.required]],
       eduationId: ['', [Validators.required]],
@@ -118,8 +128,13 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
       foodPreferencesId: !['', ![Validators.required]]
     });
 
+    if (this.isReadOnly) this.formGroup?.disable();
+    else this.formGroup?.enable();
+
     this.formGroup.valueChanges.subscribe((changes) => {
       this.sharedService.isFormValid.next(this.formGroup.valid);
+      this.isCancelled.emit(false);
+      this.isCompleted.emit(false);
     })
   }
 
@@ -152,7 +167,11 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
     return this.formGroup.controls as { [key: string]: FormControl };
   }
 
-  handleClickOnNext(src: string) {
+  handleCancelAction() {
+    this.isCancelled.emit(true);
+  }
+
+  handleClickOnNext(src: string = 'personal') {
     const formVal = this.formGroup.value;
     formVal['specializationId'] = this.specializationId ? this.specializationId : null;
     formVal['bloodGroupId'] = formVal['bloodGroupId'] ? formVal['bloodGroupId'] : null;
@@ -199,6 +218,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.personalInfoData.emit(props);
           this.nextFormStep.emit('family');
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
@@ -235,6 +255,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.personalInfoData.emit(props);
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.nextFormStep.emit('family');

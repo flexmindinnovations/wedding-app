@@ -9,7 +9,23 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      backgroundImage: {
+        'bg-blog': "url('/assets/icon/blog.png')",
+      },
       colors: {
+        dark: {
+          '50': '#f5f6f6',
+          '100': '#e4e7e9',
+          '200': '#ccd1d5',
+          '300': '#a9b1b7',
+          '400': '#7e8892',
+          '500': '#626c78',
+          '600': '#545b66',
+          '700': '#484e56',
+          '800': '#40444a',
+          '900': '#393b40',
+          '950': '#222428',
+        },
         wr: {
           '50': '#fef3f2',
           '100': '#fce9e7',
@@ -63,13 +79,15 @@ module.exports = {
           '950': '#0e2b5d',
         }
       },
+      fontFamily: {
+      },
       animation: {
-        marquee: 'marquee 10s linear infinite',
+        marquee: 'marquee 5s linear infinite',
       },
       keyframes: {
         marquee: {
-          '0%': { transform: 'translatey(0%)' },
-          '100%': { transform: 'translateY(-100%)' },
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
         }
       },
     },
@@ -77,6 +95,5 @@ module.exports = {
   plugins: [require('@tailwindcss/aspect-ratio')
     , require('@tailwindcss/forms')
     , require('@tailwindcss/typography')
-    , require('flowbite/plugin')
   ],
 };

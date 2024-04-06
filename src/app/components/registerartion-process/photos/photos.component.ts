@@ -20,6 +20,8 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
   isEditMode: boolean = false;
   imagesData: any;
   @Output() photosData = new EventEmitter();
+  @Output() isCancelled = new EventEmitter();
+  @Output() isCompleted = new EventEmitter();
   customerRegistrationService = inject(CustomerRegistrationService);
   alert = inject(AlertService);
   cdref = inject(ChangeDetectorRef);
@@ -94,7 +96,11 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
     this.photosData.emit(props);
   }
 
-  handleClickOnNext(src: string) {
+  handleCancelAction() {
+    this.isCancelled.emit(true);
+  }
+
+  handleClickOnNext(src: string = 'photos') {
     if (this.isEditMode) this.updateCustomerInfo(src);
     else this.saveNewCustomerInfo(src);
   }
@@ -126,6 +132,7 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
             },
             next: null
           }
+          this.isCompleted.emit(true);
           this.photosData.emit(props);
           this.router.navigateByUrl('customers');
           this.customerRegistrationService.setRequestStatus(true, 'add');
@@ -164,6 +171,7 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
             },
             next: null
           }
+          this.isCompleted.emit(true);
           this.photosData.emit(props);
           this.router.navigateByUrl('customers');
           this.customerRegistrationService.setRequestStatus(true, 'update');

@@ -1,4 +1,21 @@
-button {
-    // border: 1px solid #4b5563;
-    @apply border-solid border-gray-600 dark:border dark:bg-gray-700 dark:border-opacity-60 dark:border-gray-600;
+::ng-deep .p-dropdown {
+    @apply w-full text-sm leading-4  dark:bg-dark-950 dark:text-white;
+
+    .p-dropdown-items-wrapper {
+        @apply dark:bg-dark-950 dark:text-white;
+
+        .p-dropdown-item {
+            @apply dark:text-white/50;
+        }
+
+        .p-focus {
+            @apply text-gray-700 dark:text-white dark:bg-gray-700;
+            color: #4b5563;
+            background: #e5e7eb;
+        }
+    }
+}
+
+label {
+    @apply text-sm mb-2 mx-1 text-dark-700 dark:bg-dark-950 dark:text-white;
 }

@@ -1,0 +1,40 @@
+<div class="min-h-12 p-3 md:p-4 lg:xl:p-10 bg-white dark:bg-dark-950 flex flex-col gap-0 lg:xl:gap-2">
+  <div class="header">
+    <h1 class="text-gray-700 dark:text-white text-center">
+      Most Trusted Matrimonial Service in India
+    </h1>
+  </div>
+
+  <div class="criteria py-4">
+    <form [formGroup]="formGroup" class="grid grid-cols-2 gap-3 md:lg:flex md:lg:items-end md:lg:justify-center">
+      <app-input label="Age From" type="number" labelColor="text-gray-700"
+        [controlValue]="formGroup.get('ageFrom')?.value" [control]="formGroupControl['ageFrom']"
+        formControlName="ageFrom" class="flex-auto" />
+
+      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('ageTo')?.value"
+        [control]="formGroupControl['ageTo']" formControlName="ageTo"  class="flex-auto" />
+
+      <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+        (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
+        [options]="genderOptions"  class="flex-auto" />
+
+      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['religion']"
+        formControlName="religion" (onSelectionChange)="onSelectionChange($event, 'religionId')"
+        [options]="religionList" class="flex-auto" />
+
+      @if (isReligionSelected && castList.length) {
+      <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+        (onSelectionChange)="onSelectionChange($event, 'castId')" [options]="castList"  class="flex-auto"/>
+      }
+
+
+      <app-dropdown label="Mother Tongue" [control]="formGroupControl['motherTongue']" formControlName="motherTongue"
+        (onSelectionChange)="onSelectionChange($event, 'motherTongueId')" [options]="motherToungeList"  class="flex-auto" />
+
+      <div class="action col-span-2 flex-grow-0 lg:xl:col-span-1 h-full mt-auto flex flex-none w-full lg:xl:w-24">
+        <mt-button size="lg" class="w-full" title="Search" icon="search" (action)="handleOnSearch()" />
+      </div>
+
+    </form>
+  </div>
+</div>

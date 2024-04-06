@@ -21,6 +21,8 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   isEditMode: boolean = false;
   otherData: any;
   @Output() otherInfoData = new EventEmitter();
+  @Output() isCancelled = new EventEmitter();
+  @Output() isCompleted = new EventEmitter();
 
   alert = inject(AlertService);
   customerRegistrationService = inject(CustomerRegistrationService);
@@ -73,7 +75,11 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
     this.otherInfoData.emit(props);
   }
 
-  handleClickOnNext(src: string) {
+  handleCancelAction() {
+    this.isCancelled.emit(true);
+  }
+
+  handleClickOnNext(src: string = 'other') {
     const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId, otherInfoId: 0 };
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
@@ -113,6 +119,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
         }
       },
@@ -152,6 +159,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
         }
       },

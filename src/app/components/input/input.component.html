@@ -1,30 +1,31 @@
-<div class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-gray-700">
-  <label class="mb-2" for="username">{{label}}
+<div class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-dark-950 text-sm">
+  <label for="{{id}}">{{label}}
   </label>
   @if(isMultiline){
-  <textarea [title]="label" [name]="label" [id]="label" (blur)="onTouched()" (keyup)="handleOnChange($event)" rows="3"
-    class="p-2.5" [value]="controlValue" [ngClass]="colorVarients" [placeholder]="placeholder"
-    resize="false"></textarea>
-  } @else if(type === 'date') {
-  <div class="picker-container relative w-full"
+  <textarea [title]="label" [disabled]="control.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" rows="3"
+    class="p-2.5 w-full h-auto" [value]="controlValue" [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''"  [placeholder]="placeholder"
+    [autoResize]="true"></textarea>
+
+  } @else if(type === 'date' && presentaion==="date") {
+  <p-calendar [(ngModel)]="value" [disabled]="control.disabled" [id]="id" (ngModelChange)="handleOnChange($event, 'dt')" appendTo="body"
+    [showButtonBar]="true" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
+  } @else if(type === "time" && presentaion==="time"){
+  <time-picker [disabled]="control.disabled" class="w-full" [value]="value" (selectedTime)="handleOnChange($event, 'time')" />
+  } @else if(type === "number"){
+  <input [type]="type" [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" pInputText
+    pKeyFilter="int" class="w-full !text-sm" [disabled]="control.disabled"
     [ngClass]="control.touched && control.invalid ? colorVarients + invalidControl : colorVarients + validControl"
-    (click)="datePicker.showPicker()">
-    <input type="date" #datePicker [id]="datePickerId" (focus)="'showPicker'"
-      (change)="handleOnChange($event, 'dt');" />
-    <div class="absolute inset-y-0 start-[90%] flex items-center pointer-events-none" (click)="datePicker.showPicker()">
-      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor" viewBox="0 0 20 20">
-        <path
-          d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-      </svg>
-    </div>
-  </div>
-  } @else if(type === "text" && presentaion==="time"){
-  <time-picker class="w-full" [value]="value" (selectedTime)="handleOnChange($event, 'time')" />
+    [value]="value" [placeholder]="placeholder" [required]="isRequired" />
+  } @else if(type === "password"){
+  <p-password [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="isRequired" [toggleMask]="true"></p-password>
   } @else {
-  <input [type]="type" [name]="label" [id]="label" (blur)="onTouched()" (keyup)="handleOnChange($event)" class="p-2.5 h-12"
-    [ngClass]="control.touched && control.invalid ? colorVarients + invalidControl : colorVarients + validControl"
-    [value]="value" [placeholder]="placeholder" [required]="isRequired">
+  <input [type]="type" [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="isRequired" />
   @if (formControlName === 'userPassword' && hasValue) {
   <button type="button" (click)="handlePasswordVisiblity()" id="togglePassword"
     class=" absolute top-10 right-4 focus:outline-none -ml-8">
@@ -41,8 +42,6 @@
     @if (type === 'email' && control.hasError('email')) { <span
       class="text-xs dark:bg-gray-700 font-light text-red-700">Invalid
       email</span> }
-    @if (type === 'number' && control.hasError('pattern')) { <span class="text-xs font-light text-red-700">Invalid
-      Mobile number</span> }
   </div>
   }
   }

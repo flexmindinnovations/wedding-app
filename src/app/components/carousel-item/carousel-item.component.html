@@ -1,0 +1,86 @@
+<!-- <div class="w-full p-4">
+  <div class="relative rounded-lg block md:flex items-center bg-white shadow-xl">
+    <div class="relative w-full h-full overflow-hidden rounded-lg
+    min-h-[12rem]">
+      <img class="absolute inset-0 w-full h-full object-fill object-center" [src]="imagePath" [alt]="data?.customerId">
+      <div class="absolute inset-0 w-full rounded-s-lg h-full bg-wr-900 opacity-75"></div>
+      <div
+        class="user-title absolute inset-0 w-full h-full flex items-center justify-center rounded-s-lg fill-current text-white ">
+        <h1 class="text-lg">
+          {{data?.fullName}}
+        </h1>
+      </div>
+    </div>
+    <div
+      class="w-full relative h-[inherit] min-h-[inherit] flex flex-col md:lg:flex-row items-start bg-white  rounded-s-lg">
+
+      <div class="left w-full flex-grow">
+        <div class="p-4 flex items-start justify-between flex-col gap-3">
+          <div class="text-container flex-col w-full h-full flex">
+            <div class="flex flex-col items-start justify-start">
+              <p class="text-label opacity-80 select-none">Full Name</p>
+              <p class="text-data select-none">{{data?.fullName}}</p>
+            </div>
+            <div class="flex flex-col items-start justify-start">
+              <p class="text-label opacity-80 select-none">Address</p>
+              <p class="text-data select-none">{{data?.fullName}}</p>
+            </div>
+          </div>
+          <a class="flex items-baseline mt-3 text-wr-600 hover:text-wr-900 focus:text-wr-900" href="">
+            <span>Learn more about this profile</span>
+            <span class="text-xs ml-1">&#x279c;</span>
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="right w-full rounded-e-md flex items-center m-auto justify-between min-h-12 md:lg:items-start md:lg:justify-end md:lg:gap-5 max-w-[85%] border-tborder-t-gray-100">
+        <p>#{{data?.customerId}}</p>
+        <ion-icon class="cursor-pointer" (click)="handleIsFavourite()"
+          [name]="isFavourite ? 'star' : 'star-outline'"></ion-icon>
+      </div>
+
+    </div>
+  </div>
+
+</div> -->
+
+<div class="w-full p-4 relative h-full">
+  <div class="item-container rounded-md flex flex-col shadow-md">
+    <div class="image-container relative max-h-60 flex-auto rounded-t-md">
+      <img class="w-full h-60 rounded-t-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
+      <div class="absolute inset-0 w-full rounded-t-md max-h-60 h-full
+      bg-wr-700/70 flex items-start justify-end p-4 z-10">
+        <span class="cursor-pointer text-white !text-4xl" (click)="handleIsFavourite()"
+        [ngClass]="isFavourite ? 'pi pi-star-fill' : 'pi pi-star'"></span>
+      </div>
+      <div
+        class="user-title z-20 h-28 absolute top-2/4 left-2/4 transform -translate-x-1/2 -translate-y-1/2 inset-0 w-full flex items-center justify-center rounded-s-lg fill-current text-white ">
+        <h1 class="text-lg">
+          {{data?.fullName}}
+        </h1>
+      </div>
+    </div>
+    <div class="text-container flex-auto flex flex-col gap-2 min-h-12 p-4 border-b border-b-gray-100">
+      <div class="info flex flex-col gap-2">
+        <div class="flex flex-col items-start justify-start">
+          <p class="text-label opacity-80 select-none">Full Name</p>
+          <p class="text-data select-none">{{data?.fullName}}</p>
+        </div>
+        <div class="flex flex-col items-start justify-start">
+          <p class="text-label opacity-80 select-none">Address</p>
+          <p class="text-data select-none">{{data?.fullName}}</p>
+        </div>
+      </div>
+      <div class="link">
+        <p class="flex items-baseline text-xs text-wr-600 hover:text-wr-900 focus:text-wr-900 cursor-pointer">
+          <span>Learn more about this profile</span>
+          <span class="text-xs ml-1">&#x279c;</span>
+        </p>
+      </div>
+    </div>
+    <div class="audit-info flex items-center justify-between py-2 px-5 flex-none h-10 rounded-b-md">
+      <span></span>
+      <p>#{{data?.customerId}}</p>
+    </div>
+  </div>

@@ -4,6 +4,8 @@ const homeIcon = faHome;
 const blogIcon = faBlog;
 const calenderIcon = faCalendarDays;
 
+export const SLIDE_INTERVAL = 4000;
+
 const availableLoaders: any = {
     dots: 'dots',
     lines: 'lines',

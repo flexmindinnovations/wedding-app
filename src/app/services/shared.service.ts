@@ -15,6 +15,7 @@ export class SharedService {
   userPermissions = new Subject();
   http = inject(HttpConfigService);
   httpAssests = inject(HttpClient);
+  customerData = new Map<string, any>();
 
   nextButtonClick: any = new Subject();
   isFormValid = new Subject<boolean>();
@@ -23,8 +24,25 @@ export class SharedService {
 
   controlRest = new Subject();
 
+  isLoggedInCompleted = new Subject();
+  isLoggedOutCompleted = new Subject();
+
+  isReadOnlyMode = new Subject();
+
   handleNextButtonClick() {
     return this.nextButtonClick.asObservable();
+  }
+
+  getIsReadOnlyMode(): Observable<any> {
+    return this.isReadOnlyMode.asObservable();
+  }
+
+
+  getIsLoggedInEvent() {
+    return this.isLoggedInCompleted.asObservable();
+  }
+  getIsLoggedOutEvent() {
+    return this.isLoggedOutCompleted.asObservable();
   }
 
   getIsFormValid() {
@@ -72,6 +90,10 @@ export class SharedService {
 
   getFoodPreferencesList(): Observable<any> {
     return this.http.get(`${this.endpoint}/FoodPreferences/getFoodPreferencesList`);
+  }
+
+  getMotherToungeList(): Observable<any> {
+    return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
   }
 
 

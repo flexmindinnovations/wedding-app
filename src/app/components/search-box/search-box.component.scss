@@ -1,0 +1,7 @@
+h1 {
+    @apply text-base font-semibold md:lg:text-3xl;
+}
+
+::ng-deep app-dropdown {
+    @apply w-full;
+}

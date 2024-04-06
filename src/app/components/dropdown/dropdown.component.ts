@@ -1,16 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, Self, ViewChild, inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { COLOR_SCHEME, dropdownThemeVariables } from 'src/app/util/theme';
-import { Dropdown } from 'flowbite';
 import { v4 as uuidv4 } from 'uuid';
-import { Flowbite } from '../flowbiteconfig';
 
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
 })
-@Flowbite()
 export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAccessor {
 
   cdr = inject(ChangeDetectorRef);
@@ -19,6 +16,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   toggleIcon: any = 'down';
   isOpen: boolean = false;
   @Input() label: string = '';
+  @Input() labelColor: string = 'text-white';
   @Input() formControlName: string = '';
   @Input() control!: FormControl;
   @Input() fill: 'solid' | 'outline' = 'outline';
@@ -31,6 +29,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   value: any;
   @Input() buttonId = uuidv4();
   @Input() menuId: any = uuidv4();
+  id = uuidv4();
 
   searchQuery: string = '';
   filteredOptions: any = [];
@@ -144,27 +143,11 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   handleDropdownToggle() {
-    const targetEl = document.getElementById(this.menuId);
-    const triggerEl = document.getElementById(this.buttonId);
-    this.dropdownIcon = this.isVisible ? 'chevron-up-outline' : 'chevron-down-outline';
-    const instanceOptions = {
-      id: this.menuId,
-      override: false
-    };
-    this.dropdown = new Dropdown(targetEl, triggerEl, this.dropdownOptions, instanceOptions);
-    if (this.isVisible) this.dropdown.hide();
-    else this.dropdown.show();
-    this.menuWidth = this.triggerButton.nativeElement.offsetWidth + 'px';
-    this.isVisible = !this.isVisible;
-    this.dropdownIcon = this.isVisible ? 'chevron-up-outline' : 'chevron-down-outline';
   }
 
   onItemChange(event: any) {
-    this.onSelectionChange.emit(event);
-    this.writeValue(event);
-    this.dropdown.hide();
-    this.isVisible = false;
-    this.dropdownIcon = this.isVisible ? 'chevron-up-outline' : 'chevron-down-outline';
+    this.onSelectionChange.emit(event?.value);
+    this.writeValue(event?.value);
   }
 
   handleSearchQuery(event: any) {

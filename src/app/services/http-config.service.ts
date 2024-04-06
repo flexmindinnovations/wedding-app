@@ -19,7 +19,7 @@ export class HttpConfigService {
         tap((data: any) => { }),
         map((response) => {
           if (response.type === 4 && response.body) {
-            return response.body;
+            return response?.body;
           }
         }),
         catchError((error) => {
@@ -33,7 +33,7 @@ export class HttpConfigService {
       .pipe(
         tap((data: any) => { }),
         map((response) => {
-          if (response.type === 4) {
+          if (response.type === 4 && response?.body) {
             return response.body;
           }
         }),
