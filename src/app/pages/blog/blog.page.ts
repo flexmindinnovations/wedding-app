@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DOMAIN } from 'src/app/util/theme';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-blog',
@@ -16,6 +17,7 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
   blogService = inject(BlogService);
   router = inject(NavController);
   deviceDetector = inject(DeviceDetectorService);
+  sharedService = inject(SharedService);
   blogList: any[] = [];
 
   domain = DOMAIN;
@@ -38,7 +40,7 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
 
   handlePopState() {
     console.log('handlePopState: ');
-    
+
     this.getBlogList();
   }
 
@@ -69,7 +71,8 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleBlogItemClick(blogInfo: any) {
-    this.router.navigateForward(`blog/${blogInfo?.blogId}`);
+    this.sharedService.blogData.next(blogInfo);
+    this.router.navigateForward(`blog/details/${blogInfo?.blogId}`);
   }
 
   ngOnDestroy(): void {

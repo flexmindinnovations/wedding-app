@@ -1,5 +1,5 @@
 <div class="personal-info-container lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
-  <form [formGroup]="formGroup" class="w-full flex-grow">
+  <form [formGroup]="formGroup" class="form-container w-full flex-auto overflow-auto md:lg:p-4">
     <div class="grid gap-4 lg:gap-5 grid-cols-1 md:lg:grid-cols-4">
       <app-input label="Father Name" type="text" class="flex-grow" [control]="formGroupControl['fatherName']"
         formControlName="fatherName" [required]="true" />
@@ -40,7 +40,7 @@
 
     </div>
   </form>
-  <div class="action w-full flex items-center justify-end gap-5 py-2 px-4 border-t border-t-gray-100">
+  <div class="action w-full flex items-center justify-end gap-5 py-2 px-7 border-t border-t-gray-100">
     <mt-button title="Cancel" [isCancel]="true" (action)="handleCancelAction()" />
     <mt-button title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
   </div>

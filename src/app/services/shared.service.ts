@@ -29,6 +29,12 @@ export class SharedService {
 
   isReadOnlyMode = new Subject();
 
+  blogData = new Subject();
+
+  getBlogData(): Observable<any> {
+    return this.blogData.asObservable();
+  }
+
   handleNextButtonClick() {
     return this.nextButtonClick.asObservable();
   }

@@ -33,10 +33,6 @@ const routes: Routes = [
         loadChildren: () => import('../blog/blog.module').then(m => m.BlogPageModule)
       },
       {
-        path: 'blog/:id',
-        loadChildren: () => import('../blog/blog-detail/blog-detail.module').then(m => m.BlogDetailPageModule)
-      },
-      {
         path: 'events',
         loadChildren: () => import('../events/events.module').then(m => m.EventsPageModule)
       },

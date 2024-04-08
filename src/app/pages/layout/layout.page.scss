@@ -26,9 +26,13 @@
     @apply text-white;
 }
 
-// ::ng-deep .p-avatar-image {
-//     @apply w-10 h-10;
-// }
+::ng-deep .p-menubar-start {
+    height: 50px;
+    width: 80px;
+}
+::ng-deep .p-menubar {
+    @apply px-10;
+}
 
 ::ng-deep .p-menubar-end {
     @apply flex items-center justify-center;

@@ -8,6 +8,7 @@ import { BlogDetailPageRoutingModule } from './blog-detail-routing.module';
 
 import { BlogDetailPage } from './blog-detail.page';
 import { QuillModule } from 'ngx-quill';
+import { BlogContentComponent } from './blog-content/blog-content.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { QuillModule } from 'ngx-quill';
     QuillModule.forRoot(),
     BlogDetailPageRoutingModule
   ],
-  declarations: [BlogDetailPage]
+  declarations: [BlogDetailPage, BlogContentComponent]
 })
 export class BlogDetailPageModule {}

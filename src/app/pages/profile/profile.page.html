@@ -1,23 +1,17 @@
-<ion-header *ngIf="isMobile" [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
+<ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
+  <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
+    <ion-title class="font-light">Profile Information</ion-title>
+    <ion-buttons slot="end">
+      <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
+        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="content profile-page h-full w-full flex flex-col items-start justify-center">
-    <div class="profile-info-container">
-      <h1>
-        Profile Information
-      </h1>
-
-      <div class="card flex justify-content-center">
-        <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
-          (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'"></p-toggleButton>
-      </div>
-    </div>
-    <div class="form-container flex-grow w-full">
-      <p-splitter [panelSizes]="[18, 85]" [minSizes]="[15, 80]" class="flex-grow h-full p-4">
+  <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
+    <div class="form-container max-h-full flex-grow w-full">
+      <p-splitter [panelSizes]="[18, 82]" [minSizes]="[15, 80]" class="flex-grow w-full h-full">
         <ng-template pTemplate>
           <div class="w-full h-full">
             <p-listbox (ngModelChange)="handleListItemChange($event)" class="h-full shadow-none"
@@ -25,7 +19,7 @@
           </div>
         </ng-template>
         <ng-template pTemplate>
-          <div class="p-4 w-full h-full">
+          <div class="w-full h-full">
             @switch(selectedStep.code) {
             @case ('PI') {
             <personal-info [isReadOnly]="isReadOnly" (isCancelled)="handleCancelAction($event)"

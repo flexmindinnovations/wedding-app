@@ -1,23 +1,23 @@
 <div class="content flex flex-col md:flex-row lg:flex-row items-start justify-between flex-grow ion-padding overflow-auto">
   <div class="blog-content flex-grow w-full h-full overflow-auto md:border-r md:border-r-gray-100 lg:border-r lg:border-r-gray-100">
-    <quill-view [content]="blogInfo?.blogText" theme="snow"></quill-view>
+    <router-outlet/>
   </div>
 
   <div class="blog-list hidden md:flex lg:flex md:lg:flex-col ion-padding w-[90%] m-auto md:lg:min-w-[25%] md:lg:w-[25%] md:lg:m-0">
-    <div class="h2">
+    <h1 class="header font-light">
       Related Blogs:
-    </div>
-    @if (blogList.length) {
+    </h1>
+    @if (filteredBlogList.length) {
       <div class="blog-list-container">
-        <ul lines="none" class="bg-inherit">
+        <ul lines="none" class="bg-inherit flex flex-col gap-2">
           @for (item of filteredBlogList; track $index) {
-          <li class="bg-white shadow-md cursor-pointer hover:bg-slate-50 rounded-md my-3"
+          <li class="bg-white cursor-pointer delay-200 transition-all hover:bg-slate-50 border-b border-b-gray-100 last:border-b-0"
             (click)="handleBlogItemClick(item)">
-            <div class="blog-brief w-full flex">
-              <div class="image-conatiner h-[inherit] w-20">
-                <img class="object-fill w-full h-full shadow-md rounded-md" [src]="getImagePath(item)" alt="">
+            <div class="blog-brief w-full flex items-center justify-between flex-row-reverse">
+              <div class="image-conatiner h-16 w-16">
+                <img class="object-fill w-full h-full" [src]="getImagePath(item)" alt="">
               </div>
-              <div class="blog-content ion-padding w-full">
+              <div class="blog-content w-full">
                 <div
                   class="header w-full flex flex-col md:flex-row lg:flex-row  items-start justify-between py-2 px-3 gap-2">
                   <h2 class="blog-title !text-sm">
@@ -31,7 +31,9 @@
         </ul>
       </div>
     } @else {
-      <p>Loading...</p>
+      <div class="h-28 w-full p-3 flex items-center justify-start">
+        <i class="pi pi-spin pi-spinner"></i>
+      </div>
     }
 
   </div>

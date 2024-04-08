@@ -2,11 +2,18 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { BlogDetailPage } from './blog-detail.page';
+import { BlogContentComponent } from './blog-content/blog-content.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: BlogDetailPage
+    component: BlogDetailPage,
+    children: [
+      {
+        path: ':id',
+        component: BlogContentComponent
+      },
+    ]
   }
 ];
 
@@ -14,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class BlogDetailPageRoutingModule {}
+export class BlogDetailPageRoutingModule { }

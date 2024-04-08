@@ -1,10 +1,11 @@
 import { style, transition, trigger, useAnimation } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Subscription, map, filter } from 'rxjs';
 import { slideLeft, slideRight } from 'src/app/animations/carousel.animation';
 import { BlogService } from 'src/app/services/blog/blog.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,6 +23,7 @@ export class BlogDetailPage implements OnInit, AfterViewInit, OnDestroy {
 
   route = inject(ActivatedRoute);
   blogService = inject(BlogService);
+  sharedService = inject(SharedService);
   router = inject(Router);
   blogId: any;
   blogInfo: any;
@@ -29,16 +31,14 @@ export class BlogDetailPage implements OnInit, AfterViewInit, OnDestroy {
   filteredBlogList: any[] = [];
 
   subs: Subscription[] = [];
-
   endpoint = environment.endpoint;
 
-  constructor() { }
+  constructor(
+    private zone: NgZone
+  ) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.blogId = params['id'];
-      this.getBlogDetails();
-    });
+
   }
 
   ngAfterViewInit(): void {
@@ -53,7 +53,7 @@ export class BlogDetailPage implements OnInit, AfterViewInit, OnDestroy {
           if (response) {
             this.blogList = response;
             this.filteredBlogList = JSON.parse(JSON.stringify(this.blogList));
-            const blogList = response.filter((item: any) => item.blogId != this.blogId);
+            const blogList = this.blogList?.filter((item: any) => item.blogId != this.blogId);
             this.filteredBlogList = blogList;
           }
         },
@@ -64,25 +64,15 @@ export class BlogDetailPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  getBlogDetails() {
-    this.blogInfo = {};
-    this.blogService.getBlogById(this.blogId).subscribe({
-      next: (response: any) => {
-        if (response) {
-          this.blogInfo = response;
-          const blogList = response.filter((item: any) => item.blogId != this.blogId);
-          this.filteredBlogList = blogList;
-        }
-      },
-      error: (error: any) => {
-        console.log('error: ', error);
-      }
-    })
-  }
-
 
   handleBlogItemClick(blogInfo: any) {
-    this.router.navigate([`blog/${blogInfo?.blogId}`]);
+    this.blogId = blogInfo?.blogId;
+    this.router.navigate([`blog/details/${this.blogId}`]);
+    this.filteredBlogList = [];
+    setTimeout(() => {
+      const blogList = this.blogList.filter((item: any) => item.blogId != this.blogId);
+      this.filteredBlogList = blogList;
+    }, 300)
   }
 
   getImagePath(item: any) {

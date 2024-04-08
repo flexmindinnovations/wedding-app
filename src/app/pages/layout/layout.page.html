@@ -43,7 +43,7 @@
   </ion-header> -->
   <p-menubar>
     <ng-template pTemplate="start">
-      <img src="/assets/icon/logo.png" class="h-14 w-14" alt="Logo" (error)="handleLogoLoadError($event)" />
+      <img (click)="redirectToHome()" src="/assets/icon/logo.png" class="h-full w-full object-fill cursor-pointer" alt="Logo" (error)="handleLogoLoadError($event)" />
     </ng-template>
     <ng-template pTemplate="end">
       @for (item of menuItems; track item.id) {

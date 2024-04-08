@@ -1,0 +1,15 @@
+.form-container {
+    max-height: 100%;
+
+}
+
+.action {
+    min-height: 8%;
+    max-height: 12%;
+    height: 10%;
+}
+
+
+::ng-deep .p-inputtext {
+    @apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+}
