@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import * as AOS from 'aos';
-import { AlertType } from './enums/alert-types';
-import { AlertService } from './services/alert/alert.service';
 import { AUTO_DISMISS_TIMER, COLOR_SCHEME } from './util/theme';
 import { Spinkit } from 'ng-http-loader';
 import { CustomLoaderComponent } from './components/custom-loader/custom-loader.component';
+import { v4 as uuidv4 } from 'uuid';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -12,12 +12,7 @@ import { CustomLoaderComponent } from './components/custom-loader/custom-loader.
 })
 export class AppComponent implements OnInit, AfterViewInit {
   isLightMode = true;
-
-  alertService = inject(AlertService);
-  alertData: any;
-  alertType: AlertType = 1;
-  alertMessage: string = '';
-  showAlert: boolean = false;
+  key = uuidv4();
 
   loaderComponent = CustomLoaderComponent;
 
@@ -28,15 +23,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     AOS.init();
-    this.alertService.getAlertMessage().subscribe((data: any) => {
-      this.showAlert = true;
-      this.alertMessage = data?.message;
-      this.alertType = data?.type;
-      this.alertData = data ? true : false;
-      setTimeout(() => {
-        this.showAlert = false;
-      }, AUTO_DISMISS_TIMER);
-    })
   }
 
   ngAfterViewInit(): void {

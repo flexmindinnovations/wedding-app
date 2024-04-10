@@ -1,7 +1,9 @@
-@if (showAlert) {
-<div class="alert-container" id="alertContainer" [@slideInOut] (@slideInOut.done)="handleHideAlert()">
-  <div class="wrapper">
-    <div class="flex items-center p-4 mb-4 shadow-md min-w-[300px]" [ngClass]="getAlertType()" role="alert">
+<p-toast [key]="key" (onClose)="handleHideAlert()" [showTransformOptions]="'translateY(100%)'"
+  [showTransitionOptions]="'500ms'" [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"
+  [life]="500"
+  [baseZIndex]="5000">
+  <ng-template let-message pTemplate="headless" let-closeFn="closeFn">
+    <section class="flex p-3 gap-3 w-full shadow-lg" [ngClass]="getAlertType()">
       <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
         viewBox="0 0 20 20">
         <path
@@ -17,7 +19,5 @@
           </svg>
         </button>
       </div>
-    </div>
-  </div>
-</div>
-}
+    </section>
+  </ng-template>
