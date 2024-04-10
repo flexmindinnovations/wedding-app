@@ -25,26 +25,28 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
   customerRegistrationService = inject(CustomerRegistrationService);
   alert = inject(AlertService);
   cdref = inject(ChangeDetectorRef);
+  sharedService = inject(SharedService);
   selectedFiles: any[] = [];
-
+  // photoNext: boolean = false;
   thumbnailImage = '';
   photo1 = '';
+  imageName: string = '';
+  photoName: string = '';
   customerId: number = 0;
   router = inject(Router);
+  imgData: any[] = [];
 
-  sharedService = inject(SharedService);
   @Output() nextFormStep = new EventEmitter();
 
   ngOnChanges(changes: SimpleChanges | any): void {
-    if (changes?.customerData?.currentValue) this.imagesData = this.customerData?.photos;
+    // if (changes?.customerData?.currentValue) this.imagesData = this.customerData?.photos;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getCustomerDetails();
+  }
 
   ngAfterViewInit(): void {
-    this.isEditMode = this.customerData && this.customerData['isImagesAdded'];
-    if (this.isEditMode) this.getCustomerImages();
-
     this.sharedService.handleNextButtonClick().subscribe((event: any) => {
       const props: FormStep = {
         source: event,
@@ -66,12 +68,23 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getCustomerImages() {
-    const imageInfoModel = this.customerData && this.customerData['imageInfoModel'];
-    if (imageInfoModel) {
-      this.thumbnailImage = `${environment.endpoint}/${imageInfoModel?.imagePath1}`;
-      this.photo1 = `${environment.endpoint}/${imageInfoModel?.imagePath2}`;
-      this.cdref.detectChanges();
+    const imageInfoModel = this.customerData['imageInfoModel'];
+    this.thumbnailImage = `${environment.endpoint}/${imageInfoModel?.imagePath1}`;
+    const imageNameIndex = imageInfoModel?.imagePath1?.lastIndexOf('/') + 1;
+    this.imageName = imageInfoModel?.imagePath1?.substring(imageNameIndex, imageInfoModel?.imagePath1.length);
+    this.photo1 = `${environment.endpoint}/${imageInfoModel?.imagePath2}`;
+    const photo1NameIndex = imageInfoModel?.imagePath2?.lastIndexOf('/') + 1;
+    this.photoName = imageInfoModel?.imagePath2?.substring(photo1NameIndex, imageInfoModel?.imagePath2.length);
+    if (this.thumbnailImage && this.photo1) {
+      this.imgData.push(this.thumbnailImage);
+      this.imgData.push(this.photo1);
     }
+    // if (this.selectedFiles.length === 2 || this.imageData.length === 2) {
+    //   this.photoNext = true;
+    // }
+    console.log('photos', this.imageName, this.photoName);
+    if (this.imgData.length === 2) this.sharedService.imagesSelected.next(true);
+    this.cdref.detectChanges();
   }
 
   handleSelectedImage(event: any, src: string) {
@@ -83,6 +96,8 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
         this.selectedFiles.push(event.file);
         break;
     }
+    if (this.selectedFiles.length === 2) this.sharedService.imagesSelected.next(true);
+    this.cdref.detectChanges();
   }
 
   handleClickOnPrevious(src: string) {
@@ -101,13 +116,14 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   handleClickOnNext(src: string = 'photos') {
+    this.cdref.detectChanges();
     if (this.isEditMode) this.updateCustomerInfo(src);
     else this.saveNewCustomerInfo(src);
   }
 
 
   saveNewCustomerInfo(src: string): void {
-    const customerId = this.customerData?.customerId || 0;
+    const customerId: any = this.completedStep?.data?.customerId;
     const formData: FormData = new FormData();
     formData.append('customerId', customerId);
     this.selectedFiles.forEach((file: any) => {
@@ -180,6 +196,25 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
       error: (error: any) => {
         console.log('error: ', error);
         this.alert.setAlertMessage('Photos: ' + error?.statusText, AlertType.error);
+      }
+    })
+  }
+
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.customerData = data;
+          this.imagesData = this.customerData?.photos;
+          this.isEditMode = this.customerData && this.customerData['isImagesAdded'] ? true : false;
+          if (this.isEditMode) this.getCustomerImages()
+          // this.isDataLoaded = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })
   }

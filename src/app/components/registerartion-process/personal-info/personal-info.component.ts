@@ -119,7 +119,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       shakeDate: !['', [Validators.required]],
       gender: ['', [Validators.required]],
       heightId: ['', [Validators.required]],
-      educationId: ['', [Validators.required]],
+      eduationId: ['', [Validators.required]],
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
@@ -181,7 +181,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
   handleClickOnNext(src: string = 'personal') {
     const formVal = this.formGroup.value;
     formVal['specializationId'] = this.specializationId ? this.specializationId : null;
-    formVal['occupationId'] = this.occupationId ? this.occupationId : null;
+    // formVal['occupationId'] = this.occupationId ? this.occupationId : null;
     formVal['occupationDetailId'] = this.occupationDetailId ? this.occupationDetailId : null;
     formVal['bloodGroupId'] = formVal['bloodGroupId'] ? formVal['bloodGroupId'] : null;
     formVal['physicalStatus'] = this.isPhysicallyAbled ? formVal['physicalStatus'] : null;

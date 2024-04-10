@@ -30,6 +30,12 @@ export class SharedService {
   isReadOnlyMode = new Subject();
 
   blogData = new Subject();
+  imagesSelected = new Subject();
+
+  getImagesSelected(): Observable<any> {
+    return this.imagesSelected.asObservable();
+  }
+
 
   getBlogData(): Observable<any> {
     return this.blogData.asObservable();
