@@ -48,6 +48,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { NgHttpLoaderModule } from "ng-http-loader";
+import { CustomLoaderComponent } from './components/custom-loader/custom-loader.component';
 
 const components = [
   FormStepperComponent,
@@ -66,6 +67,7 @@ const components = [
   CarouselItemComponent,
   SearchBoxComponent,
   FooterComponent,
+  CustomLoaderComponent
 ]
 
 const modules: any = [

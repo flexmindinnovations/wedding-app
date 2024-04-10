@@ -1,6 +1,5 @@
 <ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
-<ng-http-loader [backdrop]="true" [backgroundColor]="loaderTheme" [debounceDelay]="20" [extraDuration]="100"
-  [minDuration]="300" [opacity]="'.7'" [backdropBackgroundColor]="'#000000'" [spinner]="spinkit.skThreeBounce">
+<ng-http-loader [className]="'custom-loader'" [entryComponent]="loaderComponent" [extraDuration]="300" [minDuration]="500">
 </ng-http-loader>
 <div class="app-wrapper flex relative h-screen w-screen">
   <app-alert [alertMessage]="alertMessage" [alertType]="alertType" [showAlert]="showAlert" class="absolute top-20 right-5 min-h-40 min-w-80" [ngClass]="showAlert ? 'z-[10000]' : 'z-0'" [outside]="true" />
