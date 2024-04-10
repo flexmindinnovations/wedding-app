@@ -1,6 +1,11 @@
 section {
-    
+    .container {
+        @apply w-full md:lg:xl:w-[85%];
+        margin: 40px auto;
+    }
+}
 
+section.meet-members {
     h1 {
         @apply text-center font-bold text-base md:lg:text-4xl my-2;
     }
@@ -10,15 +15,133 @@ section {
     }
 }
 
+section._register {
+    h1 {
+        @apply font-bold text-base md:lg:text-4xl m-0;
+        background: rgb(247, 0, 104);
+        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    p.about {
+        @apply text-left font-normal text-base leading-3;
+
+        position: relative;
+        display: block;
+        font-size: 16px;
+        line-height: 1em;
+        color: #ff8a01;
+        font-weight: 500;
+        background: rgb(247, 0, 104);
+        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+    }
+
+    p {
+        letter-spacing: 1px;
+        font-size: 14px;
+        color: black;
+    }
+
+    ol {
+        @apply ml-5;
+
+        li {
+            @apply text-sm my-2;
+            position: relative;
+            list-style-type: none;
+            text-align: justify;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -20px;
+                width: 18px;
+                height: 18px;
+                background-image: url('/assets/icon/check.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+    }
+
+    .content {
+
+        .bars {
+
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[50%] absolute top-0 right-0 bottom-0 -z-[1];
+            will-change: auto;
+            animation: shake 45s linear infinite;
+
+            .bar1 {
+                @apply h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+
+            .bar2 {
+                @apply h-28 bg-gradient-to-r from-rose-400 to-red-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+
+            .bar3 {
+                @apply h-6 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+        }
+
+        .image-container {
+
+            img {
+                @apply shadow-2xl;
+                border: 15px solid #fff;
+            }
+        }
+    }
+}
+
+section._counter {
+    @apply text-8xl font-bold text-black;
+}
+
+section._features {
+    h1 {
+        @apply font-bold text-base md:lg:text-4xl m-0;
+        background: rgb(247, 0, 104);
+        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+
 
 section.video {
-    @apply container m-auto flex items-center justify-center h-[50%] md:lg:h-[75%] md:lg:max-h-[75%] sm:md:lg:w-full relative backdrop-brightness-200 bg-blend-darken;
+    @apply container m-auto flex items-center justify-center h-[50%] md:lg:h-[75%] md:lg:max-h-[75%] sm:md:lg:xl:max-w-full relative backdrop-brightness-200 bg-blend-darken;
     perspective: 1px;
     overflow: hidden;
 
 
     video {
-        @apply absolute top-0 h-full left-0 right-0 w-full object-fill ;
+        @apply absolute top-0 h-full left-0 right-0 w-full object-fill;
         transform: translateZ(-1px) scale(2);
     }
 
@@ -116,4 +239,42 @@ section.video {
 
 .active {
     @apply bg-wr-600 transition-transform -translate-y-1;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(145deg);
+    }
+
+    25% {
+        transform: rotate(150deg);
+
+    }
+
+    50% {
+        transform: rotate(155deg);
+    }
+
+    75% {
+        transform: rotate(150deg);
+    }
+
+    100% {
+        transform: rotate(145deg);
+
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }

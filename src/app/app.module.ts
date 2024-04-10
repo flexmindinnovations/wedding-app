@@ -9,11 +9,14 @@ import { AppComponent } from './app.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared.module';
+import { StoreModule } from '@ngrx/store';
+import { dataReducer } from './store.reducer';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, SharedModule,
-    BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule, FontAwesomeModule],
+    StoreModule.forRoot({ data: dataReducer }),
+    BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

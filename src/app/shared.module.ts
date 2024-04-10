@@ -37,6 +37,14 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { FooterComponent } from './components/footer/footer.component';
+import { TmNgOdometerModule } from 'odometer-ngx';
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { BadgeModule } from 'primeng/badge';
+import { ImageModule } from 'primeng/image';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 const components = [
   FormStepperComponent,
@@ -54,6 +62,7 @@ const components = [
   CarouselComponent,
   CarouselItemComponent,
   SearchBoxComponent,
+  FooterComponent,
 ]
 
 const modules: any = [
@@ -73,7 +82,14 @@ const modules: any = [
   CalendarModule,
   InputTextareaModule,
   SelectButtonModule,
-  ToggleButtonModule
+  ToggleButtonModule,
+  ScrollTopModule,
+  ConfirmPopupModule,
+  OverlayPanelModule,
+  BadgeModule,
+  ImageModule,
+  TmNgOdometerModule,
+  NgScrollbarModule
 ];
 
 @NgModule({
@@ -85,7 +101,7 @@ const modules: any = [
     ReactiveFormsModule,
     IonicModule,
     ...modules,
-    FontAwesomeModule,
+    FontAwesomeModule
   ],
   exports: [
     CommonModule,

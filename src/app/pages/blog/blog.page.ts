@@ -71,8 +71,10 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleBlogItemClick(blogInfo: any) {
-    this.sharedService.blogData.next(blogInfo);
     this.router.navigateForward(`blog/details/${blogInfo?.blogId}`);
+    setTimeout(() => {
+      this.sharedService.blogData.next(blogInfo);
+    }, 200)
   }
 
   ngOnDestroy(): void {

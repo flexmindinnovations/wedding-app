@@ -13,37 +13,10 @@
 </div>
 
 <div *ngIf="isDesktopMode" class="desktop-layout hidden md:flex lg:flex flex-col min-h-screen">
-  <!-- <ion-header [translucent]="true" class="max-h-16 ion-no-border">
-    <ion-toolbar>
-      <ion-title slot="start" class="cursor-pointer pl-12 " (click)="redirectToHome()">
-        <img src="/assets/icon/logo.png" class="h-14 w-14" alt="Logo" (error)="handleLogoLoadError($event)" />
-      </ion-title>
-      <ion-buttons slot="end" class="gap-3">
-        @for (item of menuItems; track item.id) {
-        <ion-button class="px-2" [ngClass]="item.isActive ? 'active' : 'px-2'" (click)="navigateToPage(item)">
-          <p class="m-0 flex items-center justify-start gap-3">
-            <fa-icon [icon]="item.icon" />
-            <span>{{item.title}}</span>
-          </p>
-        </ion-button>
-        }
-        @if (!isLoggedIn) {
-        <ion-button (click)="navigateToLogin()">
-          <p class="m-0 flex items-center justify-start gap-3">
-            <fa-icon [icon]="loginIcon" />
-            <span>Login</span>
-          </p>
-        </ion-button>
-        } @else {
-        <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
-        <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label="Show"></button>
-        }
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header> -->
   <p-menubar>
     <ng-template pTemplate="start">
-      <img (click)="redirectToHome()" src="/assets/icon/logo.png" class="h-full w-full object-fill cursor-pointer" alt="Logo" (error)="handleLogoLoadError($event)" />
+      <img (click)="redirectToHome()" src="/assets/icon/logo.png" class="h-full w-full object-fill cursor-pointer"
+        alt="Logo" (error)="handleLogoLoadError($event)" />
     </ng-template>
     <ng-template pTemplate="end">
       @for (item of menuItems; track item.id) {
@@ -62,21 +35,27 @@
         </p>
       </ion-button>
       } @else {
-      <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
-      <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
-        shape="circle"></p-avatar>
+      <div class="protected-content flex items-center justify-start gap-3 ml-3">
+        <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
+          [value]="notificationItems.length.toString()"></i>
+        <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
+        <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
+          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
+          shape="circle"></p-avatar>
+      </div>
       }
     </ng-template>
   </p-menubar>
   <ion-content class="flex-grow bg-slate-300">
-    <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
+    <!--  -->
+      <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
+    <!-- </ng-scrollbar> -->
   </ion-content>
 </div>
 
 <ng-container>
-  <p-dialog [(visible)]="showLogoutModal" [modal]="true" [closable]="false" [style]="{ width: '30vw' }" [draggable]="false"
-    [resizable]="false">
+  <p-dialog [(visible)]="showLogoutModal" [modal]="true" [closable]="false" [style]="{ width: '30vw' }"
+    [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-3">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       <p>
@@ -85,3 +64,18 @@
     </div>
   </p-dialog>
 </ng-container>
+
+<p-overlayPanel #notificationPanel>
+  <ng-template pTemplate="content">
+    <ul class="flex flex-col m-0">
+      @for (item of notificationItems; track $index) {
+      <li (click)="handleNotificationItemClick(item); notificationPanel.toggle($event)">
+        <p class="flex flex-row items-center justify-start gap-3">
+          <i [ngClass]="item?.icon"></i>
+          {{item?.text}}
+        </p>
+      </li>
+      }
+    </ul>
+  </ng-template>
+</p-overlayPanel>

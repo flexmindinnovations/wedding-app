@@ -10,7 +10,7 @@ export class TimePickerComponent implements OnInit {
 
   @Input() value: string = '';
   @Output() selectedTime: any = new EventEmitter();
-  @Input() isDisabled: any = true;
+  @Input() isDisabled: any = false;
   time: any = new Date();
 
   constructor(

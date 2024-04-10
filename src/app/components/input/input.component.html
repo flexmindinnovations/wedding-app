@@ -3,7 +3,7 @@
   </label>
   @if(isMultiline){
   <textarea [title]="label" [disabled]="control.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" rows="3"
-    class="p-2.5 w-full h-auto" [value]="controlValue" [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''"  [placeholder]="placeholder"
+    class="p-2.5 w-full min-h-24" [value]="controlValue" [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''"  [placeholder]="placeholder"
     [autoResize]="true"></textarea>
 
   } @else if(type === 'date' && presentaion==="date") {

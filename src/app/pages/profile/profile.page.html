@@ -2,8 +2,8 @@
   <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
     <ion-title class="font-light">Profile Information</ion-title>
     <ion-buttons slot="end">
-      <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
-        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton>
+      <!-- <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
+        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -20,24 +20,7 @@
         </ng-template>
         <ng-template pTemplate>
           <div class="w-full h-full">
-            @switch(selectedStep.code) {
-            @case ('PI') {
-            <personal-info [isReadOnly]="isReadOnly" (isCancelled)="handleCancelAction($event)"
-              (isCompleted)="handleCompleteAction($event)" />
-            }
-            @case ('FI') {
-            <family-info />
-            }
-            @case ('CI') {
-            <contact-info />
-            }
-            @case ('OI') {
-            <other-info />
-            }
-            @case ('PH') {
-            <photos />
-            }
-            }
+            <router-outlet></router-outlet>
           </div>
         </ng-template>
       </p-splitter>
