@@ -38,7 +38,7 @@
       <div class="protected-content flex items-center justify-start gap-3 ml-3">
         <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
           [value]="notificationItems.length.toString()"></i>
-        <p-menu #menu [model]="profileItems" [popup]="true"></p-menu>
+        <p-menu #menu [model]="profileItems" [popup]="true" appendTo="body"></p-menu>
         <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
           image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
           shape="circle"></p-avatar>
@@ -47,14 +47,12 @@
     </ng-template>
   </p-menubar>
   <ion-content class="flex-grow bg-slate-300">
-    <!--  -->
-      <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
-    <!-- </ng-scrollbar> -->
+    <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
   </ion-content>
 </div>
 
 <ng-container>
-  <p-dialog [(visible)]="showLogoutModal" [modal]="true" [closable]="false" [style]="{ width: '30vw' }"
+  <p-dialog [(visible)]="showLogoutModal" appendTo="body" [modal]="true" [closable]="false" [style]="{ width: '30vw' }"
     [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-3">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
@@ -65,7 +63,7 @@
   </p-dialog>
 </ng-container>
 
-<p-overlayPanel #notificationPanel>
+<p-overlayPanel #notificationPanel appendTo="body">
   <ng-template pTemplate="content">
     <ul class="flex flex-col m-0">
       @for (item of notificationItems; track $index) {

@@ -45,6 +45,9 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { BadgeModule } from 'primeng/badge';
 import { ImageModule } from 'primeng/image';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { NgHttpLoaderModule } from "ng-http-loader";
 
 const components = [
   FormStepperComponent,
@@ -89,7 +92,12 @@ const modules: any = [
   BadgeModule,
   ImageModule,
   TmNgOdometerModule,
-  NgScrollbarModule
+  NgScrollbarModule,
+  NgHttpLoaderModule.forRoot(),
+  // for Router use:
+  LoadingBarRouterModule,
+  // for Core use:
+  LoadingBarModule
 ];
 
 @NgModule({
@@ -101,7 +109,7 @@ const modules: any = [
     ReactiveFormsModule,
     IonicModule,
     ...modules,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   exports: [
     CommonModule,
