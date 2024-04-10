@@ -7,6 +7,8 @@ import { delay, of } from 'rxjs';
 import { AuthService } from 'src/app/services/auth//auth.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { COLOR_SCHEME, inputThemeVariables } from 'src/app/util/theme';
+import { Store } from '@ngrx/store';
+import { saveData } from 'src/app/store.actions';
 
 @Component({
   selector: 'app-login',
@@ -75,8 +77,10 @@ export class LoginPage implements OnInit {
     this.authService.loginCustomer(formVal).subscribe({
       next: (response) => {
         if (response) {
+          console.log('response: ', response);
+
           const data = response?.customerResponse;
-          const { token, customerId, profileStatus } = data;
+          const { token, customerId, profileStatus, isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } = data;
           localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
           localStorage.setItem('token', token);
           this.sharedService.customerData.set('profileStatusData', data);

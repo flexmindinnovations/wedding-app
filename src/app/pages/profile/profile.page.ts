@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -10,7 +11,7 @@ import { SharedService } from 'src/app/services/shared.service';
 export class ProfilePage implements OnInit {
 
   isMobile: boolean = false;
-  selectedStep: any = { name: 'Personal Information', code: 'PI' };
+  selectedStep: any = { name: 'Personal Information', route: 'personal', code: 'PI' };
   host = inject(ElementRef);
   isCancelled: boolean = false;
   isCompleted: boolean = false;
@@ -19,15 +20,16 @@ export class ProfilePage implements OnInit {
   isReadOnly: boolean = false;
 
   profileSteps = [
-    { name: 'Personal Information', code: 'PI' },
-    { name: 'Family Information', code: 'FI' },
-    { name: 'Contact Information', code: 'CI' },
-    { name: 'Other Information', code: 'OI' },
-    { name: 'Photos Upload', code: 'PH' }
+    { name: 'Personal Information', route: 'personal', code: 'PI' },
+    { name: 'Family Information', route: 'family', code: 'FI' },
+    { name: 'Contact Information', route: 'contact', code: 'CI' },
+    { name: 'Other Information', route: 'other', code: 'OI' },
+    { name: 'Photos Upload', route: 'photos', code: 'PH' }
   ];
 
   constructor(
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -38,6 +40,15 @@ export class ProfilePage implements OnInit {
     });
 
     observer.observe(this.host.nativeElement);
+
+    this.router.events.subscribe((events: any) => {
+        const currentUrl = this.router.url;
+        const activeRoute = this.router.url.substring(currentUrl.lastIndexOf('/') + 1, this.router.url.length);
+        if(activeRoute) {
+          const activeItem = this.profileSteps.filter((item: any) => item.route === activeRoute);
+          if(activeItem?.length) this.selectedStep = activeItem[0];
+        }
+    })
   }
 
 
@@ -54,7 +65,8 @@ export class ProfilePage implements OnInit {
   }
 
   handleListItemChange(event: any) {
-
+    this.router.navigateByUrl('profile/' + event.route);
+    this.selectedStep = event;
   }
 
 }

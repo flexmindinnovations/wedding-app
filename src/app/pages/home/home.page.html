@@ -5,12 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header *ngIf="isMobile" class="md:lg:2xl:hidden" collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <div class="content h-full w-full">
+  <div class="content bg-gray-50 h-full w-full">
     <section class="video">
       <video autoplay muted loop>
         <source src="/assets/videos/intro.mp4" type="video/mp4">
@@ -35,28 +30,109 @@
         </div>
       </div>
     </section>
-    <section>
-      <div class="search-box border-b border-b-gray-100">
+    <section class="border-b">
+      <div class="container search-box">
         <search-box class="w-full" />
       </div>
     </section>
 
-    <section class="meet-members col-span-2 py-5  w-full bg-gray-100">
-      <div class="header">
-        <h1>
-          Meet Our Members
-        </h1>
-        <p class="ion-padding">
-          The largest Matrimonial Website with 1 lakhs+ of Manglik profiles. Find Matches. Join FREE!
-        </p>
+    <section class="meet-members  col-span-2 py-5 w-full">
+      <div class="container">
+        <div class="header">
+          <h1>
+            Meet Our Members
+          </h1>
+          <p class="ion-padding">
+            The largest Matrimonial Website with 1 lakhs+ of Manglik profiles. Find Matches. Join FREE!
+          </p>
+        </div>
+        <div class="member-list-container md:lg:p-5 flex items-start justify-center flex-wrap gap-5 relative">
+          @if (profileList.length) {
+          <carousel class="w-full" [slides]="profileList" />
+          } @else {
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+          }
+        </div>
       </div>
-      <div class="member-list-container md:lg:p-5 flex items-start justify-center flex-wrap gap-5 relative">
-        @if (profileList.length) {
-        <carousel class="w-full" [slides]="profileList" />
-        }
+    </section>
+
+    <section class="_register ">
+      <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10">
+        <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
+          <p class="about tracking-widest uppercase">
+            About Us
+          </p>
+          <h1>
+            Welcome to {{domain}} Matrimony
+          </h1>
+          <p>
+            Marriage, also known as matrimony or wedlock, is like a special bond that ties two people together. Imagine
+            it
+            as a magical connection where two hearts decide to walk through life side by side.
+          </p>
+          <p>
+            Here’s what our platform offers:
+          </p>
+          <ol>
+            <li>
+              <p>Profiles with all the details, from age to education. </p>
+            </li>
+            <li>
+              <p>Easy navigation to explore effortlessly.</p>
+            </li>
+            <li>
+              <p>Smart profile matching with the help of advace algorithm.</p>
+            </li>
+            <li>
+              <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
+            </li>
+          </ol>
+
+          <mt-button title="Register Now" />
+        </div>
+        <div class="content -z-[10] flex-grow w-full h-[inherit]">
+          <div class="bars">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+          </div>
+          <div 
+            class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
+            <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="_counter flex items-center justify-center min-h-96 ">
+      <div class="overlay min-h-96 w-full flex items-center justify-center backdrop-blur-lg">
+        <div class="container h-full flex flex-row items-center justify-center gap-10">
+          <div class="profiles text-center">
+            <tm-ng-odometer class="block w-full" [number]="profileCount" [config]="config"
+            [observable]="observable"></tm-ng-odometer>
+            <h1>Total Profiles</h1>
+          </div>
+          <div class="branches text-center">
+            <tm-ng-odometer class="block w-full" [number]="branchCount" [config]="config"
+            [observable]="observable"></tm-ng-odometer>
+  
+            <h1>Total Branches</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="_features flex items-center justify-center min-h-96">
+      <div class="container">
+          <h1>
+            Why choose {{domain}}?
+          </h1>
       </div>
     </section>
 
 
+    <div class="footer">
+      <app-footer></app-footer>
+    </div>
   </div>
 </ion-content>

@@ -1,13 +1,13 @@
 <div class="blog-details-container px-5 py-0 flex flex-col items-start justify-start gap-5 h-full w-full">
-  @if (blogInfo) {
+  @if (!isLoading) {
   <div class="header border-b border-b-gray-100 w-full">
     <h1 class="title">{{blogInfo?.blogTitle}}</h1>
     <p class="author-info flex w-full items-center justify-between pb-1">
-      <span class="text-sm select-none">
-        Created By: {{blogInfo?.createdBy}}
+      <span class="text-xs text-dark-900 font-normal select-none">
+        Created By: &nbsp;{{blogInfo?.createdByName}}
       </span>
-      <span class="text-sm select-none">
-        Created On: {{createdDate}}
+      <span class="text-xs text-dark-900 font-normal select-none">
+        Created On: &nbsp;{{createdDate}}
       </span>
     </p>
   </div>

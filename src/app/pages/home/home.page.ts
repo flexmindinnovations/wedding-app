@@ -1,7 +1,9 @@
 import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Observable, Observer, share } from 'rxjs';
 import { AnimationDirection } from 'src/app/components/carousel-item/carousel-item.component';
 import { HomeService } from 'src/app/services/home/home.service';
+import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -21,13 +23,29 @@ export class HomePage implements OnInit {
   currentItem = 0;
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
 
+  domain = DOMAIN;
+
+  profileCount = 100;
+  branchCount = 10;
+  public observable: Observable<boolean>;
+  private observer!: Observer<boolean>;
+  public config = {
+    animation: 'count', 
+    format: ',ddd', 
+    value: 0,
+    auto: true,
+}
+
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
     this.handleOnScroll(event);
   };
 
   animateDirection: AnimationDirection = 'right';
-  constructor() { }
+  constructor() {
+    this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
+    setTimeout(() => this.observer?.next(true), 2000);
+  }
 
   ngOnInit() {
     const observer = new ResizeObserver((rect) => {

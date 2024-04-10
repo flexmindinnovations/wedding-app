@@ -15,7 +15,7 @@ export class BlogContentComponent implements OnInit {
   blogInfo: any;
   blogId: any;
   createdDate: any;
-
+  isLoading = true;
   blogImagePath: string = '';
   constructor(
     private route: ActivatedRoute,
@@ -31,16 +31,19 @@ export class BlogContentComponent implements OnInit {
   }
 
   getBlogDetails() {
-    this.blogInfo = {};
+  this.isLoading = true;
+    this.blogInfo = undefined;
     this.blogService.getBlogById(this.blogId).subscribe({
       next: (response: any) => {
         if (response) {
           this.blogInfo = response;
           this.blogImagePath = `${environment.endpoint}/${this.blogInfo?.blogImagePath}`;
           this.createdDate = moment(this.blogInfo?.createdDate).format('MM-DD-YYYY');
+          this.isLoading = false;
         }
       },
       error: (error: any) => {
+        this.isLoading = false;
         console.log('error: ', error);
       }
     })

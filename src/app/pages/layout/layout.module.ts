@@ -16,7 +16,6 @@ import { SharedModule } from 'src/app/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    FontAwesomeModule,
     LayoutPageRoutingModule,
     SharedModule
   ],

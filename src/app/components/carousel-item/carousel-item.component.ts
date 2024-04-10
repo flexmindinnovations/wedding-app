@@ -25,9 +25,6 @@ export class CarouselItemComponent implements OnInit {
   ngOnInit() {
     const networkImage = `${this.data.imagePath1 ? this.data.imagePath1 : this.data.imagePath2 ? this.data.imagePath2 : ''}`;
     this.imagePath = networkImage ? `${environment.endpoint}/${networkImage}` : '/assets/image/image-placeholder.png';
-
-    console.log('data: ', this.data);
-    
   }
 
   handleIsFavourite() {

@@ -55,7 +55,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   }
 
   onSelectionChange(event: any, src: string) {
-    const value = event?.value?.id;
+    const value = event?.id;
     switch (src) {
       case 'religionId':
         this.isReligionSelected = true;

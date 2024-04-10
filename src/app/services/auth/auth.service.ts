@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   http = inject(HttpConfigService);
-  endpoint = environment.endpoint + '/api/Customer/createcustomerToken';
+  endpoint = environment.endpoint + '/api/Customer';
   constructor() { }
 
   isLoggedIn() {
@@ -17,11 +17,11 @@ export class AuthService {
   }
 
   loginCustomer(payload: any): Observable<any> {
-    return this.http.post(this.endpoint, payload);
+    return this.http.post(`${this.endpoint}/createcustomerToken`, payload);
   }
 
-  getCustomerProfile() {
-
+  getCustomerProfileById(userId: number): Observable<any> {
+    return this.http.get(`${this.endpoint}/GetCustomerById/${userId}`);
   }
 
   logoutUser() {

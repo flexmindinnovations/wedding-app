@@ -8,7 +8,11 @@ import { NavController } from '@ionic/angular';
 import { HostListener } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared.service';
-import { delay, of } from 'rxjs';
+import { Observable, delay, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { saveData } from 'src/app/store.actions';
+import { ProfileStatus } from 'src/app/enums/profile-status';
+import * as AOS from 'aos';
 
 @Component({
   selector: 'app-layout',
@@ -32,6 +36,11 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   loginIcon: IconProp = faGem;
   isLoginPage: boolean = false;
   isLoggedIn: boolean = false;
+
+  store = inject(Store<{ saveData: any }>);
+  storeData!: Observable<any>;
+  notificationItems: any[] = [];
+
   profileItems = [
     {
       items: [
@@ -39,7 +48,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           label: 'Profile',
           icon: 'pi pi-user',
           command: () => {
-            this.router.navigateByUrl('profile');
+            this.router.navigateByUrl('profile/personal');
           }
         },
         {
@@ -83,6 +92,85 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           window.location.reload();
         })
+      }
+    })
+    window.onload = (event: any) => {
+      AOS.refresh();
+      if (this.authService.isLoggedIn()) this.getUserDetails();
+    }
+  }
+
+  getUserDetails() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const profileStatusParams = ['isFamilyInfoFill', 'isImagesAdded', 'isOtherInfoFill', 'isPersonInfoFill', 'isContactInfoFill'];
+    this.authService.getCustomerProfileById(user?.user).subscribe({
+      next: (response) => {
+        if (response) {
+          console.log('response: ', response);
+          
+          const { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill, profileStatus } = response;
+          this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
+          if(profileStatus === ProfileStatus.incomplete) {
+            this.notificationItems.push({
+              key: 'profileStatus',
+              text: 'Profile is incomplete',
+              icon: 'pi pi-times',
+              route: 'profile/personal'
+            });
+          }
+          Object.keys(response).forEach((key) => {
+            const obj = {
+              key: key,
+              text: '',
+              icon: '',
+              route: ''
+            }
+            if (profileStatusParams.includes(key) && response[key] === false) {
+              switch (key) {
+                case profileStatusParams[0]:
+                  obj.key = key;
+                  obj.text = 'Family details are not updated.';
+                  obj.icon = 'pi pi-users';
+                  obj.route = 'profile/family';
+                  this.notificationItems.push(obj);
+                  break;
+                case profileStatusParams[1]:
+                  obj.key = key;
+                  obj.text = 'Profile Images are not uploaded.';
+                  obj.icon = 'pi pi-images';
+                  obj.route = 'profile/photos';
+                  this.notificationItems.push(obj);
+                  break;
+                case profileStatusParams[2]:
+                  obj.key = key;
+                  obj.text = 'Other required details are not updated.';
+                  obj.icon = 'pi pi-info-circle';
+                  obj.route = 'profile/other';
+                  this.notificationItems.push(obj);
+                  break;
+                case profileStatusParams[3]:
+                  obj.key = key;
+                  obj.text = 'Personal details are not updated.';
+                  obj.icon = 'pi pi-user';
+                  obj.route = 'profile/personal';
+                  this.notificationItems.push(obj);
+                  break;
+                case profileStatusParams[4]:
+                  obj.key = key;
+                  obj.text = 'Contact details are not updated.';
+                  obj.icon = 'pi pi-mobile';
+                  obj.route = 'profile/contact';
+                  this.notificationItems.push(obj);
+                  break;
+              }
+            }
+          })
+
+        }
+      },
+      error: (error: any) => {
+        const err = error?.error;
+        const errorMessage = err.message ? err?.message : 'Something went wrong';
       }
     })
   }
@@ -166,4 +254,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.sharedService.isLoggedOutCompleted.unsubscribe();
   }
 
+  handleNotificationItemClick(item: any) {
+    console.log('item: ', item);
+    this.router.navigateByUrl(item?.route);
+  }
 }

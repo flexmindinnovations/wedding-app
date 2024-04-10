@@ -33,6 +33,7 @@
             ],
             "styles": [
               "src/theme/variables.scss",
+              "./node_modules/aos/dist/aos.css",
               "src/global.scss"
             ],
             "scripts": []
