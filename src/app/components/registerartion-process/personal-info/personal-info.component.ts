@@ -119,7 +119,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       shakeDate: !['', [Validators.required]],
       gender: ['', [Validators.required]],
       heightId: ['', [Validators.required]],
-      eduationId: ['', [Validators.required]],
+      educationId: ['', [Validators.required]],
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
@@ -207,7 +207,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
   saveNewCustomerInfo(formVal: any, src: string): void {
     let payload = { ...formVal, personalInfoId: 0, occupation: "" };
     this.tithiList.forEach((item: any) => {
-      payload = { ...payload, [item.title]: item.value ? item.value : "" }
+      payload = { ...payload, [item.title.toLowerCase()]: item.value ? item.value : "" }
     });
     this.customerRegistrationService.savePersonalInformation(payload).subscribe({
       next: (data: any) => {
@@ -244,7 +244,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     const customerId = this.customerData?.customerId;
     let payload = { ...formVal, personalInfoId: this.personalData.personalInfoId, occupation: "" };
     this.tithiList.forEach((item: any) => {
-      payload = { ...payload, [item.title]: item.value ? item.value : "" }
+      payload = { ...payload, [item.title.toLowerCase()]: item.value ? item.value : "" }
     });
     this.customerRegistrationService.updatePersonalInformation(payload, customerId).subscribe({
       next: (data: any) => {
