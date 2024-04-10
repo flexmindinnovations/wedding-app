@@ -125,7 +125,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       dateOfBirth: [new Date(), [Validators.required]],
       timeOfBirth: !['', [Validators.required]],
       occupationId: ['', [Validators.required]],
-      physicalStatus: !['', [Validators.required]],
+      handycapId: !['', [Validators.required]],
       otherPhysicalCondition: ['', ![Validators.required]],
       maritalStatus: ['', [Validators.required]],
       hobbies: ['', ![Validators.required]],
@@ -181,10 +181,10 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
   handleClickOnNext(src: string = 'personal') {
     const formVal = this.formGroup.value;
     formVal['specializationId'] = this.specializationId ? this.specializationId : null;
-    // formVal['occupationId'] = this.occupationId ? this.occupationId : null;
+    formVal['occupationId'] = formVal['occupationId'] ? formVal['occupationId'] : null;
     formVal['occupationDetailId'] = this.occupationDetailId ? this.occupationDetailId : null;
     formVal['bloodGroupId'] = formVal['bloodGroupId'] ? formVal['bloodGroupId'] : null;
-    formVal['physicalStatus'] = this.isPhysicallyAbled ? formVal['physicalStatus'] : null;
+    formVal['handycapId'] = this.isPhysicallyAbled ? formVal['handycapId'] : null;
     formVal['hobbies'] = formVal['hobbies'] ? formVal['hobbies'] : "";
     formVal['dateOfBirth'] = moment(formVal['dateOfBirth']).format();
     formVal['shakeDate'] = formVal['shakeDate'] ? moment(formVal['shakeDate']).format() : null;
@@ -192,7 +192,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     formVal['spectacles'] = this.spectacles;
     formVal['isPatrika'] = this.showPatrika;
     formVal['isPhysicallyAbled'] = this.isPhysicallyAbled;
-
+    formVal['timeOfBirth'] = moment(formVal['timeOfBirth']).format();
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src)
       else this.saveNewCustomerInfo(formVal, src)
@@ -364,7 +364,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       case 'height':
 
         break;
-      case 'physicalStatus':
+      case 'handycapId':
         this.isOtherPhyicalCondition = event?.id === 7;
         break;
 
