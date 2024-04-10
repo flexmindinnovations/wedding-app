@@ -26,6 +26,12 @@
       <app-input label="No Of Married Sisters" type="number" class="" [control]="formGroupControl['noOfMarriedSisters']"
         formControlName="noOfMarriedSisters" />
 
+      @if (religionListOptions.length) {
+      <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
+        [controlValue]="formGroup.get('religionId')?.value"
+        (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
+      }
+
       @if (castListOptions.length) {
       <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId"
         [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"

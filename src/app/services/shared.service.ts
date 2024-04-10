@@ -102,5 +102,18 @@ export class SharedService {
     return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
   }
 
+  getOccupationList(): Observable<any> {
+    return this.http.get(`${this.endpoint}/Occupation/getOccupationList`);
+  }
+  getOccupationById(occupationId: any): Observable<any> {
+    return this.http.get(`${this.endpoint}/Occupation/getOccupationById?occupationId=${occupationId}`);
+  }
+  getReligionList(): Observable<any> {
+    return this.http.get(`${this.endpoint}/Religion/getReligionList`);
+  }
+  getMotherTongueList(): Observable<any> {
+    return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
+  }
+
 
 }

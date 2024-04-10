@@ -1,5 +1,5 @@
 <div class="dropdown-container flex flex-col w-full">
   <label>{{label}}</label>
-  <p-dropdown [disabled]="control.disabled" [options]="options" appendTo="body" class="min-w-12" (onChange)="onItemChange($event)" optionLabel="title"
-    [showClear]="false" placeholder="Select a option"></p-dropdown>
+  <p-dropdown [options]="options" [id]="id" appendTo="body" class="min-w-12" (onChange)="onItemChange($event)"
+    optionLabel="title" [(ngModel)]="itemValue" [showClear]="false" placeholder="Select a option"></p-dropdown>
 </div>

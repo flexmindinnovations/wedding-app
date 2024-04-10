@@ -21,7 +21,7 @@ export class FamilyInfoComponent implements OnInit {
   @Input() customerData: any = null;
   @Output() isCancelled = new EventEmitter();
   @Output() isCompleted = new EventEmitter();
-  isEditMode: boolean = false;
+  isEditMode: boolean = true;
   familyData: any;
   alert = inject(AlertService);
   customerRegistrationService = inject(CustomerRegistrationService);
@@ -35,9 +35,9 @@ export class FamilyInfoComponent implements OnInit {
 
   hasSubCast: boolean = false;
   subCastId: boolean = false;
-
+  religionId: any;
   isSubCastDataAvailable: boolean = false;
-
+  religionListOptions: any[] = [];
   sharedService = inject(SharedService);
   @Output() nextFormStep = new EventEmitter();
 
@@ -49,18 +49,14 @@ export class FamilyInfoComponent implements OnInit {
 
   ngOnInit() {
     this.initFormGroup();
-    this.getCastList();
+    this.getCustomerDetails();
   }
 
-  ngOnChanges(changes: SimpleChanges | any): void {
-    if (changes?.customerData?.currentValue) this.familyData = this.customerData['familyInfoModel'];
-  }
+  // ngOnChanges(changes: SimpleChanges | any): void {
+  //   if (changes?.customerData?.currentValue) this.familyData = this.customerData['familyInfoModel'];
+  // }
 
   ngAfterViewInit(): void {
-    this.isEditMode = this.customerData && this.customerData['isFamilyInfoFill'] ? true : false;
-    if (this.familyData) {
-      if (this.isEditMode) this.patchFormData();
-    }
   }
 
   initFormGroup() {
@@ -73,6 +69,7 @@ export class FamilyInfoComponent implements OnInit {
       noOfMarriedBrothers: ['', [Validators.required]],
       noOfSisters: ['', [Validators.required]],
       noOfMarriedSisters: ['', [Validators.required]],
+      religionId: ['', [Validators.required]],
       castId: ['', [Validators.required]],
       subCastId: ['', [Validators.required]]
     })
@@ -183,6 +180,9 @@ export class FamilyInfoComponent implements OnInit {
 
   onSelectionChange(event: any, src: string) {
     switch (src) {
+      case 'religionId':
+        this.religionId = event?.religionId;
+        break;
       case 'castId':
         this.hasSubCast = event?.hasSubcast;
         if (this.hasSubCast) this.getSubCastList(event?.id);
@@ -192,6 +192,24 @@ export class FamilyInfoComponent implements OnInit {
         this.subCastId = subCastId;
         break;
     }
+  }
+
+  getReligionList() {
+    this.sharedService.getReligionList().subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.religionListOptions = response?.map((item: any) => {
+            return {
+              id: item?.religionId,
+              title: item?.religionName,
+            }
+          })
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
   }
 
   getCastList() {
@@ -229,6 +247,27 @@ export class FamilyInfoComponent implements OnInit {
       error: (error) => { }
     })
   }
-
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.customerData = data;
+          this.familyData = this.customerData['familyInfoModel'];
+          this.isEditMode = this.customerData ? this.customerData['isFamilyInfoFill'] : false;
+          this.getReligionList();
+          this.getCastList();
+          if (this.familyData) {
+            if (this.isEditMode) this.patchFormData();
+          }
+          // this.isDataLoaded = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+  }
 
 }

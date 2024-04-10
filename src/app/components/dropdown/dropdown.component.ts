@@ -30,7 +30,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   @Input() buttonId = uuidv4();
   @Input() menuId: any = uuidv4();
   id = uuidv4();
-
+  @Input() dropdownId: string = ''
   searchQuery: string = '';
   filteredOptions: any = [];
 
@@ -45,6 +45,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
 
 
   isVisible = false;
+  itemValue: any;
 
   colorScheme: any = COLOR_SCHEME;
   colorVarients: any;
@@ -114,8 +115,12 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   ngAfterViewInit(): void {
-    this.isNumberValue = typeof this.value === 'number' ? true : false;
-    this.cdr.detectChanges();
+    if (this.options.length) {
+      const value = this.control.value;
+      const itemVlue = this.options.filter((item: any) => item.id === value);
+      if (itemVlue?.length) this.itemValue = itemVlue[0];
+      this.cdr.detectChanges();
+    }
   }
 
   handleToggle() {
@@ -146,6 +151,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   onItemChange(event: any) {
+    const value = event?.value;
     this.onSelectionChange.emit(event?.value);
     this.writeValue(event?.value);
   }

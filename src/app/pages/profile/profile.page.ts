@@ -16,7 +16,7 @@ export class ProfilePage implements OnInit {
   isCompleted: boolean = false;
   sharedService = inject(SharedService);
 
-  isReadOnly: boolean = true;
+  isReadOnly: boolean = false;
 
   profileSteps = [
     { name: 'Personal Information', code: 'PI' },
