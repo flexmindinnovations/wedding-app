@@ -1,3 +1,4 @@
 <div class="w-full bg-transparent dark:bg-gray-700">
-  <p-calendar [disabled]="isDisabled" class="w-full" [showButtonBar]="true" appendTo="body" [(ngModel)]="time" (ngModelChange)="handleSelectionChange($event)" hourFormat="12" [timeOnly]="true"></p-calendar>
+  <p-calendar class="w-full" [showButtonBar]="true" appendTo="body" [(ngModel)]="time"
+    (ngModelChange)="handleSelectionChange($event)" hourFormat="12" [timeOnly]="true"></p-calendar>
 </div>

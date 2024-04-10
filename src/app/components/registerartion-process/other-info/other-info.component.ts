@@ -29,6 +29,8 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   cdref = inject(ChangeDetectorRef);
 
   sharedService = inject(SharedService);
+  motherTongueListOptions: any = [];
+  motherTongueId: any = '';
   @Output() nextFormStep = new EventEmitter();
 
 
@@ -39,18 +41,18 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initFormGroup();
+    this.getCustomerDetails();
   }
 
   ngAfterViewInit(): void {
-    this.otherData = this.customerData && this.customerData['otherInfoModel'] ? true : false;
-    this.isEditMode = this.customerData && this.customerData['isOtherInfoFill'];
-    if (this.isEditMode) this.patchFormData();
+
   }
 
   initFormGroup() {
     this.formGroup = this.fb.group({
       expectations: ['', [Validators.required]],
-      extraInformation: ['', [Validators.required]]
+      extraInformation: ['', [Validators.required]],
+      motherTongueId: ['', [Validators.required]],
     })
   }
 
@@ -77,6 +79,13 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
 
   handleCancelAction() {
     this.isCancelled.emit(true);
+  }
+
+  onSelectionChange(event: any, src: string) {
+    if (src) {
+      const motherTongueId = event?.motherTongueId;
+      this.motherTongueId = motherTongueId;
+    }
   }
 
   handleClickOnNext(src: string = 'other') {
@@ -166,6 +175,42 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
       error: (error: any) => {
         console.log('error: ', error);
         this.alert.setAlertMessage('Other Info: ' + error?.statusText, AlertType.error);
+      }
+    })
+  }
+  getMotherTongueList() {
+    this.sharedService.getMotherTongueList().subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.motherTongueListOptions = data?.map((item: any) => {
+            return {
+              id: item?.motherTongueId,
+              title: item?.motherTongueName,
+            }
+          });
+        }
+      },
+      error: (error) => {
+        this.alert.setAlertMessage(error?.message, AlertType.error);
+      }
+    })
+  }
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.customerData = data;
+          this.otherData = this.customerData['otherInfoModel'];
+          this.isEditMode = this.customerData ? this.customerData['isContactInfoFill'] : false;
+          if (this.isEditMode) this.patchFormData();
+          this.getMotherTongueList();
+          // this.isDataLoaded = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })
   }

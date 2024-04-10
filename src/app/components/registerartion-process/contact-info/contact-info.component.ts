@@ -18,7 +18,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   formGroup!: FormGroup;
   @ViewChild('dropdownInput') dropdownInput: any;
   @Input() customerData: any = null;
-  isEditMode: boolean = false;
+  isEditMode: boolean = true;
   contactData: any;
   @Output() contactInfoData = new EventEmitter();
   @Output() isCancelled = new EventEmitter();
@@ -46,17 +46,15 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initFormGroup();
+    this.getCustomerDetails();
   }
 
-  ngOnChanges(changes: SimpleChanges | any): void {
-    if (changes?.customerData?.currentValue) this.contactData = this.customerData['contactInfoModel'];
-  }
+  // ngOnChanges(changes: SimpleChanges | any): void {
+  //   if (changes?.customerData?.currentValue) this.contactData = this.customerData['contactInfoModel'];
+  // }
 
   ngAfterViewInit(): void {
-    this.isEditMode = this.customerData && this.customerData['isContactInfoFill'] ? true : false;
-    if (this.contactData) {
-      if (this.isEditMode) this.patchFormData();
-    }
+
   }
 
   initFormGroup() {
@@ -70,13 +68,14 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       stateId: ['', [Validators.required]],
       cityId: ['', [Validators.required]],
     })
-
+    this.formGroup.get('contactNumber')?.disable();
     this.getCountryList();
 
   }
 
   patchFormData() {
-    this.formGroup.patchValue(this.contactData)
+    const contactData = { ...this.contactData, contactNumber: this.customerData['customerUserName'] };
+    this.formGroup.patchValue(contactData)
     this.cdref.detectChanges();
   }
 
@@ -260,4 +259,25 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       })
     }
   }
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.customerData = data;
+          this.contactData = this.customerData['contactInfoModel'];
+          this.isEditMode = this.customerData && this.customerData['isContactInfoFill'] ? true : false;
+          if (this.contactData) {
+            if (this.isEditMode) this.patchFormData();
+          }
+          // this.isDataLoaded = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+  }
+
 }

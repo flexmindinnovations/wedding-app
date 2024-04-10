@@ -8,7 +8,7 @@
         <app-input class="col-span-1" label="First Name" type="text" [control]="formGroupControl['firstName']"
           formControlName="firstName" [controlValue]="formGroup.get('firstName')?.value" [required]="true" />
 
-        <app-input label="Middle Name" type="text" [control]="formGroupControl['middleName']"
+        <app-input label="Father Name" type="text" [control]="formGroupControl['middleName']"
           formControlName="middleName" [controlValue]="formGroup.get('middleName')?.value" />
 
         <app-input label="Last Name" type="text" [control]="formGroupControl['lastName']" formControlName="lastName"
@@ -19,9 +19,22 @@
 
         <app-input label="Time Of Birth" presentaion="time" type="time" [control]="formGroupControl['timeOfBirth']"
           formControlName="timeOfBirth" (inputValue)="handleInputValue($event)" />
-
+        <!-- 
         <app-input label="Occupation" type="text" [control]="formGroupControl['occupation']"
-          formControlName="occupation" [controlValue]="formGroup.get('occupation')?.value" />
+          formControlName="occupation" [controlValue]="formGroup.get('occupation')?.value" /> -->
+
+        <app-dropdown *ngIf="occupationListOptions.length" label="Occupation" [dropdownId]="'myDropdownId'"
+          [control]="formGroupControl['occupationId']" formControlName="occupationId"
+          (onSelectionChange)="onSelectionChange($event, 'occupationId')"
+          [controlValue]="formGroup.get('occupationId')?.value" [options]="occupationListOptions" />
+
+        @if (hasChild && isOccupationDetailsDataAvailable) {
+        <app-dropdown *ngIf="occupationDetailList.length" label="Occupation Details"
+          [control]="formGroupControl['occupationDetailId']" [controlValue]="formGroup.get('occupationDetailId')?.value"
+          formControlName="occupationDetailId" (onSelectionChange)="onSelectionChange($event, 'occupationDetailId')"
+          [options]="occupationDetailList" />
+        }
+
 
         <app-dropdown label="Gender" [control]="formGroupControl['gender']" formControlName="gender"
           (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
@@ -36,19 +49,20 @@
           [controlValue]="formGroup.get('heightId')?.value" (onSelectionChange)="onSelectionChange($event, 'heightId')"
           [options]="heightListOptions" />
 
-        <app-dropdown label="Education" [control]="formGroupControl['eduationId']" formControlName="eduationId"
-          [controlValue]="formGroup.get('eduationId')?.value"
+        <app-dropdown *ngIf="educationListOptions.length" label="Education" [control]="formGroupControl['eduationId']"
+          formControlName="eduationId" [controlValue]="formGroup.get('eduationId')?.value"
           (onSelectionChange)="onSelectionChange($event, 'educationId')" [options]="educationListOptions" />
 
         @if (hasSpecialization && isSpecializationDataAvailable) {
-        <app-dropdown label="Specialization" [control]="formGroupControl['specializationId']"
-          [controlValue]="formGroup.get('specializationId')?.value" formControlName="specializationId"
-          (onSelectionChange)="onSelectionChange($event, 'specializationId')" [options]="specializationListOptions" />
+        <app-dropdown *ngIf="specializationListOptions.length" label="Specialization"
+          [control]="formGroupControl['specializationId']" [controlValue]="formGroup.get('specializationId')?.value"
+          formControlName="specializationId" (onSelectionChange)="onSelectionChange($event, 'specializationId')"
+          [options]="specializationListOptions" />
         }
 
         <!--Optional-->
         <app-input label="Hobbies" class="col-span-3 lg:col-span-4" type="text" [control]="formGroupControl['hobbies']"
-          formControlName="hobbies" [isMultiline]=true />
+          formControlName="hobbies" [controlValue]="formGroup.get('hobbies')?.value" [isMultiline]=true />
 
         <p class="flex items-center justify-start gap-3 p-1"
           [ngClass]="isReadOnly ? 'cursor-not-allowed pointer-events-none opacity-50' : ''">
@@ -118,8 +132,8 @@
     </form>
 
     <div class="action w-full flex items-center justify-end gap-5 py-2 px-7 border-t border-t-gray-100">
-      <mt-button [disabled]="isReadOnly" title="Cancel" [isCancel]="true" (action)="handleCancelAction()" />
-      <mt-button [disabled]="isReadOnly" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+      <mt-button title="Cancel" [isCancel]="true" (action)="handleCancelAction()" />
+      <mt-button title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
     </div>
   </div>
   } @else {

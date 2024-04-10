@@ -18,7 +18,7 @@ import { APP_LOADER } from 'src/app/util/util';
   templateUrl: './personal-info.component.html',
   styleUrls: ['./personal-info.component.scss'],
 })
-export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterViewInit {
+export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
 
   formGroup!: FormGroup;
   genderOptions: any = [];
@@ -34,7 +34,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
   @Input() isReadOnly: any;
   showPatrika: boolean = false;
   spectacles: boolean = false;
-  isEditMode: boolean = false;
+  isEditMode: boolean = true;
   isPhysicallyAbled: boolean = false;
   personalData: any;
 
@@ -51,16 +51,21 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
   cdref = inject(ChangeDetectorRef);
 
   hasSpecialization: boolean = false;
+  hasChild: boolean = false;
   isOtherPhyicalCondition: boolean = false;
-
+  occupationListOptions: any = [];
   specializationId = '';
+  occupationId = '';
+  occupationDetailId = '';
   isDataAvailable = false;
+  isOccupationDetailsDataAvailable = false;
   isSpecializationDataAvailable = false;
   tithiList: any[] = TITHI_LIST;
-
+  occupationDetailList: any = [];
   colorScheme: any = COLOR_SCHEME;
   colorVarients: any;
   loaderType = APP_LOADER;
+  isDataLoaded: boolean = false;
 
   constructor(
     private fb: FormBuilder
@@ -76,6 +81,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
 
   ngOnInit() {
     this.initFormGroup();
+    this.getCustomerDetails();
     this.genderOptions = [
       { id: 'male', title: 'Male' },
       { id: 'female', title: 'Female' },
@@ -96,14 +102,11 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
   }
 
   ngDoCheck(): void {
-    if (this.isReadOnly === true) this.formGroup?.disable();
-    else this.formGroup?.enable();
+
   }
 
   ngAfterViewInit(): void {
-    this.getMasterData();
-    this.isEditMode = this.customerData ? this.customerData['isPersonInfoFill'] : false;
-    this.cdref.detectChanges();
+
   }
 
   initFormGroup() {
@@ -111,25 +114,27 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
       firstName: ['', [Validators.required]],
       middleName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
+      // customerPassword: ['', ![Validators.required]],
       locationOfBirth: ['', [Validators.required]],
-      shakeDate: ![new Date(), [Validators.required]],
+      shakeDate: !['', [Validators.required]],
       gender: ['', [Validators.required]],
       heightId: ['', [Validators.required]],
       eduationId: ['', [Validators.required]],
       specializationId: !['', [Validators.required]],
+      occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
       timeOfBirth: !['', [Validators.required]],
-      occupation: ['', [Validators.required]],
+      occupationId: ['', [Validators.required]],
       physicalStatus: !['', [Validators.required]],
       otherPhysicalCondition: ['', ![Validators.required]],
       maritalStatus: ['', [Validators.required]],
-      hobbies: !['', ![Validators.required]],
+      hobbies: ['', ![Validators.required]],
       bloodGroupId: !['', ![Validators.required]],
       foodPreferencesId: !['', ![Validators.required]]
     });
 
-    if (this.isReadOnly) this.formGroup?.disable();
-    else this.formGroup?.enable();
+    // if (this.isReadOnly) this.formGroup?.disable();
+    // else this.formGroup?.enable();
 
     this.formGroup.valueChanges.subscribe((changes) => {
       this.sharedService.isFormValid.next(this.formGroup.valid);
@@ -150,8 +155,10 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
       ...this.personalData,
       dateOfBirth: new Date(this.personalData['dateOfBirth'])
     });
+
     this.spectacles = this.personalData['spectacles'];
     this.showPatrika = this.personalData['isPatrika'];
+    this.isPhysicallyAbled = this.personalData['isPhysicallyAbled'];
     this.tithiList = this.tithiList.map((item: any) => {
       Object.keys(this.personalData).forEach((key: any) => {
         if (item?.title.toLowerCase() === key) {
@@ -174,6 +181,8 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
   handleClickOnNext(src: string = 'personal') {
     const formVal = this.formGroup.value;
     formVal['specializationId'] = this.specializationId ? this.specializationId : null;
+    // formVal['occupationId'] = this.occupationId ? this.occupationId : null;
+    formVal['occupationDetailId'] = this.occupationDetailId ? this.occupationDetailId : null;
     formVal['bloodGroupId'] = formVal['bloodGroupId'] ? formVal['bloodGroupId'] : null;
     formVal['physicalStatus'] = this.isPhysicallyAbled ? formVal['physicalStatus'] : null;
     formVal['hobbies'] = formVal['hobbies'] ? formVal['hobbies'] : "";
@@ -196,9 +205,9 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
   }
 
   saveNewCustomerInfo(formVal: any, src: string): void {
-    let payload = { ...formVal, personalInfoId: 0 };
+    let payload = { ...formVal, personalInfoId: 0, occupation: "" };
     this.tithiList.forEach((item: any) => {
-      payload = { ...payload, [item.title]: item.value ? item.value : "" }
+      payload = { ...payload, [item.title.toLowerCase()]: item.value ? item.value : "" }
     });
     this.customerRegistrationService.savePersonalInformation(payload).subscribe({
       next: (data: any) => {
@@ -233,9 +242,9 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
 
   updateCustomerInfo(formVal: any, src: string): void {
     const customerId = this.customerData?.customerId;
-    let payload = { ...formVal, personalInfoId: this.personalData.personalInfoId };
+    let payload = { ...formVal, personalInfoId: this.personalData.personalInfoId, occupation: "" };
     this.tithiList.forEach((item: any) => {
-      payload = { ...payload, [item.title]: item.value ? item.value : "" }
+      payload = { ...payload, [item.title.toLowerCase()]: item.value ? item.value : "" }
     });
     this.customerRegistrationService.updatePersonalInformation(payload, customerId).subscribe({
       next: (data: any) => {
@@ -274,11 +283,12 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
     const handycap = this.sharedService.getHandyCapItemList();
     const bloodGroup = this.sharedService.getBloodGroupList();
     const foodPreferences = this.sharedService.getFoodPreferencesList();
-    forkJoin({ education, height, handycap, bloodGroup, foodPreferences })
+    const occupation = this.sharedService.getOccupationList();
+    forkJoin({ education, height, handycap, bloodGroup, foodPreferences, occupation })
       .subscribe({
         next: async (result) => {
           this.isDataAvailable = true;
-          const { education, height, handycap, bloodGroup, foodPreferences } = result;
+          const { education, height, handycap, bloodGroup, foodPreferences, occupation } = result;
           this.heightListOptions = height.map((item: any) => {
             return { id: item?.heightId, title: item?.heightName }
           });
@@ -307,8 +317,19 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
               title: item?.foodName,
             }
           });
+          this.occupationListOptions = occupation.map((item: any) => {
+            return {
+              id: item?.occupationId,
+              title: item?.occupationName,
+              hasChild: item?.hasChild
+            }
+          });
+
           if (this.isEditMode) this.patchValue();
           this.isDataAvailableEvent.emit(true);
+
+          // if (this.isReadOnly === true) this.formGroup?.disable();
+          // else this.formGroup?.enable();
           this.cdref.detectChanges();
         },
         error: (error: Error) => {
@@ -327,6 +348,14 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
       case 'specializationId':
         const specializationId = event?.specializationId;
         this.specializationId = specializationId;
+        break;
+      case 'occupationId':
+        this.hasChild = event?.hasChild;
+        if (this.hasChild) this.getOccupationDetails(event?.id);
+        break;
+      case 'occupationDetailId':
+        const occupationDetailId = event?.occupationDetailId;
+        this.occupationDetailId = occupationDetailId;
         break;
       case 'gender':
         break;
@@ -374,7 +403,7 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
         if (data) {
           this.specializationListOptions = data.map((item: any) => {
             return {
-              id: item?.educationId,
+              id: item?.specializationId,
               title: item?.specializationName,
               educationId,
               specializationId: item?.specializationId
@@ -388,5 +417,44 @@ export class PersonalInfoComponent implements OnInit, OnChanges, DoCheck, AfterV
       }
     })
   }
+  getOccupationDetails(occupationId: number) {
+    this.sharedService.getOccupationById(occupationId).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.occupationDetailList = data?.occupationDetailList?.map((item: any) => {
+            return {
+              id: item?.occupationDetailId,
+              title: item?.occupationDetailName,
+              occupationId,
+              occupationDetailId: item?.occupationDetailId
+            }
+          });
+          this.isOccupationDetailsDataAvailable = true;
+        }
+      },
+      error: (error) => {
+        this.alert.setAlertMessage(error?.message, AlertType.error);
+      }
+    })
+  }
 
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          console.log(data);
+          this.customerData = data;
+          this.personalData = this.customerData['personalInfoModel'];
+          this.isEditMode = this.customerData ? this.customerData['isPersonInfoFill'] : false;
+          this.getMasterData();
+          // this.isDataLoaded = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+  }
 }
