@@ -68,7 +68,6 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       stateId: ['', [Validators.required]],
       cityId: ['', [Validators.required]],
     })
-    this.formGroup.get('contactNumber')?.disable();
     this.getCountryList();
 
   }
@@ -77,6 +76,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
     const contactData = { ...this.contactData, contactNumber: this.customerData['customerUserName'] };
     this.formGroup.patchValue(contactData)
     this.cdref.detectChanges();
+    this.formGroup.get('contactNumber')?.disable();
   }
 
   get formGroupControl(): { [key: string]: FormControl } {
@@ -89,7 +89,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   }
 
   handleClickOnNext(src: string = 'contact') {
-    const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId, contactInfoId: 0 };
+    const formVal = { ...this.formGroup.value, customerId: this.customerData?.customerId, contactInfoId: 0 };
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
       else this.saveNewCustomerInfo(formVal, src);
@@ -128,6 +128,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
         }
@@ -168,6 +169,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
         }
@@ -268,7 +270,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           this.contactData = this.customerData['contactInfoModel'];
           this.isEditMode = this.customerData && this.customerData['isContactInfoFill'] ? true : false;
           if (this.contactData) {
-            if (this.isEditMode) this.patchFormData();
+            this.patchFormData();
           }
           // this.isDataLoaded = true;
         }

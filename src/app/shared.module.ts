@@ -51,6 +51,7 @@ import { NgHttpLoaderModule } from "ng-http-loader";
 import { CustomLoaderComponent } from './components/custom-loader/custom-loader.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { SidebarModule } from 'primeng/sidebar';
 
 const components = [
   FormStepperComponent,
@@ -98,6 +99,7 @@ const modules: any = [
   ToastModule,
   TmNgOdometerModule,
   NgScrollbarModule,
+  SidebarModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
   LoadingBarRouterModule,

@@ -27,6 +27,10 @@ export class SharedService {
   isLoggedInCompleted = new Subject();
   isLoggedOutCompleted = new Subject();
 
+  isUnAuthorizedRequest = new Subject();
+
+  isUserDetailUpdated = new Subject();
+
   isReadOnlyMode = new Subject();
 
   blogData = new Subject();

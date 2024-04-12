@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './photos.component.html',
   styleUrls: ['./photos.component.scss'],
 })
-export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
+export class PhotosComponent implements OnInit, AfterViewInit {
   @Input() completedStep!: FormStep;
   @ViewChild('dropdownInput') dropdownInput: any;
   @Input() customerData: any = null;
@@ -38,10 +38,6 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Output() nextFormStep = new EventEmitter();
 
-  ngOnChanges(changes: SimpleChanges | any): void {
-    // if (changes?.customerData?.currentValue) this.imagesData = this.customerData?.photos;
-  }
-
   ngOnInit() {
     this.getCustomerDetails();
   }
@@ -59,11 +55,6 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
       }
       this.photosData.emit(props);
       this.nextFormStep.emit('photo');
-      // if (this.formGroup.valid) {
-      //   this.handleClickOnNext(event);
-      // } else {
-      //   this.sharedService.isFormValid.next(this.formGroup.valid);
-      // }
     })
   }
 
@@ -79,10 +70,6 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
       this.imgData.push(this.thumbnailImage);
       this.imgData.push(this.photo1);
     }
-    // if (this.selectedFiles.length === 2 || this.imageData.length === 2) {
-    //   this.photoNext = true;
-    // }
-    console.log('photos', this.imageName, this.photoName);
     if (this.imgData.length === 2) this.sharedService.imagesSelected.next(true);
     this.cdref.detectChanges();
   }
@@ -95,6 +82,10 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
       case 'photo':
         this.selectedFiles.push(event.file);
         break;
+    }
+    const filename = event?.file?.name;
+    if(filename && this.imgData.length < 2) {
+      this.imgData.push(filename);
     }
     if (this.selectedFiles.length === 2) this.sharedService.imagesSelected.next(true);
     this.cdref.detectChanges();
@@ -123,12 +114,14 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   saveNewCustomerInfo(src: string): void {
-    const customerId: any = this.completedStep?.data?.customerId;
+    const customerId: any = this.customerData?.customerId;
     const formData: FormData = new FormData();
     formData.append('customerId', customerId);
-    this.selectedFiles.forEach((file: any) => {
-      formData.append('file', file, file.name);
-    })
+    if(this.selectedFiles.length) {
+      this.selectedFiles.forEach((file: any) => {
+        formData.append('file', file, file.name);
+      })
+    }
     this.customerRegistrationService.savePhotos(formData).subscribe({
       next: (data: any) => {
         if (data) {
@@ -148,14 +141,13 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
             },
             next: null
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.photosData.emit(props);
-          this.router.navigateByUrl('customers');
           this.customerRegistrationService.setRequestStatus(true, 'add');
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
         this.alert.setAlertMessage('Photos: ' + error?.statusText, AlertType.error);
       }
     })
@@ -165,9 +157,11 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
     const customerId = this.customerData?.customerId;
     const formData: FormData = new FormData();
     formData.append('customerId', customerId);
-    this.selectedFiles.forEach((file: any) => {
-      formData.append('file', file, file.name);
-    })
+    if(this.selectedFiles.length) {
+      this.selectedFiles.forEach((file: any) => {
+        formData.append('file', file, file.name);
+      })
+    }
     this.customerRegistrationService.updatePhotos(formData, customerId).subscribe({
       next: (data: any) => {
         if (data) {
@@ -187,14 +181,13 @@ export class PhotosComponent implements OnInit, AfterViewInit, OnChanges {
             },
             next: null
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.photosData.emit(props);
-          this.router.navigateByUrl('customers');
           this.customerRegistrationService.setRequestStatus(true, 'update');
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
         this.alert.setAlertMessage('Photos: ' + error?.statusText, AlertType.error);
       }
     })

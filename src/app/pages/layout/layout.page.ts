@@ -13,6 +13,8 @@ import { Store } from '@ngrx/store';
 import { saveData } from 'src/app/store.actions';
 import { ProfileStatus } from 'src/app/enums/profile-status';
 import * as AOS from 'aos';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { AlertType } from 'src/app/enums/alert-types';
 
 @Component({
   selector: 'app-layout',
@@ -27,10 +29,12 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   deviceService = inject(DeviceDetectorService);
   authService = inject(AuthService);
   sharedService = inject(SharedService);
+  alertService = inject(AlertService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
   isDesktopMode: boolean = false;
   showLogoutModal = false;
+  showSessionExpiredDialog = false;
 
   menuItems = MENU_ITEMS;
   loginIcon: IconProp = faGem;
@@ -98,6 +102,21 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       AOS.refresh();
       if (this.authService.isLoggedIn()) this.getUserDetails();
     }
+
+    this.sharedService.isUnAuthorizedRequest.subscribe((isUnAuthorizedRequest: any) => {
+      if(isUnAuthorizedRequest) {
+        this.showSessionExpiredDialog = true;
+        this.cdr.detectChanges();
+      }
+    })
+
+    this.sharedService.isUserDetailUpdated.subscribe((isUserUpdated: any) => {
+      if (isUserUpdated && this.authService.isLoggedIn()) this.getUserDetails();
+    })
+  }
+
+  handleSignIn() {
+    this.logoutUser();
   }
 
   getUserDetails() {
@@ -106,10 +125,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.authService.getCustomerProfileById(user?.user).subscribe({
       next: (response) => {
         if (response) {
-          console.log('response: ', response);
-          
           const { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill, profileStatus } = response;
           this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
+          this.notificationItems = [];
           if(profileStatus === ProfileStatus.incomplete) {
             this.notificationItems.push({
               key: 'profileStatus',

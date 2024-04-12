@@ -9,6 +9,8 @@ import { SharedService } from 'src/app/services/shared.service';
 import { COLOR_SCHEME, inputThemeVariables } from 'src/app/util/theme';
 import { Store } from '@ngrx/store';
 import { saveData } from 'src/app/store.actions';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { AlertType } from 'src/app/enums/alert-types';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +25,7 @@ export class LoginPage implements OnInit {
   deviceService = inject(DeviceDetectorService);
   authService = inject(AuthService);
   sharedService = inject(SharedService);
+  alert = inject(AlertService);
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
   colorScheme: any = COLOR_SCHEME;
@@ -77,14 +80,12 @@ export class LoginPage implements OnInit {
     this.authService.loginCustomer(formVal).subscribe({
       next: (response) => {
         if (response) {
-          console.log('response: ', response);
-
           const data = response?.customerResponse;
           const { token, customerId, profileStatus, isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } = data;
           localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
           localStorage.setItem('token', token);
           this.sharedService.customerData.set('profileStatusData', data);
-          this.showAlert('Successfully Logged in', 'success');
+          this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
           of(true)
             .pipe(
               delay(500)
@@ -105,7 +106,7 @@ export class LoginPage implements OnInit {
       error: (error: any) => {
         const err = error?.error;
         const errorMessage = err.message ? err?.message : 'Something went wrong';
-        this.showAlert(errorMessage, 'error');
+        this.alert.setAlertMessage(errorMessage, AlertType.error);
         of(true)
           .pipe(
             delay(1000)
@@ -113,12 +114,6 @@ export class LoginPage implements OnInit {
             this.isLoading = false;
             this.isLoggedIn = false;
             this.formGroup.enable();
-            of(true).
-              pipe(
-                delay(2000)
-              ).subscribe(() => {
-                this.messageService.clear();
-              });
           });
       }
     })

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
@@ -227,6 +228,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.personalInfoData.emit(props);
           this.nextFormStep.emit('family');
@@ -264,14 +266,14 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.personalInfoData.emit(props);
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.nextFormStep.emit('family');
         }
       },
-      error: (error: any) => {
-        console.log('error: ', error);
+      error: (error: any) => { 
         this.alert.setAlertMessage('Personal Info: ' + error?.statusText, AlertType.error);
       }
     })
@@ -287,54 +289,59 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     forkJoin({ education, height, handycap, bloodGroup, foodPreferences, occupation })
       .subscribe({
         next: async (result) => {
-          this.isDataAvailable = true;
-          const { education, height, handycap, bloodGroup, foodPreferences, occupation } = result;
-          this.heightListOptions = height.map((item: any) => {
-            return { id: item?.heightId, title: item?.heightName }
-          });
-          this.educationListOptions = education.map((item: any) => {
-            return {
-              id: item?.educationId,
-              title: item?.educationName,
-              hasSpecialization: item?.hasSpecialization
-            }
-          });
-          this.physicalStatusListOptions = handycap.map((item: any) => {
-            return {
-              id: item?.handycapId,
-              title: item?.handycapName,
-            }
-          });
-          this.bloodGroupListOptions = bloodGroup.map((item: any) => {
-            return {
-              id: item?.bloodGroupId,
-              title: item?.bloodGroupName,
-            }
-          });
-          this.foodPreferencesListOptions = foodPreferences.map((item: any) => {
-            return {
-              id: item?.foodId,
-              title: item?.foodName,
-            }
-          });
-          this.occupationListOptions = occupation.map((item: any) => {
-            return {
-              id: item?.occupationId,
-              title: item?.occupationName,
-              hasChild: item?.hasChild
-            }
-          });
+          console.log('result: ', result);
+          
+          if (result) {
+            this.isDataAvailable = true;
+            const { education, height, handycap, bloodGroup, foodPreferences, occupation } = result;
+            this.heightListOptions = height.map((item: any) => {
+              return { id: item?.heightId, title: item?.heightName }
+            });
+            this.educationListOptions = education.map((item: any) => {
+              return {
+                id: item?.educationId,
+                title: item?.educationName,
+                hasSpecialization: item?.hasSpecialization
+              }
+            });
+            this.physicalStatusListOptions = handycap.map((item: any) => {
+              return {
+                id: item?.handycapId,
+                title: item?.handycapName,
+              }
+            });
+            this.bloodGroupListOptions = bloodGroup.map((item: any) => {
+              return {
+                id: item?.bloodGroupId,
+                title: item?.bloodGroupName,
+              }
+            });
+            this.foodPreferencesListOptions = foodPreferences.map((item: any) => {
+              return {
+                id: item?.foodId,
+                title: item?.foodName,
+              }
+            });
+            this.occupationListOptions = occupation.map((item: any) => {
+              return {
+                id: item?.occupationId,
+                title: item?.occupationName,
+                hasChild: item?.hasChild
+              }
+            });
 
-          if (this.isEditMode) this.patchValue();
-          this.isDataAvailableEvent.emit(true);
+            if (this.isEditMode) this.patchValue();
+            this.isDataAvailableEvent.emit(true);
 
-          // if (this.isReadOnly === true) this.formGroup?.disable();
-          // else this.formGroup?.enable();
-          this.cdref.detectChanges();
+            // if (this.isReadOnly === true) this.formGroup?.disable();
+            // else this.formGroup?.enable();
+            this.cdref.detectChanges();
+          }
         },
-        error: (error: Error) => {
-          console.log('error: ', error);
-          this.alert.setAlertMessage('Error while processing request', AlertType.error);
+        error: (error: HttpErrorResponse) => {
+          if(error.status !== 401) {
+            this.alert.setAlertMessage('Error while processing request', AlertType.error);
+          } 
         }
       })
   }

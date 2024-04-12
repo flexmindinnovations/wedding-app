@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Sidebar } from 'primeng/sidebar';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -18,6 +19,9 @@ export class ProfilePage implements OnInit {
   sharedService = inject(SharedService);
 
   isReadOnly: boolean = false;
+
+  sidebarVisible: boolean = false;
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
   profileSteps = [
     { name: 'Personal Information', route: 'personal', code: 'PI' },
@@ -42,12 +46,12 @@ export class ProfilePage implements OnInit {
     observer.observe(this.host.nativeElement);
 
     this.router.events.subscribe((events: any) => {
-        const currentUrl = this.router.url;
-        const activeRoute = this.router.url.substring(currentUrl.lastIndexOf('/') + 1, this.router.url.length);
-        if(activeRoute) {
-          const activeItem = this.profileSteps.filter((item: any) => item.route === activeRoute);
-          if(activeItem?.length) this.selectedStep = activeItem[0];
-        }
+      const currentUrl = this.router.url;
+      const activeRoute = this.router.url.substring(currentUrl.lastIndexOf('/') + 1, this.router.url.length);
+      if (activeRoute) {
+        const activeItem = this.profileSteps.filter((item: any) => item.route === activeRoute);
+        if (activeItem?.length) this.selectedStep = activeItem[0];
+      }
     })
   }
 
@@ -67,6 +71,26 @@ export class ProfilePage implements OnInit {
   handleListItemChange(event: any) {
     this.router.navigateByUrl('profile/' + event.route);
     this.selectedStep = event;
+  }
+
+  closeSIdebar(e: any): void {
+    this.sidebarRef.close(e);
+  }
+
+  getSplitterDimensions() {
+    if(this.isMobile) {
+      return [0, 100];
+    } else {
+      return [18, 100];
+    }
+  }
+
+  getMinSplitterDimensions() {
+    if(this.isMobile) {
+      return [0, 100];
+    } else {
+      return [15, 80];
+    }
   }
 
 }
