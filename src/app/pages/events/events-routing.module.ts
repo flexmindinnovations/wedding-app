@@ -7,9 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: EventsPage
-  },  {
-    path: 'event-detail',
-    loadChildren: () => import('./event-detail/event-detail.module').then( m => m.EventDetailPageModule)
+  },
+  {
+    path: 'details',
+    loadChildren: () => import('../events/event-detail/event-detail.module').then(m => m.EventDetailPageModule)
   }
 
 ];
@@ -18,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class EventsPageRoutingModule {}
+export class EventsPageRoutingModule { }
