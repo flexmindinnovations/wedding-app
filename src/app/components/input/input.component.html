@@ -20,7 +20,7 @@
   <p-password [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
     (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
     [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [value]="value"
-    [placeholder]="placeholder" [required]="isRequired" [toggleMask]="true"></p-password>
+    [placeholder]="placeholder" [required]="isRequired" [toggleMask]="true" appendTo="body"></p-password>
   } @else {
   <input [type]="type" [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
     (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"

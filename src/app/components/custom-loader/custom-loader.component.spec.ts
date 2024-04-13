@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DeleteConfirmComponent } from './delete-confirm.component';
+import { CustomLoaderComponent } from './custom-loader.component';
 
-describe('DeleteConfirmComponent', () => {
-  let component: DeleteConfirmComponent;
-  let fixture: ComponentFixture<DeleteConfirmComponent>;
+describe('CustomLoaderComponent', () => {
+  let component: CustomLoaderComponent;
+  let fixture: ComponentFixture<CustomLoaderComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteConfirmComponent ],
+      declarations: [ CustomLoaderComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeleteConfirmComponent);
+    fixture = TestBed.createComponent(CustomLoaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

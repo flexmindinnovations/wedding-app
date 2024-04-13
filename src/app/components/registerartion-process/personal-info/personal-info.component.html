@@ -106,9 +106,9 @@
         </p>
 
         @if (isPhysicallyAbled) {
-        <app-dropdown label="Physical Status" [control]="formGroupControl['physicalStatus']"
-          [controlValue]="formGroup.get('physicalStatus')?.value" formControlName="physicalStatus"
-          (onSelectionChange)="onSelectionChange($event, 'physicalStatus')" [options]="physicalStatusListOptions" />
+        <app-dropdown label="Physical Status" [control]="formGroupControl['handycapId']"
+          [controlValue]="formGroup.get('handycapId')?.value" formControlName="handycapId"
+          (onSelectionChange)="onSelectionChange($event, 'handycapId')" [options]="physicalStatusListOptions" />
         @if (isOtherPhyicalCondition) {
         <app-input label="Physical Condition" type="text" [control]="formGroupControl['otherPhysicalCondition']"
           formControlName="otherPhysicalCondition" [controlValue]="formGroup.get('otherPhysicalCondition')?.value" />

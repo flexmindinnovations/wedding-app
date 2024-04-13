@@ -89,7 +89,7 @@ export class FamilyInfoComponent implements OnInit {
   }
 
   handleClickOnNext(src: string = 'family') {
-    const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId };
+    const formVal = { ...this.formGroup.value, customerId: this.customerData?.customerId };
     this.cdref.detectChanges();
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
@@ -129,6 +129,7 @@ export class FamilyInfoComponent implements OnInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
         }
@@ -167,6 +168,7 @@ export class FamilyInfoComponent implements OnInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
         }

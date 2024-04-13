@@ -48,6 +48,10 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { NgHttpLoaderModule } from "ng-http-loader";
+import { CustomLoaderComponent } from './components/custom-loader/custom-loader.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { SidebarModule } from 'primeng/sidebar';
 
 const components = [
   FormStepperComponent,
@@ -66,6 +70,7 @@ const components = [
   CarouselItemComponent,
   SearchBoxComponent,
   FooterComponent,
+  CustomLoaderComponent
 ]
 
 const modules: any = [
@@ -91,8 +96,10 @@ const modules: any = [
   OverlayPanelModule,
   BadgeModule,
   ImageModule,
+  ToastModule,
   TmNgOdometerModule,
   NgScrollbarModule,
+  SidebarModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
   LoadingBarRouterModule,
@@ -122,6 +129,7 @@ const modules: any = [
     ...components
   ],
   providers: [
+    MessageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomHttpInterceptor,

@@ -36,8 +36,10 @@
       </ion-button>
       } @else {
       <div class="protected-content flex items-center justify-start gap-3 ml-3">
+        @if (notificationItems.length > 0) {
         <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
           [value]="notificationItems.length.toString()"></i>
+        }
         <p-menu #menu [model]="profileItems" [popup]="true" appendTo="body"></p-menu>
         <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
           image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
@@ -59,6 +61,20 @@
       <p>
         Logging out, please waite...
       </p>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<ng-container>
+  <p-dialog #sessionExpired [header]="'Session Expired'" [(visible)]="showSessionExpiredDialog" appendTo="body"
+    [modal]="true" [closable]="false" [style]="{ width: '33vw' }" [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-4">
+      <p class="select-none">
+        Your session is expired, please login again to continue.
+      </p>
+      <div class="action w-full flex items-center justify-end">
+        <mt-button title="Sign In" (action)="handleSignIn()" />
+      </div>
     </div>
   </p-dialog>
 </ng-container>

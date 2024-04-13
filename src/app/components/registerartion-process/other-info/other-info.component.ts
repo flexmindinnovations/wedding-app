@@ -89,7 +89,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   }
 
   handleClickOnNext(src: string = 'other') {
-    const formVal = { ...this.formGroup.value, customerId: this.completedStep?.data?.customerId, otherInfoId: 0 };
+    const formVal = { ...this.formGroup.value, customerId:this.customerData?.customerId, otherInfoId: 0 };
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
       else this.saveNewCustomerInfo(formVal, src);
@@ -128,6 +128,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
         }
@@ -168,6 +169,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
               isCompleted: false
             }
           }
+          this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
         }
@@ -202,7 +204,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
         if (data) {
           this.customerData = data;
           this.otherData = this.customerData['otherInfoModel'];
-          this.isEditMode = this.customerData ? this.customerData['isContactInfoFill'] : false;
+          this.isEditMode = this.customerData ? this.customerData['isOtherInfoFill'] : false;
           if (this.isEditMode) this.patchFormData();
           this.getMotherTongueList();
           // this.isDataLoaded = true;

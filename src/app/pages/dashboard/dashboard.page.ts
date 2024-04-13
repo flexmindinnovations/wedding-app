@@ -2,6 +2,8 @@ import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@an
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Observer, share } from 'rxjs';
 import { AnimationDirection } from 'src/app/components/carousel-item/carousel-item.component';
+import { AlertType } from 'src/app/enums/alert-types';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { HomeService } from 'src/app/services/home/home.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
@@ -35,6 +37,7 @@ export class DashboardPage implements OnInit {
     auto: true,
   }
 
+  alert = inject(AlertService);
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
     this.handleOnScroll(event);

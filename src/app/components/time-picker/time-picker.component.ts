@@ -1,4 +1,4 @@
-import { Component, DoCheck, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -13,23 +13,24 @@ export class TimePickerComponent implements OnInit {
   @Output() selectedTime: any = new EventEmitter();
   @Input() isDisabled: any = false;
   time: any = new Date();
+  defaultDate: any;
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private cdref: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
     this.sharedService.getIsReadOnlyMode().subscribe((readOnly: any) => {
       this.isDisabled = readOnly;
     })
-    // console.log('value: ', this.value);
-    // const cValue = moment(this.value).format();
-    // console.log('cValue: ', cValue);
-
+    this.time = new Date(this.value);
+    this.defaultDate = new Date(this.value);
   }
 
 
   handleSelectionChange(event: any, src?: string) {
     this.selectedTime.emit(event);
+    this.cdref.detectChanges();
   }
 }
