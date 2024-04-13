@@ -39,8 +39,11 @@
               <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
             </li>
           </ol>
-
-          <mt-button title="Register Now" />
+          @if (isLoggedIn) {
+            <mt-button title="Explore Profiles" />
+          } @else {
+            <mt-button title="Register Now" (action)="handleRegister()"/>
+          }
         </div>
         <div class="content -z-[10] flex-grow w-full h-[inherit]">
           <div class="bars">
@@ -50,7 +53,8 @@
           </div>
           <div data-aos="fade-up-left" data-aos-easing="linear" data-aos-duration="3000"
             class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
-            <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full select-none" alt="Demo Image" />
+            <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full select-none"
+              alt="Demo Image" />
           </div>
         </div>
       </div>

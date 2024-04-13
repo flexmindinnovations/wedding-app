@@ -40,6 +40,10 @@ export class AlertComponent implements AfterViewInit, OnDestroy {
       summary: this.getAlertType(),
       detail: this.alertMessage
      });
+
+     setTimeout(() => {
+      this.handleHideAlert();
+     }, 3000)
   }
 
   handleHideAlert() {

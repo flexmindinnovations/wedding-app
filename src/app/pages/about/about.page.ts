@@ -1,22 +1,31 @@
-import { Component, ElementRef, NgZone, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DOMAIN } from 'src/app/util/theme';
+import { Message } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.page.html',
   styleUrls: ['./about.page.scss'],
 })
-export class AboutPage implements OnInit {
+export class AboutPage implements OnInit, AfterViewInit {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
-  
+  isLoggedIn: boolean = false;
+
   isMobile: boolean = false;
   isDesktop: boolean = true;
-
   domain = DOMAIN;
-  constructor() { }
+  dialogRef: DynamicDialogRef | undefined;
+
+  constructor(
+    private authService: AuthService,
+    private dialogService: DialogService
+  ) { }
 
   ngOnInit() {
     const observer = new ResizeObserver((rect) => {
@@ -27,7 +36,31 @@ export class AboutPage implements OnInit {
     });
 
     observer.observe(this.host.nativeElement);
-
   }
+
+  ngAfterViewInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    console.log('isLoggedIn: ', this.isLoggedIn);
+    
+  }
+
+  handleRegister() {
+    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      console.log('afterClose: ', afterClose);
+      if (afterClose) { }
+    });
+  }
+
 
 }
