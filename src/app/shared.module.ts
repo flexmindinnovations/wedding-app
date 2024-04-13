@@ -52,6 +52,9 @@ import { CustomLoaderComponent } from './components/custom-loader/custom-loader.
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
+import { RegisterUserComponent } from './modals/register-user/register-user.component';
+import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FieldsetModule } from 'primeng/fieldset';
 
 const components = [
   FormStepperComponent,
@@ -70,7 +73,8 @@ const components = [
   CarouselItemComponent,
   SearchBoxComponent,
   FooterComponent,
-  CustomLoaderComponent
+  CustomLoaderComponent,
+  RegisterUserComponent
 ]
 
 const modules: any = [
@@ -100,6 +104,8 @@ const modules: any = [
   TmNgOdometerModule,
   NgScrollbarModule,
   SidebarModule,
+  DynamicDialogModule,
+  FieldsetModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
   LoadingBarRouterModule,
@@ -130,6 +136,8 @@ const modules: any = [
   ],
   providers: [
     MessageService,
+    DialogService,
+    DynamicDialogRef, 
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomHttpInterceptor,

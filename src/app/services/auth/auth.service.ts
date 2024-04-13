@@ -24,6 +24,10 @@ export class AuthService {
     return this.http.get(`${this.endpoint}/GetCustomerById/${userId}`);
   }
 
+  signUp(payload: any): Observable<any> {
+    return this.http.post(`${this.endpoint}/signUp`, payload);
+  }
+
   logoutUser() {
     localStorage.removeItem('token');
     localStorage.removeItem('profile');

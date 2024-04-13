@@ -2,46 +2,55 @@
   <label for="{{id}}">{{label}}
   </label>
   @if(isMultiline){
-  <textarea [title]="label" [disabled]="control.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" rows="3"
-    class="p-2.5 w-full min-h-24" [value]="controlValue" [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''"  [placeholder]="placeholder"
+  <textarea [title]="label" [disabled]="control?.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" rows="3" class="p-2.5 w-full min-h-24" [value]="controlValue"
+    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [placeholder]="placeholder"
     [autoResize]="true"></textarea>
 
   } @else if(type === 'date' && presentaion==="date") {
-  <p-calendar [(ngModel)]="value" [disabled]="control.disabled" [id]="id" (ngModelChange)="handleOnChange($event, 'dt')" appendTo="body"
-    [showButtonBar]="true" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
+  <p-calendar [(ngModel)]="value" [disabled]="control?.disabled" [id]="id"
+    (ngModelChange)="handleOnChange($event, 'dt')" appendTo="body" [showButtonBar]="true" [iconDisplay]="'input'"
+    [showIcon]="true"></p-calendar>
   } @else if(type === "time" && presentaion==="time"){
-  <time-picker [disabled]="control.disabled" class="w-full" [value]="value" (selectedTime)="handleOnChange($event, 'time')" />
+  <time-picker [disabled]="control?.disabled" class="w-full" [value]="value"
+    (selectedTime)="handleOnChange($event, 'time')" />
   } @else if(type === "number"){
   <input [type]="type" [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" pInputText
-    pKeyFilter="int" class="w-full !text-sm" [disabled]="control.disabled"
+    pKeyFilter="int" class="w-full !text-sm" [disabled]="control?.disabled"
     [ngClass]="control.touched && control.invalid ? colorVarients + invalidControl : colorVarients + validControl"
     [value]="value" [placeholder]="placeholder" [required]="isRequired" />
   } @else if(type === "password"){
-  <p-password [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+  <p-password [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
     (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
-    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [value]="value"
-    [placeholder]="placeholder" [required]="isRequired" [toggleMask]="true" appendTo="body"></p-password>
-  } @else {
-  <input [type]="type" [disabled]="control.disabled" [name]="label" [id]="id" (blur)="onTouched()"
-    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
-    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [value]="value"
-    [placeholder]="placeholder" [required]="isRequired" />
-  @if (formControlName === 'userPassword' && hasValue) {
-  <button type="button" (click)="handlePasswordVisiblity()" id="togglePassword"
-    class=" absolute top-10 right-4 focus:outline-none -ml-8">
-    <ion-icon [name]="passwordToggleIcon"></ion-icon>
-  </button>
+    [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="control.required" [toggleMask]="true" appendTo="body"></p-password>
+  @if (control.hasError('min')) {
+  <small id="username-help" class="p-error">Please minimum length required</small>
   }
+  @if (control.hasError('max')) {
+  <small id="username-help" class="p-error">Should not exceed maximum length required</small>
+  }
+  } @else {
+  <input [type]="type" [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="isRequired" />
   @if (control.touched && control.invalid) {
   <div class="validation-errors px-2 bg-transparent dark:bg-gray-700 mt-[2px]">
-    @if (control.hasError('required')) { <span class="text-xs font-light dark:bg-gray-700 text-red-700">{{label}} is
-      required</span> }
-    @if (control.hasError('min') || control.hasError('max')) { <span
-      class="text-xs dark:bg-gray-700 font-light text-red-700">Please
-      provide valid input</span> }
-    @if (type === 'email' && control.hasError('email')) { <span
-      class="text-xs dark:bg-gray-700 font-light text-red-700">Invalid
-      email</span> }
+    @if (control.hasError('required')) {
+    <small id="username-help" class="p-error">{{label}} is
+      required</small>
+    }
+    @if (control.hasError('min')) {
+    <small id="username-help" class="p-error">Please minimum length required</small>
+    }
+    @if (control.hasError('max')) {
+    <small id="username-help" class="p-error">Should not exceed maximum length required</small>
+    }
+    @if (type === 'email' && control.hasError('email')) {
+    <small id="username-help" class="p-error">Invalid
+      email</small>
+    }
   </div>
   }
   }

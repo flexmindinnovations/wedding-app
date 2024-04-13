@@ -1,0 +1,18 @@
+::ng-deep .p-message-wrapper {
+    @apply p-2;
+    .p-message-icon {
+        @apply hidden text-xs font-light;
+    }
+
+    .p-message-close {
+        @apply font-light text-xs h-3 w-3;
+    }
+
+    .p-message-summary {
+        @apply text-xs;
+    }
+
+    .p-message-detail {
+        @apply text-xs font-light;
+    }
+}

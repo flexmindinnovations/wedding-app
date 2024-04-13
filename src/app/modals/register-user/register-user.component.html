@@ -1,0 +1,43 @@
+<div class="content h-full w-full">
+  <p-messages [(value)]="validationMessages" [showTransitionOptions]="'500ms'" [enableService]="false"
+    [closable]="false"></p-messages>
+  <form [formGroup]="formGroup" class="flex flex-col items-start justify-center gap-5 w-full">
+    <app-input label="Mobile Number" type="number" labelColor="text-gray-700"
+      [controlValue]="formGroup.get('customerUserName')?.value" [control]="formGroupControl['customerUserName']"
+      formControlName="customerUserName" class="flex-auto" />
+
+    <app-input label="Password" type="password" labelColor="text-gray-700"
+      [controlValue]="formGroup.get('customerPassword')?.value" [control]="formGroupControl['customerPassword']"
+      formControlName="customerPassword" class="flex-auto" />
+
+    <app-input label="Confirm Password" type="password" labelColor="text-gray-700"
+      [controlValue]="formGroup.get('confirmPassword')?.value" [control]="formGroupControl['confirmPassword']"
+      formControlName="confirmPassword" class="flex-auto" />
+
+    <div class="action flex w-full items-center justify-end py-2">
+      <p-button [disabled]="showRegisterLoader" [iconPos]="!showRegisterLoader ? 'left' : 'right'" label="Sign Up
+      " pAutoFocus (click)="handleSignUpClick()" />
+    </div>
+  </form>
+</div>
+
+<p-dialog header="Header" [(visible)]="showSuccessDialog" [modal]="true" [style]="{ width: '100%' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <ng-template pTemplate="header">
+    <span class="p-dialog-title">
+      Congratulations
+    </span>
+  </ng-template>
+  <p class="m-0 mb-4 text-sm">
+    You have been successfully registered for {{domain}} platform,
+    you can use you mobile number {{username}} to login.
+  </p>
+  <p class="m-0 text-sm">
+    Would you like to continue to login?
+  </p>
+  <ng-template pTemplate="footer">
+    <p-button [icon]="!showLoader ? 'pi pi-user' : 'pi pi-spin pi-spinner'" (click)="handleLogin()"
+      [iconPos]="!showLoader ? 'left' : 'right'" [label]="showLoader ? 'Redirecting...' : 'Login'
+    " pAutoFocus [disabled]="showLoader" [autofocus]="true"></p-button>
+  </ng-template>
+</p-dialog>

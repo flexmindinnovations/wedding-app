@@ -1,7 +1,9 @@
 import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, Observer, share } from 'rxjs';
 import { AnimationDirection } from 'src/app/components/carousel-item/carousel-item.component';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { HomeService } from 'src/app/services/home/home.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
@@ -30,11 +32,11 @@ export class HomePage implements OnInit {
   public observable: Observable<boolean>;
   private observer!: Observer<boolean>;
   public config = {
-    animation: 'count', 
-    format: ',ddd', 
+    animation: 'count',
+    format: ',ddd',
     value: 0,
     auto: true,
-}
+  }
 
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
@@ -42,7 +44,10 @@ export class HomePage implements OnInit {
   };
 
   animateDirection: AnimationDirection = 'right';
-  constructor() {
+  dialogRef: DynamicDialogRef | undefined;
+  constructor(
+    private dialogService: DialogService
+  ) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
   }
@@ -63,6 +68,24 @@ export class HomePage implements OnInit {
   handleOnScroll(event: any) {
     console.log('event scroll: ', event);
 
+  }
+
+  handleRegister() {
+    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      console.log('afterClose: ', afterClose);
+      if (afterClose) { }
+    });
   }
 
   getRandomProfiles() {
