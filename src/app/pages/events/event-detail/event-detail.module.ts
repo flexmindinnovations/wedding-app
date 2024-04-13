@@ -7,14 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { EventDetailPageRoutingModule } from './event-detail-routing.module';
 
 import { EventDetailPage } from './event-detail.page';
+import { QuillModule } from 'ngx-quill';
+import { EventContentComponent } from './event-content/event-content.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    QuillModule.forRoot(),
     EventDetailPageRoutingModule
   ],
-  declarations: [EventDetailPage]
+  declarations: [EventDetailPage, EventContentComponent]
 })
-export class EventDetailPageModule {}
+export class EventDetailPageModule { }
