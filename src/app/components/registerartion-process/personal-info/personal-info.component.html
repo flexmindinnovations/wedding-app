@@ -110,8 +110,8 @@
           [controlValue]="formGroup.get('handycapId')?.value" formControlName="handycapId"
           (onSelectionChange)="onSelectionChange($event, 'handycapId')" [options]="physicalStatusListOptions" />
         @if (isOtherPhyicalCondition) {
-        <app-input label="Physical Condition" type="text" [control]="formGroupControl['otherPhysicalCondition']"
-          formControlName="otherPhysicalCondition" [controlValue]="formGroup.get('otherPhysicalCondition')?.value" />
+        <app-input label="Physical Condition" type="text" [control]="formGroupControl['otherPhysicalText']"
+          formControlName="otherPhysicalText" [controlValue]="formGroup.get('otherPhysicalText')?.value" />
         }
         }
 

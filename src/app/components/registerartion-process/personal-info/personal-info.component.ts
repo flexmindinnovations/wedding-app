@@ -127,7 +127,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       timeOfBirth: !['', [Validators.required]],
       occupationId: ['', [Validators.required]],
       handycapId: !['', [Validators.required]],
-      otherPhysicalCondition: ['', ![Validators.required]],
+      otherPhysicalText: ['', ![Validators.required]],
       maritalStatus: ['', [Validators.required]],
       hobbies: ['', ![Validators.required]],
       bloodGroupId: !['', ![Validators.required]],
@@ -273,7 +273,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           this.nextFormStep.emit('family');
         }
       },
-      error: (error: any) => { 
+      error: (error: any) => {
         this.alert.setAlertMessage('Personal Info: ' + error?.statusText, AlertType.error);
       }
     })
@@ -290,7 +290,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       .subscribe({
         next: async (result) => {
           console.log('result: ', result);
-          
+
           if (result) {
             this.isDataAvailable = true;
             const { education, height, handycap, bloodGroup, foodPreferences, occupation } = result;
@@ -339,9 +339,9 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           }
         },
         error: (error: HttpErrorResponse) => {
-          if(error.status !== 401) {
+          if (error.status !== 401) {
             this.alert.setAlertMessage('Error while processing request', AlertType.error);
-          } 
+          }
         }
       })
   }

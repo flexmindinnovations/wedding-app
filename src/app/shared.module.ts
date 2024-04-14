@@ -55,6 +55,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { RegisterUserComponent } from './modals/register-user/register-user.component';
 import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FieldsetModule } from 'primeng/fieldset';
+import { CardComponent } from './components/card/card.component';
 
 const components = [
   FormStepperComponent,
@@ -74,7 +75,8 @@ const components = [
   SearchBoxComponent,
   FooterComponent,
   CustomLoaderComponent,
-  RegisterUserComponent
+  RegisterUserComponent,
+  CardComponent,
 ]
 
 const modules: any = [
@@ -137,7 +139,7 @@ const modules: any = [
   providers: [
     MessageService,
     DialogService,
-    DynamicDialogRef, 
+    DynamicDialogRef,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomHttpInterceptor,
