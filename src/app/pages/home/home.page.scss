@@ -1,6 +1,6 @@
 section {
     .container {
-        @apply w-full md:lg:xl:w-[85%];
+        @apply w-[80%];
         margin: 40px auto;
     }
 }
@@ -79,10 +79,9 @@ section._register {
     }
 
     .content {
-
+        @apply z-0;
         .bars {
-
-            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[50%] absolute top-0 right-0 bottom-0 -z-[1];
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[50%] absolute top-0 right-0 bottom-0 z-[1];
             will-change: auto;
             animation: shake 45s linear infinite;
 
@@ -106,7 +105,7 @@ section._register {
         }
 
         .image-container {
-
+            @apply flex z-10 relative;
             img {
                 @apply shadow-2xl;
                 border: 15px solid #fff;
@@ -133,39 +132,6 @@ section._features {
     }
 }
 
-
-section.video {
-    @apply container m-auto flex items-center justify-center h-[50%] md:lg:h-[75%] md:lg:max-h-[75%] sm:md:lg:xl:max-w-full relative backdrop-brightness-200 bg-blend-darken;
-    perspective: 1px;
-    overflow: hidden;
-
-
-    video {
-        @apply absolute top-0 h-full left-0 right-0 w-full object-fill;
-        transform: translateZ(-1px) scale(2);
-    }
-
-    .overlay {
-        @apply flex gap-10 h-full w-full z-10 items-center justify-start px-5 flex-nowrap bg-black/40;
-    }
-
-    .search-box {
-        @apply flex gap-10 w-full items-end justify-center flex-nowrap absolute left-0 right-0 bottom-14 whitespace-nowrap overflow-hidden;
-    }
-
-    .marquee-text {
-        @apply flex gap-8 w-full items-end justify-center flex-nowrap absolute right-0 bottom-0 whitespace-nowrap overflow-hidden;
-
-        p {
-            @apply text-xs md:lg:text-2xl text-white font-bold flex-grow w-full text-center my-2;
-            white-space: nowrap;
-            display: inline-block;
-            position: relative;
-            will-change: auto;
-            animation: marquee 35s linear infinite;
-        }
-    }
-}
 
 .marquee:hover span {
     animation-play-state: paused;
@@ -277,4 +243,37 @@ section.video {
     100% {
         background-position: 0% 50%;
     }
+}
+
+
+.content-wrapper {
+    @apply relative bg-gray-50 w-screen flex flex-col;
+
+    section.video {
+        @apply h-[calc(100vh-70px)] w-screen top-0 bottom-0;
+        background-attachment: fixed;
+
+        video {
+            @apply h-full w-full -z-10 object-fill;
+        }
+
+        .overlay {
+            @apply absolute top-0 bottom-0 h-[calc(100vh-70px)] w-full flex items-end justify-center bg-black/50;
+
+            .marquee-text {
+                @apply flex gap-8 w-full items-end justify-center flex-nowrap absolute top-0 bottom-10 whitespace-nowrap overflow-hidden;
+
+                p {
+                    @apply text-xs md:lg:text-2xl text-white font-bold flex-grow w-full text-center my-2;
+                    white-space: nowrap;
+                    display: inline-block;
+                    position: relative;
+                    will-change: auto;
+                    animation: marquee 35s linear infinite;
+                }
+            }
+        }
+    }
+
+
 }

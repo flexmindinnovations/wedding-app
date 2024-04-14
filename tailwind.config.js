@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         'bg-blog': "url('/assets/icon/blog.png')",
+        'counter': "url('/assets/image/counter.jpg')",
       },
       colors: {
         dark: {
