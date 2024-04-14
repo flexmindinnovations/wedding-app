@@ -88,7 +88,7 @@
             </li>
           </ol>
 
-          <mt-button title="Register Now" (action)="handleRegister()"/>
+          <mt-button title="Register Now" (action)="handleRegister()" />
         </div>
         <div class="content -z-[10] flex-grow w-full h-[inherit]">
           <div class="bars">
@@ -96,8 +96,7 @@
             <div class="bar2"></div>
             <div class="bar3"></div>
           </div>
-          <div 
-            class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
+          <div class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
             <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
           </div>
         </div>
@@ -109,13 +108,13 @@
         <div class="container h-full flex flex-row items-center justify-center gap-10">
           <div class="profiles text-center">
             <tm-ng-odometer class="block w-full" [number]="profileCount" [config]="config"
-            [observable]="observable"></tm-ng-odometer>
+              [observable]="observable"></tm-ng-odometer>
             <h1>Total Profiles</h1>
           </div>
           <div class="branches text-center">
             <tm-ng-odometer class="block w-full" [number]="branchCount" [config]="config"
-            [observable]="observable"></tm-ng-odometer>
-  
+              [observable]="observable"></tm-ng-odometer>
+
             <h1>Total Branches</h1>
           </div>
         </div>
@@ -123,14 +122,24 @@
     </section>
 
     <section class="_features flex items-center justify-center min-h-96">
-      <div class="container">
+      <div class="flex items-center justify-center flex-wrap gap-5">
+        <div class="max-w-md p-6">
           <h1>
             Why choose {{domain}}?
           </h1>
+        </div>
+        <app-card [title]="'Free SMS & Chat'"
+          [description]="'An important facility such as chat is available in our site, so that people can interact with each other.'"></app-card>
+        <app-card [title]="'Auto Match Maker'"
+          [description]="'Some new members get registered daily. This matrimony system updates and shows you matched profile.'"></app-card>
+        <app-card [title]="'Recommend Profile'"
+          [description]="'when you follow some-one, you can see the updates of people whom you follow.'"></app-card>
+        <app-card [title]="'Notification Alerts'"
+          [description]="'The activities such as changing the display picture, birthday notification, photo requests.'"></app-card>
+        <app-card [title]="'Restrictions Setting'"
+          [description]="'Restrictions Enable Copying Photos & Video Disable Anti Spam System Provided.'"></app-card>
       </div>
     </section>
-
-
     <div class="footer">
       <app-footer></app-footer>
     </div>
