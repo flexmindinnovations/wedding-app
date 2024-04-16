@@ -2,7 +2,8 @@
   <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
     <ion-title class="font-light">
       <div class="header w-full flex items-center justify-start gap-5">
-        <p-button (click)="sidebarVisible = true" icon="pi pi-bars"  [rounded]="true" [text]="true" class="flex md:lg:xl:hidden"></p-button>
+        <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
+          class="flex md:lg:xl:hidden"></p-button>
         <p>
           Profile Information
         </p>
@@ -10,7 +11,8 @@
     </ion-title>
     <ion-buttons slot="end">
       <!-- <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
-        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton> -->
+        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'"
+        class="text-xs min-w-20"></p-toggleButton> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -18,7 +20,8 @@
 <ion-content [fullscreen]="true">
   <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
     <div class="hidden md:lg:xl:block form-container max-h-full flex-grow w-full">
-      <p-splitter [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()" class="flex-grow w-full h-full">
+      <p-splitter [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
+        class="flex-grow w-full h-full">
         <ng-template class="hidden md:lg:xl:flex" pTemplate>
           <div class="w-full h-full">
             <p-listbox (ngModelChange)="handleListItemChange($event)" class="h-full shadow-none"
@@ -32,17 +35,17 @@
         </ng-template>
       </p-splitter>
     </div>
-    <div class="block md:lg:xl:hidden h-full w-full bg-slate-500">
-      <!-- <router-outlet></router-outlet> -->
-    </div>
+    <!-- <div class="block lg:xl:hidden h-full w-full">
+      <router-outlet name='secondaryOutlet'></router-outlet>z
+    </div> -->
   </div>
 </ion-content>
 
 <p-sidebar #sidebarRef [(visible)]="sidebarVisible" appendTo="body">
   <ng-template pTemplate="headless">
     <div class="profile-page w-full h-full">
-      <p-listbox (ngModelChange)="handleListItemChange($event); sidebarVisible = false" class="h-full shadow-none" [options]="profileSteps"
-        [(ngModel)]="selectedStep" optionLabel="name"></p-listbox>
+      <p-listbox (ngModelChange)="handleListItemChange($event); sidebarVisible = false" class="h-full shadow-none"
+        [options]="profileSteps" [(ngModel)]="selectedStep" optionLabel="name"></p-listbox>
     </div>
   </ng-template>
 </p-sidebar>
