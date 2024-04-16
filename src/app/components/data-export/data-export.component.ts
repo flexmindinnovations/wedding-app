@@ -7,13 +7,7 @@ import { environment } from 'src/environments/environment';
 import { v4 as uuidv4 } from 'uuid';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import * as html2PDF from 'html-to-pdfmake';
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Buffer as buffer } from 'buffer';
-
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
 
 interface ObjectType {
   title: string;

@@ -251,7 +251,7 @@ section._counter {
     @apply relative bg-gray-50 w-screen flex flex-col;
 
     section.video {
-        @apply h-[calc(100vh-70px)] w-screen top-0 bottom-0;
+        @apply h-[calc(100vh-70px)] min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;
         background-attachment: fixed;
 
         video {

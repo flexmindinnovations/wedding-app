@@ -7,8 +7,9 @@
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
     <section class="video">
-      <video autoplay muted loop>
+      <video autoplay muted loop playsInline>
         <source src="/assets/videos/intro.mp4" type="video/mp4">
+        Your browser does not support the video tag.
       </video>
       <div class="overlay">
         <div class="marquee-text">
@@ -105,9 +106,8 @@
         </div>
       </section>
 
-      <section
+      <!-- <section
         class="_counter bg-counter bg-no-repeat bg-center bg-cover object-fill flex items-center rounded-md justify-center min-h-96 ">
-        <!-- <ngx-particles [id]="particleId" [options]="particlesOptions" (particlesLoaded)="particlesLoaded($event)"></ngx-particles> -->
         <div class="overlay rounded-md bg-gray-50/90 backdrop-blur-sm min-h-96 w-full flex items-center justify-center">
           <div class="container h-full flex flex-row items-center justify-center gap-10">
             <div class="profiles text-center text-black">
@@ -123,7 +123,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <section class="_features flex items-center justify-center min-h-96">
         <div class="container flex items-center justify-center flex-wrap gap-5">

@@ -1,5 +1,5 @@
 ::ng-deep .p-button {
-    @apply py-1 text-sm font-extralight dark:text-white px-4 min-h-8 min-w-full lg:xl:min-w-24 lg:xl:max-w-60 mt-auto rounded-md;
+    @apply py-2.5 text-sm font-semibold dark:text-white px-5 min-h-8 min-w-full lg:xl:min-w-24 lg:xl:max-w-60 mt-auto rounded-md;
     font-family: "Ubuntu", sans-serif;
 
     &:focus {

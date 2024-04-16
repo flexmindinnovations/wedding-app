@@ -34,6 +34,8 @@ export class HomePage implements OnInit {
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
 
+  videoPlayerOptions = { autoplay: true, controls: false, sources: [{ src: '/assets/videos/intro.mp4', type: 'video/mp4' }] }
+
   profileCount = 100;
   branchCount = 10;
   public observable: Observable<boolean>;
@@ -90,7 +92,7 @@ export class HomePage implements OnInit {
 
   particlesLoaded(container: Container): void {
     console.log(container);
-}
+  }
 
   handleRegister() {
     this.dialogRef = this.dialogService.open(RegisterUserComponent, {

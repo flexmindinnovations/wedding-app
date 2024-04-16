@@ -59,6 +59,7 @@ import { CardComponent } from './components/card/card.component';
 import { NgxParticlesModule } from "@tsparticles/angular";
 import { DataExportComponent } from './components/data-export/data-export.component';
 import { TableModule } from 'primeng/table';
+import { VideoPlayerComponent } from './components/video-player/video-player.component';
 
 const components = [
   FormStepperComponent,
@@ -80,7 +81,8 @@ const components = [
   CustomLoaderComponent,
   RegisterUserComponent,
   CardComponent,
-  DataExportComponent
+  DataExportComponent,
+  VideoPlayerComponent
 ]
 
 const modules: any = [
