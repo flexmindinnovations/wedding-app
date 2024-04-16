@@ -60,7 +60,7 @@
       @if(currentFormName !== 'personal'){
       <!-- <mt-button [size]="'md'" title="Previous" [icon]="'arrow-back'" [iconSlot]="'start'" /> -->
       }
-      <mt-button [size]="'md'" (click)="handleNextClick()" [title]="isLastStep ? 'Finish' : 'Next'"
+      <mt-button (click)="handleNextClick()" [title]="isLastStep ? 'Finish' : 'Next'"
         [disabled]="!isDataAvailable || !isFormValid" [icon]="'arrow-forward'" [textOnly]="isLastStep ? true : false"
         [iconSlot]="'end'" />
     </div>
@@ -136,7 +136,7 @@
         </ul>
       </section>
       <div class="actions flex items-center justify-end py-3">
-        <mt-button [size]="'md'" (click)="handleContinueClick()" [title]="'Continue'" [textOnly]="true" />
+        <mt-button (click)="handleContinueClick()" [title]="'Continue'" [textOnly]="true" />
       </div>
     </div>
   </div>

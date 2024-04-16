@@ -19,3 +19,7 @@
 label {
     @apply text-sm mb-2 mx-1 text-dark-700 dark:bg-dark-950 dark:text-white;
 }
+
+::ng-deep .p-dropdown-label {
+    @apply p-2.5;
+}

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Sidebar } from 'primeng/sidebar';
 import { SharedService } from 'src/app/services/shared.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DataExportComponent } from 'src/app/components/data-export/data-export.component';
 
 @Component({
   selector: 'app-profile',
@@ -31,9 +33,12 @@ export class ProfilePage implements OnInit {
     { name: 'Photos Upload', route: 'photos', code: 'PH' }
   ];
 
+  dialogRef: DynamicDialogRef | undefined;
+
   constructor(
     private deviceService: DeviceDetectorService,
-    private router: Router
+    private router: Router,
+    public dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -78,7 +83,7 @@ export class ProfilePage implements OnInit {
   }
 
   getSplitterDimensions() {
-    if(this.isMobile) {
+    if (this.isMobile) {
       return [0, 100];
     } else {
       return [18, 100];
@@ -86,11 +91,31 @@ export class ProfilePage implements OnInit {
   }
 
   getMinSplitterDimensions() {
-    if(this.isMobile) {
+    if (this.isMobile) {
       return [0, 100];
     } else {
       return [15, 80];
     }
+  }
+
+  handleExportAction() {
+    this.dialogRef = this.dialogService.open(
+      DataExportComponent, {
+      header: 'Data Export',
+      width: '80%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: true
+    }
+    )
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      // console.log('afterClose: ', afterClose);
+      if (afterClose) { }
+    });
   }
 
 }

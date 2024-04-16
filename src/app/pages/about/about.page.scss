@@ -1,3 +1,26 @@
+.container {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.image-container {
+    margin-top: 10%;
+    width: 40vw;
+    height: 40vw;
+    overflow: hidden;
+    border-radius: 50%;
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.circle-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+
+
 section._register {
 
     @apply py-10;

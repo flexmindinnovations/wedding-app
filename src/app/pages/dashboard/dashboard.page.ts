@@ -63,7 +63,7 @@ export class DashboardPage implements OnInit {
   }
 
   handleOnScroll(event: any) {
-    console.log('event scroll: ', event);
+    // console.log('event scroll: ', event);
 
   }
 

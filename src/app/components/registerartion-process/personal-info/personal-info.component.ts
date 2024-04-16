@@ -289,8 +289,6 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     forkJoin({ education, height, handycap, bloodGroup, foodPreferences, occupation })
       .subscribe({
         next: async (result) => {
-          console.log('result: ', result);
-
           if (result) {
             this.isDataAvailable = true;
             const { education, height, handycap, bloodGroup, foodPreferences, occupation } = result;
@@ -450,7 +448,6 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {
-          console.log(data);
           this.customerData = data;
           this.personalData = this.customerData['personalInfoModel'];
           this.isEditMode = this.customerData ? this.customerData['isPersonInfoFill'] : false;

@@ -96,7 +96,7 @@ export class RegisterPage implements OnInit {
   }
 
   handleRefresh(event: any) {
-    console.log('handleRefresh: ', event);
+    // console.log('handleRefresh: ', event);
     setTimeout(() => {
       // Any calls to load data go here
       event.target.complete();

@@ -5,9 +5,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="content bg-gray-50 h-full w-full">
+  <div class="content-wrapper">
     <section class="video">
-      <video autoplay muted loop>
+      <video autoplay muted loop playsInline>
         <source src="/assets/videos/intro.mp4" type="video/mp4">
       </video>
       <div class="overlay">
@@ -30,107 +30,107 @@
         </div>
       </div>
     </section>
-    <section class="border-b">
-      <div class="container search-box">
-        <search-box class="w-full" />
-      </div>
-    </section>
-
-    <section class="meet-members py-5 w-full">
-      <div class="container">
-        <div class="header">
-          <h1>
-            Top Matches For Your Profiles
-          </h1>
+    <div class="flat-items flex flex-col gap-7">
+      <section class="border-b">
+        <div class="container search-box">
+          <search-box class="w-full" />
         </div>
-        <div class="member-list-container grid grid-cols-2 gap-2 md:grid-cols-3
+      </section>
+
+      <section class="meet-members py-5 w-full">
+        <div class="container">
+          <div class="header">
+            <h1>
+              Top Matches For Your Profiles
+            </h1>
+          </div>
+          <div class="member-list-container grid grid-cols-2 gap-2 md:grid-cols-3
         lg:grid-cols-4 xl:grid-cols-5 p-2 relative">
-          @if (profileList.length) {
-          @for (item of profileList; track $index) {
-          <div class="profile-item col-span-1 w-full ">
-            <carousel-item [data]="item" />
-          </div>
-          }
+            @if (profileList.length) {
+            @for (item of profileList; track $index) {
+            <div class="profile-item col-span-1 w-full ">
+              <carousel-item [data]="item" />
+            </div>
+            }
 
-          <div
-            class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 flex-grow w-full flex items-center justify-center p-3">
-            <mt-button title="Load More Profiles" />
-          </div>
-          } @else {
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
-          }
-        </div>
-      </div>
-    </section>
-
-    <section class="_register ">
-      <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10">
-        <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
-          <p class="about tracking-widest uppercase">
-            About Us
-          </p>
-          <h1>
-            Welcome to {{domain}} Matrimony
-          </h1>
-          <p>
-            Marriage, also known as matrimony or wedlock, is like a special bond that ties two people together. Imagine
-            it
-            as a magical connection where two hearts decide to walk through life side by side.
-          </p>
-          <p>
-            Here’s what our platform offers:
-          </p>
-          <ol>
-            <li>
-              <p>Profiles with all the details, from age to education. </p>
-            </li>
-            <li>
-              <p>Easy navigation to explore effortlessly.</p>
-            </li>
-            <li>
-              <p>Smart profile matching with the help of advace algorithm.</p>
-            </li>
-            <li>
-              <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
-            </li>
-          </ol>
-
-          <mt-button title="Explore Profiles" />
-        </div>
-        <div class="content -z-[10] flex-grow w-full h-[inherit]">
-          <div class="bars opacity-20 md:lg:opacity-100">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
-          </div>
-          <div
-            class="image-container hidden md:lg:flex border-white items-center justify-end h-full w-full rounded-full">
-            <p-image src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image"
-              [preview]="false" />
+            <div
+              class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 flex-grow w-full flex items-center justify-center p-3">
+              <mt-button title="Load More Profiles" />
+            </div>
+            } @else {
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+            }
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="_counter flex items-center justify-center min-h-96 ">
-      <div class="overlay min-h-96 w-full flex items-center justify-center backdrop-blur-lg">
-        <div class="container h-full flex flex-row items-center justify-center gap-10">
-          <div class="profiles text-center">
-            <tm-ng-odometer class="block w-full" [number]="profileCount" [config]="config"
-              [observable]="observable"></tm-ng-odometer>
-            <h1>Total Profiles</h1>
+      <section class="_register ">
+        <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10">
+          <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
+            <p class="about tracking-widest uppercase">
+              About Us
+            </p>
+            <h1>
+              Welcome to {{domain}} Matrimony
+            </h1>
+            <p>
+              Marriage, also known as matrimony or wedlock, is like a special bond that ties two people together.
+              Imagine
+              it
+              as a magical connection where two hearts decide to walk through life side by side.
+            </p>
+            <p>
+              Here’s what our platform offers:
+            </p>
+            <ol>
+              <li>
+                <p>Profiles with all the details, from age to education. </p>
+              </li>
+              <li>
+                <p>Easy navigation to explore effortlessly.</p>
+              </li>
+              <li>
+                <p>Smart profile matching with the help of advace algorithm.</p>
+              </li>
+              <li>
+                <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
+              </li>
+            </ol>
+
+            <mt-button title="Explore Profiles" />
           </div>
-          <div class="branches text-center">
-            <tm-ng-odometer class="block w-full" [number]="branchCount" [config]="config"
-              [observable]="observable"></tm-ng-odometer>
-
-            <h1>Total Branches</h1>
+          <div class="content -z-[10] flex-grow w-full h-[inherit]">
+            <div class="bars">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+            </div>
+            <div class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
+              <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- <section class="_features flex items-center justify-center min-h-96">
+      <section class="_counter flex items-center justify-center min-h-96 ">
+        <div class="overlay min-h-96 w-full flex items-center justify-center backdrop-blur-lg">
+          <div class="container h-full flex flex-row items-center justify-center gap-10">
+            <div class="profiles text-center">
+              <tm-ng-odometer class="block w-full" [number]="profileCount" [config]="config"
+                [observable]="observable"></tm-ng-odometer>
+              <h1>Total Profiles</h1>
+            </div>
+            <div class="branches text-center">
+              <tm-ng-odometer class="block w-full" [number]="branchCount" [config]="config"
+                [observable]="observable"></tm-ng-odometer>
+
+              <h1>Total Branches</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- <section class="_features flex items-center justify-center min-h-96">
       <div class="container">
           <h1>
             Why choose {{domain}}?
@@ -139,8 +139,9 @@
     </section> -->
 
 
-    <div class="footer">
-      <app-footer></app-footer>
+      <div class="footer">
+        <app-footer></app-footer>
+      </div>
     </div>
     <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
   </div>

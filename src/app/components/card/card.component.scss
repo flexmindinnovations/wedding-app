@@ -1,5 +1,7 @@
 h1 {
-    @apply font-bold text-base md:lg:text-3xl m-0;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 600;
+    @apply text-base md:lg:text-3xl m-0;
     background: rgb(247, 0, 104);
     background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
     background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
@@ -11,6 +13,8 @@ h1 {
 }
 
 .card {
+    transition: 0.3s ease-in-out all;
+
     a {
         h5 {
             font-family: "Ubuntu", sans-serif;

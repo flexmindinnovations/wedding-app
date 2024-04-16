@@ -40,8 +40,8 @@ export class AboutPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
-    console.log('isLoggedIn: ', this.isLoggedIn);
-    
+    // console.log('isLoggedIn: ', this.isLoggedIn);
+
   }
 
   handleRegister() {
@@ -57,7 +57,7 @@ export class AboutPage implements OnInit, AfterViewInit {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      console.log('afterClose: ', afterClose);
+      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }

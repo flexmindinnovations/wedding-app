@@ -12,7 +12,7 @@
     <input #filePicker type="file" [name]="label" (change)="handleImageChange($event)" accept="image/*"
       class="hidden" />
     <div class="action flex flex-col items-start justify-start gap-2">
-      <mt-button title="Choose file" [size]="'sm'" [textOnly]="true" (action)="filePicker.click()" />
+      <mt-button title="Choose file" [textOnly]="true" (action)="filePicker.click()" />
     </div>
     <span class="text-xs block w-full p-1 text-dark-900 dark:text-white font-semibold italic">{{imagePath}}</span>
   </div>

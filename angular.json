@@ -34,6 +34,7 @@
             "styles": [
               "src/theme/variables.scss",
               "./node_modules/aos/dist/aos.css",
+              "./node_modules/video.js/dist/video-js.css",
               "src/global.scss"
             ],
             "scripts": []

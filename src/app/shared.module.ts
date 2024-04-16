@@ -56,6 +56,10 @@ import { RegisterUserComponent } from './modals/register-user/register-user.comp
 import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CardComponent } from './components/card/card.component';
+import { NgxParticlesModule } from "@tsparticles/angular";
+import { DataExportComponent } from './components/data-export/data-export.component';
+import { TableModule } from 'primeng/table';
+import { VideoPlayerComponent } from './components/video-player/video-player.component';
 
 const components = [
   FormStepperComponent,
@@ -77,6 +81,8 @@ const components = [
   CustomLoaderComponent,
   RegisterUserComponent,
   CardComponent,
+  DataExportComponent,
+  VideoPlayerComponent
 ]
 
 const modules: any = [
@@ -108,11 +114,13 @@ const modules: any = [
   SidebarModule,
   DynamicDialogModule,
   FieldsetModule,
+  TableModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
   LoadingBarRouterModule,
   // for Core use:
-  LoadingBarModule
+  LoadingBarModule,
+  NgxParticlesModule
 ];
 
 @NgModule({

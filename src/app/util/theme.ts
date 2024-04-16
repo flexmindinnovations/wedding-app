@@ -55,9 +55,9 @@ export const buttonThemeVariables: any = {
 }
 
 export const iconSize = {
-    sm: 'text-sm',
-    md: 'text-xl',
-    lg: 'text-2xl'
+    small: 'text-sm',
+    normal: 'text-xl',
+    large: 'text-2xl'
 }
 
 export const inputThemeVariables: any = {
