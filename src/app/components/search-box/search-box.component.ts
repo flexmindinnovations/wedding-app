@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { AlertType } from 'src/app/enums/alert-types';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { CastService } from 'src/app/services/cast/cast.service';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -24,8 +27,12 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   isReligionSelected: boolean = false;
 
   fb = inject(FormBuilder);
+  
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -41,12 +48,12 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   initFormGroup() {
     this.formGroup = this.fb.group({
-      gender: [],
-      ageFrom: [],
-      ageTo: [],
-      religion: [],
-      cast: [],
-      motherTongue: []
+      gender: ['', [Validators.required]],
+      fromAge: !['', [Validators.required]],
+      toAge: !['', [Validators.required]],
+      cast: !['', [Validators.required]],
+      subcast: !['', ![Validators.required]],
+      motherTongue: !['', [Validators.required]]
     })
   }
 
@@ -57,7 +64,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   onSelectionChange(event: any, src: string) {
     const value = event?.id;
     switch (src) {
-      case 'religionId':
+      case 'castId':
         this.isReligionSelected = true;
         this.getCastList(value);
         break;
@@ -67,8 +74,19 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   handleOnSearch() {
     const formVal = this.formGroup.value;
-    console.log('formVal: ', formVal);
+    if(this.formGroup.invalid) {
+      this.alertService.setAlertMessage('Please provide filter criteria', AlertType.warning);
+      return;
+    }
 
+    const filteredQueryParams = Object.keys(formVal).filter(objKey =>
+      formVal[objKey]).reduce((newObj: any, key) => {
+        newObj[key] = formVal[key];
+        return newObj;
+      }, {}
+      );
+
+    this.router.navigate(['/filter-profile'], { queryParams: filteredQueryParams, skipLocationChange: false });
   }
 
   getMasterData() {
@@ -105,16 +123,16 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       next: (response: any) => {
         if (response) {
           console.log('response: ', response);
-          
-         const subCastList = response?.subCastList;
-         console.log('subCastList: ', subCastList);
-         
-         this.castList = subCastList.map((item: any) => {
-           return {
-             id: item?.subCastId,
-             title: item?.subCastName
-           }
-         });
+
+          const subCastList = response?.subCastList;
+          console.log('subCastList: ', subCastList);
+
+          this.castList = subCastList.map((item: any) => {
+            return {
+              id: item?.subCastId,
+              title: item?.subCastName
+            }
+          });
         }
 
       },

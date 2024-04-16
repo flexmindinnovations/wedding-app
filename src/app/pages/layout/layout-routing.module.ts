@@ -49,6 +49,10 @@ const routes: Routes = [
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'filter-profile',
+        loadChildren: () => import('../profile-filter/profile-filter.module').then(m => m.ProfileFilterPageModule)
+      },
+      {
         path: 'logout',
         loadChildren: () => import('../logout/logout.module').then(m => m.LogoutPageModule)
       },

@@ -12,19 +12,19 @@
         [options]="genderOptions" class="flex-auto" />
 
       <app-input label="Age From" type="number" labelColor="text-gray-700"
-        [controlValue]="formGroup.get('ageFrom')?.value" [control]="formGroupControl['ageFrom']"
-        formControlName="ageFrom" class="flex-auto" />
+        [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
+        formControlName="fromAge" class="flex-auto" />
 
-      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('ageTo')?.value"
-        [control]="formGroupControl['ageTo']" formControlName="ageTo" class="flex-auto" />
+      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('toAge')?.value"
+        [control]="formGroupControl['toAge']" formControlName="toAge" class="flex-auto" />
 
-      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['religion']"
-        formControlName="religion" (onSelectionChange)="onSelectionChange($event, 'religionId')"
+      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['cast']"
+        formControlName="cast" (onSelectionChange)="onSelectionChange($event, 'castId')"
         [options]="religionList" class="flex-auto" />
 
       @if (isReligionSelected && castList.length) {
-      <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
-        (onSelectionChange)="onSelectionChange($event, 'castId')" [options]="castList" class="flex-auto" />
+      <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
+        (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="flex-auto" />
       }
 
 

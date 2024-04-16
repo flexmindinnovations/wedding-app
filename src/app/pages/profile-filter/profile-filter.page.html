@@ -1,0 +1,100 @@
+<ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
+  <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
+    <ion-title class="font-light">
+      <div class="header w-full flex items-center justify-start gap-5">
+        <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
+          class="flex md:lg:xl:hidden"></p-button>
+        <div class="audit-info w-full flex items-center justify-between pr-5">
+          <h2 class="m-0">
+            Profile Search
+          </h2>
+          <p class="select-none">
+            @if(filteredProfileList.length) {
+            Showing {{filteredProfileList.length}} of {{filteredProfileList.length}}
+            }
+          </p>
+        </div>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end"></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
+    <div class="hidden md:lg:xl:block form-container max-h-full flex-grow w-full">
+      <p-splitter [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
+        class="max-h-[calc(100vh-70px)] block h-full">
+        <ng-template class="hidden md:lg:xl:flex md:lg:xl:h-full md:lg:xl:min-w-[20%]" pTemplate>
+          <div class="w-full h-full">
+            <div class="header min-h-10 bg-gray-100 flex items-center justify-start">
+              <p class="px-3">
+                Filter you search
+              </p>
+            </div>
+            <div class="form-container py-4 px-3">
+              @if (isDataAvailable) {
+              <form [formGroup]="formGroup" class="flex flex-col items-start justify-center gap-4">
+                <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+                  (onSelectionChange)="onSelectionChange($event, 'gender')"
+                  [controlValue]="formGroup.get('gender')?.value" [options]="genderOptions" class="w-full" />
+
+                <app-input label="Age From" type="number" labelColor="text-gray-700"
+                  [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
+                  formControlName="fromAge" class="w-full" />
+
+                <app-input label="Age To" type="number" labelColor="text-gray-700"
+                  [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']"
+                  formControlName="toAge" class="w-full" />
+
+                <app-dropdown label="Religion" [showClear]="true" labelColor="text-white" [control]="formGroupControl['cast']"
+                  formControlName="cast" [showClear]="true"  (onSelectionChange)="onSelectionChange($event, 'castId')"
+                  [options]="religionList" class="w-full" />
+
+                @if (isReligionSelected && castList.length) {
+                <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
+                  (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="w-full" />
+                }
+
+
+                <app-dropdown label="Mother Tongue" [showClear]="true"  [control]="formGroupControl['motherTongue']"
+                  formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
+                  [options]="motherToungeList" class="w-full" />
+
+              </form>
+              } @else {
+              <div class="h-28 w-full p-3 flex items-center justify-center">
+                <i class="pi pi-spin pi-spinner"></i>
+              </div>
+              }
+
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate>
+          <div class="w-full h-full grid grid-cols-2 gap-2 md:grid-cols-3
+          lg:grid-cols-3 xl:grid-cols-4 p-2 relative overflow-auto">
+            @if (filteredProfileList.length && !isLoading) {
+            @for (item of filteredProfileList; track $index) {
+            <div class="profile-item col-span-1 w-full ">
+              <carousel-item [data]="item" />
+            </div>
+            }
+            } @else if(isLoading) {
+            <div class="h-28 w-full p-3 flex items-center justify-center">
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            } @else {
+            <div class="h-full w-full p-3 flex items-center justify-center md:col-span-3
+            lg:col-span-4 xl:col-span-5">
+              <h2 class="select-none">
+                You filtered search does not match any record, try changing or removing search criteria.
+              </h2>
+            </div>
+            }
+          </div>
+        </ng-template>
+      </p-splitter>
+    </div>
+  </div>
+</ion-content>
