@@ -7,6 +7,11 @@ import { RegisterUserComponent } from 'src/app/modals/register-user/register-use
 import { HomeService } from 'src/app/services/home/home.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
+import { NgParticlesService } from "@tsparticles/angular";
+import { particlesOptions } from 'src/app/util/util';
+import { v4 as uuidv4 } from 'uuid';
+import { Container } from '@tsparticles/engine';
+import { loadSlim } from "@tsparticles/slim";
 
 @Component({
   selector: 'app-home',
@@ -26,6 +31,8 @@ export class HomePage implements OnInit {
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
 
   domain = DOMAIN;
+  particlesOptions: any = particlesOptions;
+  particleId: any = uuidv4();
 
   profileCount = 100;
   branchCount = 10;
@@ -46,7 +53,8 @@ export class HomePage implements OnInit {
   animateDirection: AnimationDirection = 'right';
   dialogRef: DynamicDialogRef | undefined;
   constructor(
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private readonly ngParticlesService: NgParticlesService
   ) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
@@ -63,12 +71,26 @@ export class HomePage implements OnInit {
     observer.observe(this.host.nativeElement);
 
     this.getRandomProfiles();
+
+    this.ngParticlesService.init(async (engine) => {
+      console.log(engine);
+
+      // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
+      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+      // starting from v2 you can add only the features you need reducing the bundle size
+      //await loadFull(engine);
+      await loadSlim(engine);
+    });
   }
 
   handleOnScroll(event: any) {
     console.log('event scroll: ', event);
 
   }
+
+  particlesLoaded(container: Container): void {
+    console.log(container);
+}
 
   handleRegister() {
     this.dialogRef = this.dialogService.open(RegisterUserComponent, {

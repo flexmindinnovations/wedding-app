@@ -11,6 +11,7 @@
     <ion-buttons slot="end">
       <!-- <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
         (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton> -->
+        <mt-button title="Export Data" icon="pi pi-file-export" (action)="handleExportAction()"></mt-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

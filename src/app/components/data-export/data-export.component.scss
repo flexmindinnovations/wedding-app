@@ -1,0 +1,45 @@
+::ng-deep .p-datatable.p-datatable-gridlines .p-datatable-header {
+    // border-width: 0;
+    // background: none;
+}
+
+::ng-deep .p-datatable,
+.user-info-container {
+    width: 80%;
+    margin: 0 auto;
+
+    .header {
+        @apply bg-gray-50 py-2 flex items-center justify-center;
+        h1 {
+            @apply block w-full text-center m-0 p-2;
+        }
+    }
+
+    .table {
+        @apply w-full;
+        .wrapper {
+
+            :not(:first-child) {
+                @apply my-3;
+            }
+
+            h2 {
+                @apply font-semibold text-base p-2 m-0;
+            }
+
+            ul {
+                li {
+                    @apply w-full flex items-center justify-start gap-4  last:border-none m-0;
+
+                    p {
+                        @apply px-10 py-1 m-0 text-sm;
+                    }
+                }
+            }
+        }
+    }
+}
+
+::ng-deep .p-dialog-header-icons {
+    @apply flex items-center justify-end gap-1;
+}

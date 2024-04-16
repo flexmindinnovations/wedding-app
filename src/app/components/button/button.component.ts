@@ -15,7 +15,7 @@ export class ButtonComponent implements OnInit {
   @Input() buttonType: ButtonTypes = 'default';
   @Input('iconSlot') iconSlot: 'start' | 'end' = 'start';
   @Input('disabled') isDisabled = false;
-  @Input() size: ButtonSize = 'lg';
+  @Input() size: ButtonSize = 'small';
   @Input() isCancel: boolean = false;
   colorScheme: any = COLOR_SCHEME;
   colorVarients: any;
@@ -43,5 +43,5 @@ export class ButtonComponent implements OnInit {
   }
 }
 
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = 'small' | 'large';
 export type ButtonTypes = 'normal' | 'default' | 'danger' | 'success';

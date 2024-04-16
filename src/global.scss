@@ -42,3 +42,40 @@ html {
 *:after {
   box-sizing: border-box;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+p,
+span {
+  font-family: "Ubuntu", sans-serif;
+}
+
+span,
+label,
+p {
+  @apply font-light text-sm;
+}
+
+.p-dialog {
+  .p-dialog-header {
+    .p-dialog-title {
+      @apply text-lg font-semibold;
+    }
+  }
+}
+
+::ng-deep .p-dialog-header {
+  .p-dialog-title {
+    @apply text-lg font-semibold;
+  }
+}
+
+
+.pi {
+  font-family: 'primeicons' !important;
+}
