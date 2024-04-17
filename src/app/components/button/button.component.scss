@@ -1,9 +1,30 @@
 ::ng-deep .p-button {
-    @apply py-2.5 text-sm font-semibold dark:text-white px-5 min-h-8 min-w-full lg:xl:min-w-24 lg:xl:max-w-60 mt-auto rounded-md;
-    font-family: "Ubuntu", sans-serif;
+    @apply text-sm font-semibold dark:text-white px-5 min-h-8 min-w-full  w-full lg:xl:min-w-24 lg:xl:max-w-full mt-auto rounded-md;
+    font-family: "Overpass", sans-serif;
+    font-optical-sizing: auto;  
+
+    .p-button-label {
+        @apply mt-[2px];
+    }
 
     &:focus {
         @apply shadow-none border-none outline-none;
     }
 
+}
+
+.small {
+    .p-button {
+        @apply p-2;
+    }
+}
+
+.large {
+    .p-button {
+        @apply p-2.5;
+    }
+}
+
+::ng-deep p-button {
+    @apply block h-full w-full;
 }

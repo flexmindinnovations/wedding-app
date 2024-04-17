@@ -1,19 +1,19 @@
 <ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
   <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
     <ion-title class="font-light">
-      <div class="header w-full flex items-center justify-start gap-5">
-        <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
-          class="flex md:lg:xl:hidden"></p-button>
-        <div class="audit-info w-full flex items-center justify-between pr-5">
-          <h2 class="m-0">
-            Profile Search
-          </h2>
-          <p class="select-none">
-            @if(filteredProfileList.length) {
-            Showing {{filteredProfileList.length}} of {{filteredProfileList.length}}
-            }
-          </p>
+      <div class="header w-full flex items-center justify-between gap-5">
+        <div class="menu-bar">
+          <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
+            class="flex md:lg:xl:hidden"></p-button>
         </div>
+        <h2 class="!m-0">
+          Profile Search
+        </h2>
+        <p class="select-none">
+          @if(filteredProfileList.length) {
+          Showing {{filteredProfileList.length}} of {{filteredProfileList.length}}
+          }
+        </p>
       </div>
     </ion-title>
     <ion-buttons slot="end"></ion-buttons>
@@ -47,9 +47,9 @@
                   [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']"
                   formControlName="toAge" class="w-full" />
 
-                <app-dropdown label="Religion" [showClear]="true" labelColor="text-white" [control]="formGroupControl['cast']"
-                  formControlName="cast" [showClear]="true"  (onSelectionChange)="onSelectionChange($event, 'castId')"
-                  [options]="religionList" class="w-full" />
+                <app-dropdown label="Religion" [showClear]="true" labelColor="text-white"
+                  [control]="formGroupControl['cast']" formControlName="cast" [showClear]="true"
+                  (onSelectionChange)="onSelectionChange($event, 'castId')" [options]="religionList" class="w-full" />
 
                 @if (isReligionSelected && castList.length) {
                 <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
@@ -57,7 +57,7 @@
                 }
 
 
-                <app-dropdown label="Mother Tongue" [showClear]="true"  [control]="formGroupControl['motherTongue']"
+                <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
                   formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
                   [options]="motherToungeList" class="w-full" />
 

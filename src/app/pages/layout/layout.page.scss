@@ -70,3 +70,8 @@
         }
     }
 }
+
+::ng-deep .p-badge {
+    @apply flex items-center justify-center;
+  }
+  

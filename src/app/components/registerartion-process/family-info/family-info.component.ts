@@ -26,6 +26,7 @@ export class FamilyInfoComponent implements OnInit {
   alert = inject(AlertService);
   customerRegistrationService = inject(CustomerRegistrationService);
   castService = inject(CastService);
+  isDataAvailable = false;
 
   @Output() familyInfoData = new EventEmitter();
   cdref = inject(ChangeDetectorRef);
@@ -50,13 +51,6 @@ export class FamilyInfoComponent implements OnInit {
   ngOnInit() {
     this.initFormGroup();
     this.getCustomerDetails();
-  }
-
-  // ngOnChanges(changes: SimpleChanges | any): void {
-  //   if (changes?.customerData?.currentValue) this.familyData = this.customerData['familyInfoModel'];
-  // }
-
-  ngAfterViewInit(): void {
   }
 
   initFormGroup() {
@@ -103,6 +97,7 @@ export class FamilyInfoComponent implements OnInit {
   }
 
   saveNewCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const payload = { ...formVal, familyInfoId: 0 };
     this.customerRegistrationService.saveFamilyInformation(payload).subscribe({
       next: (data: any) => {
@@ -132,16 +127,19 @@ export class FamilyInfoComponent implements OnInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
         console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Family Info: ' + error?.statusText, AlertType.error);
       }
     })
   }
 
   updateCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const payload = { ...formVal, familyInfoId: this.familyData.familyInfoId };
     this.customerRegistrationService.updateFamilyInformation(payload, this.customerData?.customerId).subscribe({
       next: (data: any) => {
@@ -171,10 +169,12 @@ export class FamilyInfoComponent implements OnInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
         console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Family Info: ' + error?.statusText, AlertType.error);
       }
     })
@@ -206,6 +206,7 @@ export class FamilyInfoComponent implements OnInit {
               title: item?.religionName,
             }
           })
+          this.isDataAvailable = true;
         }
       },
       error: (error) => {
@@ -262,7 +263,7 @@ export class FamilyInfoComponent implements OnInit {
           if (this.familyData) {
             if (this.isEditMode) this.patchFormData();
           }
-          // this.isDataLoaded = true;
+          this.isDataAvailable = true;
         }
       },
       error: (error) => {

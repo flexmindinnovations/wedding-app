@@ -27,6 +27,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   isCountryListAvailable = false;
   isStateListAvailable = false;
   isCityListAvailable = false;
+  isDataAvailable = false;
 
   alert = inject(AlertService);
   customerRegistrationService = inject(CustomerRegistrationService);
@@ -73,10 +74,12 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   }
 
   patchFormData() {
+    this.isDataAvailable = false;
     const contactData = { ...this.contactData, contactNumber: this.customerData['customerUserName'] };
     this.formGroup.patchValue(contactData)
     this.cdref.detectChanges();
     this.formGroup.get('contactNumber')?.disable();
+    this.isDataAvailable = true;
   }
 
   get formGroupControl(): { [key: string]: FormControl } {
@@ -102,6 +105,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   }
 
   saveNewCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const payload = { ...formVal, contactInfoId: 0 };
     this.customerRegistrationService.saveContactInformation(payload).subscribe({
       next: (data: any) => {
@@ -131,16 +135,18 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Contact Info: ' + error?.statusText, AlertType.error);
       }
     })
   }
 
   updateCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const contactInfo = this.customerData['contactInfoModel'];
     const customerId = this.customerData?.customerId;
     const payload = { ...formVal, contactInfoId: contactInfo.contactInfoId };
@@ -172,10 +178,11 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Contact Info: ' + error?.statusText, AlertType.error);
       }
     })
@@ -272,11 +279,12 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           if (this.contactData) {
             this.patchFormData();
           }
-          // this.isDataLoaded = true;
+          this.isDataAvailable = true;
         }
       },
       error: (error) => {
         console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })

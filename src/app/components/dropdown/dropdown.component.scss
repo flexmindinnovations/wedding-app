@@ -9,7 +9,7 @@
         }
 
         .p-focus {
-            @apply text-gray-700 dark:text-white dark:bg-gray-700;
+            @apply text-gray-700 shadow-none outline-none dark:text-white dark:bg-gray-700;
             color: #4b5563;
             background: #e5e7eb;
         }

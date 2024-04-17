@@ -17,7 +17,7 @@ p {
 
 .item-container {
 
-    @apply min-h-96 max-h-96;
+    @apply min-h-96 max-h-96 border;
 
     .image-container {
         @apply max-w-full rounded-t-md;
@@ -52,5 +52,31 @@ p {
         -webkit-transform: scale(1.1);
         -o-transform: scale(1.1);
         transform: scale(1.1);
+    }
+}
+
+.mobile {
+    .item-container {
+
+        @apply lg:xl:min-h-96 max-h-96;
+
+        .image-container {
+            @apply max-w-32 min-h-32 h-full p-2;
+
+            img {
+                @apply rounded-t-md w-full h-full;
+                transition: .5s ease all;
+                object-fit: fill;
+            }
+        }
+
+        &:hover .image-container img {
+            @apply rounded-t-md;
+            -ms-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -webkit-transform: scale(1.1);
+            -o-transform: scale(1.1);
+            transform: scale(1.1);
+        }
     }
 }

@@ -11,6 +11,8 @@ import { Store } from '@ngrx/store';
 import { saveData } from 'src/app/store.actions';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { AlertType } from 'src/app/enums/alert-types';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 
 @Component({
   selector: 'app-login',
@@ -38,9 +40,10 @@ export class LoginPage implements OnInit {
   userPassword = '';
   host = inject(ElementRef);
   isMobile: boolean = false;
-
+  dialogRef: DynamicDialogRef | undefined;
   constructor(
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dialogService: DialogService,
   ) { }
 
   ngOnInit() {
@@ -136,7 +139,21 @@ export class LoginPage implements OnInit {
   }
 
   handleRegister() {
-    this.router.navigateForward('register');
+    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      console.log('afterClose: ', afterClose);
+      if (afterClose) { }
+    });
   }
 
   getSeverity() {

@@ -32,7 +32,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   motherTongueListOptions: any = [];
   motherTongueId: any = '';
   @Output() nextFormStep = new EventEmitter();
-
+  isDataAvailable = false;
 
   constructor(
     private fb: FormBuilder
@@ -89,7 +89,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   }
 
   handleClickOnNext(src: string = 'other') {
-    const formVal = { ...this.formGroup.value, customerId:this.customerData?.customerId, otherInfoId: 0 };
+    const formVal = { ...this.formGroup.value, customerId: this.customerData?.customerId, otherInfoId: 0 };
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
       else this.saveNewCustomerInfo(formVal, src);
@@ -102,6 +102,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   }
 
   saveNewCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const payload = { ...formVal, otherInfoId: 0 };
     this.customerRegistrationService.saveOtherInformation(payload).subscribe({
       next: (data: any) => {
@@ -131,16 +132,18 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Other Info: ' + error?.statusText, AlertType.error);
       }
     })
   }
 
   updateCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const otherInfo = this.customerData['otherInfoModel'];
     const customerId = this.customerData?.customerId;
     const payload = { ...formVal, otherInfoId: otherInfo.otherInfoId };
@@ -172,10 +175,11 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
           this.sharedService.isUserDetailUpdated.next(true);
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
-        console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Other Info: ' + error?.statusText, AlertType.error);
       }
     })
@@ -207,11 +211,11 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
           this.isEditMode = this.customerData ? this.customerData['isOtherInfoFill'] : false;
           if (this.isEditMode) this.patchFormData();
           this.getMotherTongueList();
-          // this.isDataLoaded = true;
+          this.isDataAvailable = true;
         }
       },
       error: (error) => {
-        console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })

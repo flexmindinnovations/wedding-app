@@ -206,6 +206,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
   }
 
   saveNewCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     let payload = { ...formVal, personalInfoId: 0, occupation: "" };
     this.tithiList.forEach((item: any) => {
       payload = { ...payload, [item.title.toLowerCase()]: item.value ? item.value : "" }
@@ -233,16 +234,19 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           this.personalInfoData.emit(props);
           this.nextFormStep.emit('family');
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
         console.log('error: ', error);
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Personal Info: ' + error?.statusText, AlertType.error);
       }
     })
   }
 
   updateCustomerInfo(formVal: any, src: string): void {
+    this.isDataAvailable = false;
     const customerId = this.customerData?.customerId;
     let payload = { ...formVal, personalInfoId: this.personalData.personalInfoId, occupation: "" };
     this.tithiList.forEach((item: any) => {
@@ -271,9 +275,11 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           this.personalInfoData.emit(props);
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.nextFormStep.emit('family');
+          this.isDataAvailable = true;
         }
       },
       error: (error: any) => {
+        this.isDataAvailable = true;
         this.alert.setAlertMessage('Personal Info: ' + error?.statusText, AlertType.error);
       }
     })

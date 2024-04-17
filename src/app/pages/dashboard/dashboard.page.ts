@@ -25,6 +25,7 @@ export class DashboardPage implements OnInit {
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
 
   domain = DOMAIN;
+  isVideoLoaded = false;
 
   profileCount = 100;
   branchCount = 10;
@@ -60,6 +61,12 @@ export class DashboardPage implements OnInit {
     observer.observe(this.host.nativeElement);
 
     this.getRandomProfiles();
+  }
+
+  handleOnLoadData(event: any) {
+    this.isVideoLoaded = true;
+    let videoPlayer = <HTMLVideoElement>document.getElementById('videoPlayer');
+    videoPlayer.play();
   }
 
   handleOnScroll(event: any) {

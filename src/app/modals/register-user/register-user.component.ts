@@ -104,8 +104,11 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
         }
       },
       error: (error: any) => {
+        console.log('error: ', error);
+        const err = error?.error;
+        console.log('err: ', err);
         this.showRegisterLoader = false;
-        this.alert.setAlertMessage(error?.statusText, AlertType.error);
+        this.alert.setAlertMessage(err?.message, AlertType.error);
       }
     })
   }

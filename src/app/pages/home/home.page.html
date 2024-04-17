@@ -6,8 +6,8 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
-    <section class="video">
-      <video autoplay muted loop playsInline>
+    <section class="video" [ngClass]="isVideoLoaded ? '' : 'flex items-center justify-center'">
+      <video id="videoPlayer" autoplay muted loop playsInline (loadeddata)="handleOnLoadData($event)">
         <source src="/assets/videos/intro.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -31,20 +31,20 @@
         </div>
       </div>
     </section>
-    <div class="flat-items flex flex-col gap-7">
+    <div class="flat-items flex flex-col gap-7 ">
       <section class="search-box">
         <div class="container ">
           <search-box class="w-full" />
         </div>
       </section>
 
-      <section class="meet-members  col-span-2 py-5 w-full">
+      <section class="meet-members col-span-2 w-full">
         <div class="container">
           <div class="header">
-            <h1>
+            <h1 class="h1-gradient">
               Meet Our Members
             </h1>
-            <p class="ion-padding">
+            <p>
               The largest Matrimonial Website with 1 lakhs+ of Manglik profiles. Find Matches. Join FREE!
             </p>
           </div>
@@ -60,11 +60,11 @@
 
       <section class="_register ">
         <div class="container relative col-span-2 flex flex-row gap-4 w-full">
-          <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
-            <p class="about tracking-widest uppercase">
+          <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft" class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
+            <p class="about p-gradient tracking-widest uppercase">
               About Us
             </p>
-            <h1>
+            <h1 class="h1-gradient">
               Welcome to {{domain}} Matrimony
             </h1>
             <p>
@@ -93,7 +93,7 @@
 
             <mt-button title="Register Now" (action)="handleRegister()" />
           </div>
-          <div class="content -z-[10] flex-grow w-full h-[inherit]">
+          <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" class="content -z-[10] flex-grow w-full h-[inherit]">
             <div class="bars">
               <div class="bar1"></div>
               <div class="bar2"></div>
