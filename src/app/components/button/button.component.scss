@@ -13,15 +13,15 @@
 
 }
 
-.small {
+::ng-deep .small {
     .p-button {
-        @apply p-2;
+        @apply py-1.5 px-3;
     }
 }
 
-.large {
+::ng-deep .large {
     .p-button {
-        @apply p-2.5;
+        @apply p-2.5 px-3;
     }
 }
 

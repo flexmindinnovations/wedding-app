@@ -62,6 +62,7 @@ import { TableModule } from 'primeng/table';
 import { VideoPlayerComponent } from './components/video-player/video-player.component';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ToolbarModule } from 'primeng/toolbar';
+import { DividerModule } from 'primeng/divider';
 
 const components = [
   FormStepperComponent,
@@ -119,6 +120,7 @@ const modules: any = [
   TableModule,
   ToolbarModule,
   AnimateOnScrollModule,
+  DividerModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
   LoadingBarRouterModule,

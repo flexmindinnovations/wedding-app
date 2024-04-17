@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Observer, share } from 'rxjs';
 import { AnimationDirection } from 'src/app/components/carousel-item/carousel-item.component';
@@ -15,6 +16,7 @@ import { environment } from 'src/environments/environment';
 export class DashboardPage implements OnInit {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
+  router = inject(Router);
   ngZone = inject(NgZone);
   isMobile: boolean = false;
   isDesktop: boolean = true;
@@ -110,6 +112,10 @@ export class DashboardPage implements OnInit {
       item.isDisplayed = false;
     })
     this.profileList[this.currentItem].isDisplayed = true;
+  }
+
+  handleExploreProfiles() {
+    this.router.navigate(['/filter-profile']);
   }
 
 }

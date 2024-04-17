@@ -12,6 +12,8 @@ section.meet-members {
     p {
         @apply text-center font-normal text-sm;
     }
+
+   
 }
 
 section._register {
@@ -51,6 +53,7 @@ section._register {
 
     .content {
         @apply -z-[1] lg:z-[1] xl:z-[1] opacity-20 lg:xl:opacity-100;
+
         .bars {
             @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1];
             will-change: auto;
@@ -77,6 +80,7 @@ section._register {
 
         .image-container {
             @apply z-10 relative hidden md:hidden border-white lg:flex xl:flex items-center justify-end h-full w-full rounded-full;
+
             img {
                 @apply shadow-2xl;
                 border: 15px solid #fff;
