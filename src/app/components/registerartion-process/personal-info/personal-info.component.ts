@@ -120,7 +120,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       shakeDate: !['', [Validators.required]],
       gender: ['', [Validators.required]],
       heightId: ['', [Validators.required]],
-      eduationId: ['', [Validators.required]],
+      educationId: ['', [Validators.required]],
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
