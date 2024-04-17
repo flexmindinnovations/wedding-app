@@ -32,6 +32,8 @@ export class DataExportComponent implements OnInit {
   imageUrlPrefix = environment.endpoint;
   id = uuidv4();
   isDataLoaded = false;
+  isLoading = false;
+  personalInfoModel: any;
   constructor(
     private authService: AuthService,
     private alertService: AlertService
@@ -56,14 +58,18 @@ export class DataExportComponent implements OnInit {
   }
 
   getUserDetails() {
+    this.isLoading = true;
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.authService.getCustomerForPDFById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {
-          // this.alertService.setAlertMessage('User details loaded successfully', AlertType.success);
           const { personalInfoModel, familyInfoModel, contactInfoModel, otherInfoModel, imageInfoModel } = data;
+          this.personalInfoModel = JSON.parse(JSON.stringify(personalInfoModel));
           personalInfoModel['dateOfBirth'] = moment(personalInfoModel['dateOfBirth']).format('dddd, D MMMM YYYY');
           personalInfoModel['timeOfBirth'] = moment(personalInfoModel['timeOfBirth']).format('h:mm A');
+          personalInfoModel['isPatrika'] = personalInfoModel['isPatrika'] == true ? 'Yes' : 'No';
+          personalInfoModel['isPhysicallyAbled'] = personalInfoModel['isPhysicallyAbled'] == true ? 'Yes' : 'No';
+          personalInfoModel['spectacles'] = personalInfoModel['spectacles'] == true ? 'Yes' : 'No';
           const userInfo = {
             personalInfo: this.convertObjectToList(personalInfoModel),
             familyInfo: this.convertObjectToList(familyInfoModel),
@@ -73,10 +79,12 @@ export class DataExportComponent implements OnInit {
           };
           this.userInfo = userInfo;
           this.isDataLoaded = true;
+          this.isLoading = false;
         }
       },
       error: (error: any) => {
         if (error) {
+          this.isLoading = false;
           this.alertService.setAlertMessage('Error:Failed to load user details', AlertType.error);
         }
       }
@@ -84,6 +92,7 @@ export class DataExportComponent implements OnInit {
   }
 
   exportPdf() {
+    this.isLoading = true;
     // const tableEl: any = document.getElementById('profileDataTable');
     const tableEl: any = document.getElementById('userDataContainer');
     // console.log('tableEl: ', tableEl);
@@ -111,45 +120,41 @@ export class DataExportComponent implements OnInit {
     const pdf = new jsPDF('p', 'pt', 'a4');
     const logoImageSrc = '/assets/icon/logo.png';
 
-    this.imageUrlToBase64(logoImageSrc).then((respones: any) => {
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const testImage = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAwADAAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAGAAYDAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EACAQAAEEAgEFAAAAAAAAAAAAAAcEBQgYBhcVAgkWJif/xAAUAQEAAAAAAAAAAAAAAAAAAAAC/8QAJhEAAAMGBQUAAAAAAAAAAAAABAYHAQUIFBYXAgMRGCYJFSMlJ//aAAwDAQACEQMRAD8APuQ8koXjOCnbrl4dIA2LH80rc6Yj9aorCKqNczCyDEi/VsPYl72dN6Pa9ozX2vGcV1jwfjbFziRzVOHQavXdA2tH9M5ZNgJiPWm4x+W8J0VV9aY8KQ+sX4M+QKY2xAvk+g+C4AdaVnMGeYzi65m5RYGdh1a1UYhgF8Ixz7puTimmhCaX6pfjqO/ECPiCJYltrUsCOROuBO8HW/aauNMwYh4vPxf/2Q==';
-      pdf.addImage(respones, 'png', pageWidth / 2, 20, 100, 100);
-
-      pdf.setFontSize(12);
-      pdf.html(tableEl, {
-        width: 592,
-        margin: 20,
-        autoPaging: 'text',
-        html2canvas: {
-          scale: 0.7,
-          useCORS: true,
-          height: pdf.internal.pageSize.getHeight() - 100,
-          width: pdf.internal.pageSize.getWidth() - 100
-        },
-        image: {
-          type: 'png',
-          quality: 100
-        },
-        x: -50,
-        y: 40,
-        callback: (doc: jsPDF) => {
-          pdf.output('dataurlnewwindow');
-        }
-      })
-    })
-
     const imageModel = this.userInfo?.photos;
+    const personalInfo = this.personalInfoModel;
+    // imageModel.forEach((item: any) => {
+    //   const imageUrl = environment.endpoint + `/${item?.value}`;
+    //   this.imageUrlToBase64(imageUrl).then((respones: any) => {
+    //     const pageWidth = pdf.internal.pageSize.getWidth();
+    //     pdf.addImage(respones, 'png', pageWidth / 2, 100, 100, 100);
+    //   }).then(() => {
 
-    imageModel.forEach((item: any) => {
-      const imageUrl = environment.endpoint + `/${item?.value}`;
-      this.imageUrlToBase64(imageUrl).then((respones: any) => {
-        // console.log('respones: ', respones);
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        pdf.addImage(respones, 'png', pageWidth / 2, 100, 100, 100);
-
-      })
-    });
+    //   })
+    // });
+    pdf.setFontSize(12);
+    pdf.html(tableEl, {
+      width: 592,
+      margin: 20,
+      autoPaging: 'text',
+      html2canvas: {
+        scale: 0.7,
+        useCORS: true,
+        height: pdf.internal.pageSize.getHeight() - 100,
+        width: pdf.internal.pageSize.getWidth() - 100
+      },
+      image: {
+        type: 'png',
+        quality: 100
+      },
+      x: -50,
+      y: 40,
+      callback: (doc: jsPDF) => {
+        // pdf.output('dataurlnewwindow');
+        const profilName = personalInfo?.fullName + '_Profile';
+        pdf.save(profilName);
+        this.isLoading = false;
+      }
+    })
   }
 
   async imageUrlToBase64(url: any) {

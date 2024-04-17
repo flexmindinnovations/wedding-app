@@ -5,6 +5,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Sidebar } from 'primeng/sidebar';
 import { debounce, debounceTime, delay, forkJoin, of } from 'rxjs';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { CastService } from 'src/app/services/cast/cast.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -43,13 +44,14 @@ export class ProfileFilterPage implements OnInit {
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
   filteredProfileList: any[] = [];
-
+  filteredQueryParams: any;
 
   constructor(
     private deviceService: DeviceDetectorService,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -97,25 +99,48 @@ export class ProfileFilterPage implements OnInit {
               return newObj;
             }, {}
             );
-          this.seachFilteredProfiles(filteredQueryParams);
+            this.filteredQueryParams = filteredQueryParams;
+          if (!this.isMobile) {
+            this.seachFilteredProfiles(filteredQueryParams);
+          }
         })
     })
   }
 
+  handleFilter() {
+    this.sidebarVisible = false;
+    this.seachFilteredProfiles(this.filteredQueryParams);
+  }
 
   seachFilteredProfiles(queryParams: any) {
-    this.userService.getFreeFilteredProfileList(queryParams).subscribe({
-      next: (response) => {
-        if (response) {
-          this.filteredProfileList = response;
+    const isLogged = this.authService.isLoggedIn();
+    if (isLogged) {
+      this.userService.getPaidFilteredProfileList(queryParams).subscribe({
+        next: (response) => {
+          if (response) {
+            this.filteredProfileList = response;
+            this.isLoading = false;
+          }
+        },
+        error: (error) => {
+          this.isError = true;
           this.isLoading = false;
         }
-      },
-      error: (error) => {
-        this.isError = true;
-        this.isLoading = false;
-      }
-    })
+      })
+    } else {
+      this.userService.getFreeFilteredProfileList(queryParams).subscribe({
+        next: (response) => {
+          if (response) {
+            this.filteredProfileList = response;
+            this.isLoading = false;
+          }
+        },
+        error: (error) => {
+          this.isError = true;
+          this.isLoading = false;
+        }
+      })
+    }
   }
 
   handleListItemChange(event: any) {
