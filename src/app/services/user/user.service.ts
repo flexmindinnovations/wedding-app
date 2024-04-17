@@ -27,6 +27,10 @@ export class UserService {
     return this.http.delete(`${this.endpoint}/deleteUser/${id}`)
   }
 
+  getPaidFilteredProfileList(payload: any): Observable<any> {
+    const endpoint = environment.endpoint + `/api/Customer/getPaidCustomerFilterList?${new URLSearchParams(payload).toString()}`;
+    return this.http.get(endpoint, payload);
+  }
   getFreeFilteredProfileList(payload: any): Observable<any> {
     const endpoint = environment.endpoint + `/api/Customer/getUnpaidCustomerFilterList?${new URLSearchParams(payload).toString()}`;
     return this.http.get(endpoint, payload);

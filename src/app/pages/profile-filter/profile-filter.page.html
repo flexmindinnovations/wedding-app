@@ -97,3 +97,56 @@
     </div>
   </div>
 </ion-content>
+
+<p-sidebar #sidebarRef [(visible)]="sidebarVisible" appendTo="body">
+  <ng-template pTemplate="headless">
+    <div class="w-full h-full">
+      <div class="header min-h-10 bg-gray-100 flex items-center justify-start">
+        <p class="px-3">
+          Filter you search
+        </p>
+      </div>
+      <div class="form-container py-4 px-3">
+        @if (isDataAvailable) {
+        <form [formGroup]="formGroup" class="flex flex-col items-start justify-center gap-4">
+          <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+            (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
+            [options]="genderOptions" class="w-full" />
+
+          <app-input label="Age From" type="number" labelColor="text-gray-700"
+            [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
+            formControlName="fromAge" class="w-full" />
+
+          <app-input label="Age To" type="number" labelColor="text-gray-700"
+            [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']" formControlName="toAge"
+            class="w-full" />
+
+          <app-dropdown label="Religion" [showClear]="true" labelColor="text-white" [control]="formGroupControl['cast']"
+            formControlName="cast" [showClear]="true" (onSelectionChange)="onSelectionChange($event, 'castId')"
+            [options]="religionList" class="w-full" />
+
+          @if (isReligionSelected && castList.length) {
+          <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
+            (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="w-full" />
+          }
+
+
+          <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
+            formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
+            [options]="motherToungeList" class="w-full" />
+
+
+          <div class="w-full my-2 flex items-center justify-center">
+            <mt-button class="w-1/2" title="Filter" size="small" icon="pi pi-filter" (action)="handleFilter()"></mt-button>
+          </div>
+        </form>
+        } @else {
+        <div class="h-28 w-full p-3 flex items-center justify-center">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+        }
+
+      </div>
+    </div>
+  </ng-template>
+</p-sidebar>
