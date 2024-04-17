@@ -3,59 +3,10 @@
     margin: 0 auto;
 }
 
-.image-container {
-    margin-top: 10%;
-    width: 40vw;
-    height: 40vw;
-    overflow: hidden;
-    border-radius: 50%;
-    max-width: 400px;
-    max-height: 400px;
-}
-
-.circle-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-}
-
-
-
 section._register {
 
-    @apply py-10;
-
-    h1 {
-        @apply font-bold text-base md:lg:text-4xl m-0;
-        background: rgb(247, 0, 104);
-        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
-        color: transparent;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
     p.about {
-        @apply text-left font-normal text-base leading-3;
-
-        position: relative;
-        display: block;
-        font-size: 16px;
-        line-height: 1em;
-        color: #ff8a01;
-        font-weight: 500;
-        background: rgb(247, 0, 104);
-        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
-        color: transparent;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-transform: uppercase;
-        letter-spacing: 5px;
+        @apply text-left font-normal text-base leading-5;
     }
 
     p {
@@ -76,8 +27,8 @@ section._register {
             &::before {
                 content: '';
                 position: absolute;
-                top: 0;
-                left: -20px;
+                top: -2;
+                left: -24px;
                 width: 18px;
                 height: 18px;
                 background-image: url('/assets/icon/check.svg');
@@ -88,10 +39,10 @@ section._register {
     }
 
     .content {
+        @apply -z-[1] lg:z-[1] xl:z-[1] opacity-20 lg:xl:opacity-100;
 
         .bars {
-
-            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[50%] absolute top-0 right-0 bottom-0 -z-[1];
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] md:lg:xl:w-[45%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1];
             will-change: auto;
             animation: shake 45s linear infinite;
 
@@ -115,10 +66,12 @@ section._register {
         }
 
         .image-container {
+            @apply z-10 relative hidden lg:hidden border-white lg:flex xl:flex items-center justify-end h-full w-full rounded-full;
 
             img {
                 @apply shadow-2xl;
                 border: 15px solid #fff;
+                height: 70% !important;
             }
         }
     }

@@ -12,6 +12,7 @@ import { particlesOptions } from 'src/app/util/util';
 import { v4 as uuidv4 } from 'uuid';
 import { Container } from '@tsparticles/engine';
 import { loadSlim } from "@tsparticles/slim";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ export class HomePage implements OnInit {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
+  router = inject(Router);
   isMobile: boolean = false;
   isDesktop: boolean = true;
   profileList: any[] = [];
@@ -148,6 +150,9 @@ export class HomePage implements OnInit {
       item.isDisplayed = false;
     })
     this.profileList[this.currentItem].isDisplayed = true;
+  }
+  handleExploreProfiles() {
+    this.router.navigate(['/filter-profile']);
   }
 
 }

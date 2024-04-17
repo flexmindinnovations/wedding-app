@@ -51,10 +51,10 @@ section._register {
     }
 
     .content {
-        @apply z-0;
+        @apply -z-[1] lg:z-[1] xl:z-[1] opacity-20 lg:xl:opacity-100;
 
         .bars {
-            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[50%] absolute -top-4 -right-7 bottom-0 z-[1];
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1];
             will-change: auto;
             animation: shake 45s linear infinite;
 
@@ -78,7 +78,7 @@ section._register {
         }
 
         .image-container {
-            @apply flex z-10 relative;
+            @apply z-10 relative hidden md:hidden border-white lg:flex xl:flex items-center justify-end h-full w-full rounded-full;
 
             img {
                 @apply shadow-2xl;
@@ -87,6 +87,7 @@ section._register {
         }
     }
 }
+
 
 section._counter {
     @apply text-8xl font-bold text-black;
@@ -208,7 +209,7 @@ section._counter {
 
 
 .content-wrapper {
-    @apply relative  w-screen flex flex-col;
+    @apply relative w-screen flex flex-col;
 
     section.video {
         @apply sticky h-[calc(100vh-70px)] min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;

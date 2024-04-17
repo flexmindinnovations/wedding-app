@@ -5,6 +5,7 @@ import { Message } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-about',
@@ -16,7 +17,7 @@ export class AboutPage implements OnInit, AfterViewInit {
   host = inject(ElementRef);
   ngZone = inject(NgZone);
   isLoggedIn: boolean = false;
-
+  router = inject(Router);
   isMobile: boolean = false;
   isDesktop: boolean = true;
   domain = DOMAIN;
@@ -62,5 +63,8 @@ export class AboutPage implements OnInit, AfterViewInit {
     });
   }
 
+  handleExploreProfiles() {
+    this.router.navigate(['/filter-profile']);
+  }
 
 }
