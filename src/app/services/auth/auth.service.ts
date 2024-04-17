@@ -24,6 +24,10 @@ export class AuthService {
     return this.http.get(`${this.endpoint}/GetCustomerById/${userId}`);
   }
 
+  getCustomerForPDFById(userId: number): Observable<any> {
+    return this.http.get(`${this.endpoint}/GetCustomerForPDFById/${userId}`);
+  }
+
   signUp(payload: any): Observable<any> {
     return this.http.post(`${this.endpoint}/signUp`, payload);
   }

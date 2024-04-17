@@ -46,16 +46,16 @@
           </div>
           <div class="member-list-container flex items-center justify-center p-2">
             @if (profileList.length) {
-            <div class="profiles-wrapper w-full flex flex-col lg:xl:flex-row items-start justify-center gap-3 flex-wrap p-2 relative">
-              <!-- <carousel-item [data]="profileList[0]" /> -->
+            <div
+              class="profiles-wrapper grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-8 gap-y-4 gap-x-0 lg:gap-y-4 xl:gap-y-4 lg:gap-x-4 xl:gap-x-4">
               @for (item of profileList; track $index) {
-                <div class="w-full md:w-1/2 lg:w-1/4 lg:max-w-1/4 xl:w-1/5 xl:max-w-1/5">
-                  <carousel-item [data]="item" />
-                </div>
+              <div class="col-span-2">
+                <carousel-item [data]="item" />
+              </div>
               }
               <div
-                class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 flex-grow w-full flex items-center justify-center p-3">
-                <mt-button title="Load More Profiles" />
+                class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-8 flex-grow w-full flex items-center justify-center p-3">
+                <mt-button size="small" title="Load More Profiles" />
               </div>
             </div>
             } @else {
@@ -98,7 +98,7 @@
               </li>
             </ol>
 
-            <mt-button title="Explore Profiles" />
+            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
           </div>
           <div class="content -z-[10] flex-grow w-full h-[inherit]">
             <div class="bars">

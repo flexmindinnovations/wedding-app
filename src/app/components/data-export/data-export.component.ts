@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { Buffer as buffer } from 'buffer';
+import * as moment from 'moment';
 
 interface ObjectType {
   title: string;
@@ -56,13 +57,13 @@ export class DataExportComponent implements OnInit {
 
   getUserDetails() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.authService.getCustomerProfileById(user?.user).subscribe({
+    this.authService.getCustomerForPDFById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {
           // this.alertService.setAlertMessage('User details loaded successfully', AlertType.success);
           const { personalInfoModel, familyInfoModel, contactInfoModel, otherInfoModel, imageInfoModel } = data;
-          delete imageInfoModel.imageInfoId;
-          delete imageInfoModel.customerId;
+          personalInfoModel['dateOfBirth'] = moment(personalInfoModel['dateOfBirth']).format('dddd, D MMMM YYYY');
+          personalInfoModel['timeOfBirth'] = moment(personalInfoModel['timeOfBirth']).format('h:mm A');
           const userInfo = {
             personalInfo: this.convertObjectToList(personalInfoModel),
             familyInfo: this.convertObjectToList(familyInfoModel),

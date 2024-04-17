@@ -1,5 +1,5 @@
-<div class="hidden deesktop lg:xl:block w-full p-4 relative h-full">
-  <div class="item-container border rounded-md flex flex-col shadow-md">
+<div class="hidden desktop border lg:xl:flex w-full relative rounded-md shadow-md min-h-96">
+  <div class="item-container flex flex-col w-full">
     <div class="image-container relative max-h-52 flex-auto rounded-t-md">
       <img class="w-full h-60 rounded-t-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
       <div class="absolute inset-0 w-full rounded-t-md max-h-60 h-full
@@ -12,8 +12,8 @@
         </div>
       </div>
     </div>
-    <div class="text-container flex-auto flex flex-col gap-2 min-h-12 p-4 border">
-      <div class="info flex flex-col gap-2">
+    <div class="text-container flex-auto flex flex-col gap-2 p-2">
+      <div class="info min-h-40 flex flex-col gap-2">
         <div class="flex flex-col items-start justify-start">
           <p class="text-label opacity-80 select-none">Full Name</p>
           <p class="text-data select-none">{{data?.fullName}}</p>
@@ -31,8 +31,8 @@
         </p>
       </div>
     </div>
+    <p-divider></p-divider>
     <div class="audit-info flex items-center justify-between py-2 px-5 flex-none h-10 rounded-b-md">
-      <!-- <span></span> -->
       <p>#{{data?.customerId}}</p>
       <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
         [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
@@ -40,9 +40,9 @@
   </div>
 </div>
 
-<div class="mobile block lg:xl:hidden w-full h-full min-h-12 border">
-  <div class="item-container w-full h-full flex flex-col items-start justify-start border shadow-md rounded-md">
-    <div class="header w-full h-full flex flex-row items-start justify-start gap-2 border-b">
+<div class="mobile block lg:xl:hidden w-full h-full border shadow-md rounded-md ">
+  <div class="item-container w-full h-full flex flex-col items-start justify-start">
+    <div class="header w-full h-full flex flex-row items-start justify-start gap-2">
 
       <div class="image-container relative flex-auto rounded-t-md">
         <img class="rounded-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
@@ -61,6 +61,7 @@
         </div>
       </div>
     </div>
+    <p-divider class="w-full"></p-divider>
     <div class="footer w-full h-14 px-2 flex items-center justify-between">
       <div class="left">
         <p class="flex items-baseline text-xs text-wr-600 hover:text-wr-900 focus:text-wr-900 cursor-pointer"
