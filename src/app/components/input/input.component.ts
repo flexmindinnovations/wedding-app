@@ -19,6 +19,7 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
   @Input() control!: FormControl | any;
   @Input() fill: 'solid' | 'outline' = 'outline';
   @Input() isMultiline: boolean = false;
+  @Input() showClear: boolean = false;
   @Input('required') isRequired: true | false = false;
   @Input() placeholder: string = '';
   @Input() controlValue: string = '';

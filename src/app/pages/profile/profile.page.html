@@ -1,20 +1,18 @@
 <ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
-  <ion-toolbar class="px-2 md:lg:xl:pl-10 md:lg:xl:pr-4">
-    <ion-title class="font-light">
-      <div class="header w-full flex items-center justify-start gap-5">
-        <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
-          class="flex md:lg:xl:hidden"></p-button>
-        <p>
-          Profile Information
-        </p>
-      </div>
-    </ion-title>
-    <ion-buttons slot="end">
-      <!-- <p-toggleButton [(ngModel)]="isReadOnly" [onLabel]="'View Mode'" offLabel="Edit Mode" [onIcon]="'pi pi-eye'"
-        (ngModelChange)="handleViewChange($event)" [offIcon]="'pi pi-file-edit'" class="text-xs min-w-20"></p-toggleButton> -->
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <p-button *ngIf="isMobile" (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
+        class="flex md:lg:xl:hidden"></p-button>
+    </div>
+    <div class="p-toolbar-group-center">
+      <h3 class="m-0">
+        Profile Information
+      </h3>
+    </div>
+    <div class="p-toolbar-group-end">
       <mt-button title="Export Data" icon="pi pi-file-export" (action)="handleExportAction()"></mt-button>
-    </ion-buttons>
-  </ion-toolbar>
+    </div>
+  </p-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -35,9 +33,9 @@
         </ng-template>
       </p-splitter>
     </div>
-    <!-- <div class="block lg:xl:hidden h-full w-full">
-      <router-outlet name='secondaryOutlet'></router-outlet>z
-    </div> -->
+    <div class="block lg:xl:hidden h-full w-full">
+      <!-- <router-outlet></router-outlet> -->
+    </div>
   </div>
 </ion-content>
 

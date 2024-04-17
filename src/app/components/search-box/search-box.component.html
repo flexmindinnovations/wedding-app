@@ -1,6 +1,6 @@
 <div class="min-h-12 px-3 md:p-4 lg:xl:px-10 dark:bg-dark-950 flex flex-col gap-0 lg:xl:gap-2">
   <div class="header">
-    <h1 class="text-gray-700 dark:text-white text-center">
+    <h1 class="h1-gradient text-center">
       Most Trusted Matrimonial Service in India
     </h1>
   </div>
@@ -12,19 +12,19 @@
         [options]="genderOptions" class="flex-auto" />
 
       <app-input label="Age From" type="number" labelColor="text-gray-700"
-        [controlValue]="formGroup.get('ageFrom')?.value" [control]="formGroupControl['ageFrom']"
-        formControlName="ageFrom" class="flex-auto" />
+        [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
+        formControlName="fromAge" class="flex-auto" />
 
-      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('ageTo')?.value"
-        [control]="formGroupControl['ageTo']" formControlName="ageTo" class="flex-auto" />
+      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('toAge')?.value"
+        [control]="formGroupControl['toAge']" formControlName="toAge" class="flex-auto" />
 
-      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['religion']"
-        formControlName="religion" (onSelectionChange)="onSelectionChange($event, 'religionId')"
+      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['cast']"
+        formControlName="cast" (onSelectionChange)="onSelectionChange($event, 'castId')"
         [options]="religionList" class="flex-auto" />
 
       @if (isReligionSelected && castList.length) {
-      <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
-        (onSelectionChange)="onSelectionChange($event, 'castId')" [options]="castList" class="flex-auto" />
+      <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
+        (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="flex-auto" />
       }
 
 
@@ -33,7 +33,7 @@
         class="flex-auto" />
 
       <div class="action col-span-2 flex-grow-0 lg:xl:col-span-1 h-full mt-auto flex flex-none w-full lg:xl:w-24">
-        <mt-button size="large" class="w-full" title="Search" icon="search" (action)="handleOnSearch()" />
+        <mt-button size="large" icon="pi pi-search" class="w-full" title="Search" (action)="handleOnSearch()" />
       </div>
 
     </form>

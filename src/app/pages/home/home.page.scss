@@ -2,26 +2,12 @@ section {
     .container {
         @apply w-[80%];
         margin: 40px auto;
-
-        h1 {
-            font-family: "Ubuntu", sans-serif;
-            font-weight: 600;
-            @apply text-base md:lg:text-3xl m-0;
-            background: rgb(247, 0, 104);
-            background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-            background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-            background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
-            color: transparent;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
     }
 }
 
 section.meet-members {
     h1 {
-        @apply text-center font-bold text-base md:lg:text-4xl my-2;
+        @apply text-center m-0;
     }
 
     p {
@@ -30,37 +16,9 @@ section.meet-members {
 }
 
 section._register {
-    h1 {
-        @apply font-bold text-base md:lg:text-4xl m-0;
-        background: rgb(247, 0, 104);
-        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
-        color: transparent;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
 
     p.about {
-        @apply text-left font-normal text-base leading-3;
-
-        position: relative;
-        display: block;
-        font-size: 16px;
-        line-height: 1em;
-        color: #ff8a01;
-        font-weight: 500;
-        background: rgb(247, 0, 104);
-        background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
-        color: transparent;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-transform: uppercase;
-        letter-spacing: 5px;
+        @apply text-left font-normal text-base leading-5;
     }
 
     p {
@@ -81,8 +39,8 @@ section._register {
             &::before {
                 content: '';
                 position: absolute;
-                top: 0;
-                left: -20px;
+                top: -2;
+                left: -24px;
                 width: 18px;
                 height: 18px;
                 background-image: url('/assets/icon/check.svg');
@@ -250,10 +208,10 @@ section._counter {
 
 
 .content-wrapper {
-    @apply relative bg-gray-50 w-screen flex flex-col;
+    @apply relative  w-screen flex flex-col;
 
     section.video {
-        @apply h-[calc(100vh-70px)] min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;
+        @apply sticky h-[calc(100vh-70px)] min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;
         background-attachment: fixed;
 
         video {
@@ -278,6 +236,9 @@ section._counter {
         }
     }
 
+    .flat-items {
+        @apply bg-gray-50 z-20;
+    }
 
 }
 

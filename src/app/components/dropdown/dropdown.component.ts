@@ -19,6 +19,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   @Input() labelColor: string = 'text-white';
   @Input() formControlName: string = '';
   @Input() control!: FormControl;
+  @Input() showClear: boolean = false;
   @Input() fill: 'solid' | 'outline' = 'outline';
   @Input() cssClasses: any;
   @Input() options: any[] = [];
@@ -49,32 +50,6 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
 
   colorScheme: any = COLOR_SCHEME;
   colorVarients: any;
-  dropdownIcon = 'chevron-down-outline';
-  dropdown: any;
-
-  dropdownOptions: any = {
-    placement: 'bottom',
-    triggerType: 'click',
-    offsetSkidding: 0,
-    offsetDistance: 10,
-    delay: 300,
-    ignoreClickOutsideClass: false,
-    onHide: () => {
-      this.isVisible = false;
-      this.dropdownIcon = this.isVisible ? 'chevron-up-outline' : 'chevron-down-outline';
-    },
-    onShow: () => {
-      // console.log('dropdown has been shown');
-    },
-    onToggle: () => {
-      this.dropdownIcon = this.isVisible ? 'chevron-up-outline' : 'chevron-down-outline';
-    },
-  }
-
-  @ViewChild('triggerButton', { static: true }) triggerButton!: ElementRef;
-  @ViewChild('menuEl', { static: true }) menuEl!: ElementRef;
-  menuWidth: any;
-
   constructor(
     @Self()
     @Optional()
@@ -117,7 +92,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   ngAfterViewInit(): void {
     if (this.options.length) {
       const value = this.control.value;
-      const itemVlue = this.options.filter((item: any) => item.id === value);
+      const itemVlue = this.options.filter((item: any) => item.id == value);
       if (itemVlue?.length) this.itemValue = itemVlue[0];
       this.cdr.detectChanges();
     }
@@ -146,10 +121,6 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
     const value = event.target.value;
     this.onChange(value);
   }
-
-  handleDropdownToggle() {
-  }
-
   onItemChange(event: any) {
     const value = event?.value;
     this.onSelectionChange.emit(event?.value);

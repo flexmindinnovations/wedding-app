@@ -10,6 +10,8 @@ import { COLOR_SCHEME, buttonThemeVariables, iconSize, themeVariables } from 'sr
 export class ButtonComponent implements OnInit {
   @Input() title: string = '';
   @Input() icon: string = '';
+  @Input() severity: string = '';
+  @Input() iconPos: ButtonIconPosition = 'left';
   @Input() textOnly = false;
   @Input() iconOnly = false;
   @Input() buttonType: ButtonTypes = 'default';
@@ -45,3 +47,4 @@ export class ButtonComponent implements OnInit {
 
 export type ButtonSize = 'small' | 'large';
 export type ButtonTypes = 'normal' | 'default' | 'danger' | 'success';
+type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';

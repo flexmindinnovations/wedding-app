@@ -17,6 +17,10 @@ const routes: Routes = [
     path: 'logout',
     loadChildren: () => import('./pages/logout/logout.module').then( m => m.LogoutPageModule)
   },
+  {
+    path: 'profile-filter',
+    loadChildren: () => import('./pages/profile-filter/profile-filter.module').then( m => m.ProfileFilterPageModule)
+  },
 
   // {
   //   path: '**',

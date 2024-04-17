@@ -34,7 +34,7 @@ export class HomePage implements OnInit {
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
 
-  videoPlayerOptions = { autoplay: true, controls: false, sources: [{ src: '/assets/videos/intro.mp4', type: 'video/mp4' }] }
+  isVideoLoaded = false;
 
   profileCount = 100;
   branchCount = 10;
@@ -75,14 +75,14 @@ export class HomePage implements OnInit {
     this.getRandomProfiles();
 
     this.ngParticlesService.init(async (engine) => {
-      // console.log(engine);
-
-      // Starting from 1.19.0 you can add custom presets or shape here, using the current tsParticles instance (main)
-      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-      // starting from v2 you can add only the features you need reducing the bundle size
-      //await loadFull(engine);
       await loadSlim(engine);
     });
+  }
+
+  handleOnLoadData(event: any) {
+    this.isVideoLoaded = true;
+    let videoPlayer = <HTMLVideoElement>document.getElementById('videoPlayer');
+    videoPlayer.play();
   }
 
   handleOnScroll(event: any) {

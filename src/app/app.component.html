@@ -1,5 +1,5 @@
 <ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
-<ng-http-loader [className]="'custom-loader'" [entryComponent]="loaderComponent" [extraDuration]="300" [minDuration]="500">
+<ng-http-loader [className]="'custom-loader'" [entryComponent]="loaderComponent" [extraDuration]="300" [minDuration]="500" [filteredUrlPatterns]="['\\d', '[a-zA-Z]', 'createcustomerToken']">
 </ng-http-loader>
 <app-alert></app-alert>
 <ion-app>

@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { fadeIn, fadeOut, scaleIn, scaleOut, slideLeft, slideRight } from 'src/app/animations/carousel.animation';
 import { environment } from 'src/environments/environment';
 
@@ -20,15 +21,24 @@ export class CarouselItemComponent implements OnInit {
   @Input() data: any;
   isFavourite: boolean = false;
   imagePath: any = '';
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    // console.log('data: ', this.data);
+
     const networkImage = `${this.data.imagePath1 ? this.data.imagePath1 : this.data.imagePath2 ? this.data.imagePath2 : ''}`;
     this.imagePath = networkImage ? `${environment.endpoint}/${networkImage}` : '/assets/image/image-placeholder.png';
   }
 
   handleIsFavourite() {
     this.isFavourite = !this.isFavourite;
+  }
+
+  handleProfileClick() {
+    // console.log('data: ', this.data);
+
   }
 
 }

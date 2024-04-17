@@ -7,7 +7,7 @@
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
     <section class="video">
-      <video autoplay muted loop playsInline>
+      <video id="videoPlayer" autoplay muted loop playsInline (loadeddata)="handleOnLoadData($event)">
         <source src="/assets/videos/intro.mp4" type="video/mp4">
       </video>
       <div class="overlay">
@@ -30,32 +30,33 @@
         </div>
       </div>
     </section>
-    <div class="flat-items flex flex-col gap-7">
-      <section class="border-b">
+    <div class="flat-items flex flex-col gap-3 md:gap-4 lg:xl:gap-7">
+      <section>
         <div class="container search-box">
           <search-box class="w-full" />
         </div>
       </section>
 
-      <section class="meet-members py-5 w-full">
+      <section class="meet-members py-1 lg:xl:py-5 w-full">
         <div class="container">
           <div class="header">
-            <h1>
+            <h1 class="h1-gradient">
               Top Matches For Your Profiles
             </h1>
           </div>
-          <div class="member-list-container grid grid-cols-2 gap-2 md:grid-cols-3
-        lg:grid-cols-4 xl:grid-cols-5 p-2 relative">
+          <div class="member-list-container flex items-center justify-center p-2">
             @if (profileList.length) {
-            @for (item of profileList; track $index) {
-            <div class="profile-item col-span-1 w-full ">
-              <carousel-item [data]="item" />
-            </div>
-            }
-
-            <div
-              class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 flex-grow w-full flex items-center justify-center p-3">
-              <mt-button title="Load More Profiles" />
+            <div class="profiles-wrapper w-full flex flex-col lg:xl:flex-row items-start justify-center gap-3 flex-wrap p-2 relative">
+              <!-- <carousel-item [data]="profileList[0]" /> -->
+              @for (item of profileList; track $index) {
+                <div class="w-full md:w-1/2 lg:w-1/4 lg:max-w-1/4 xl:w-1/5 xl:max-w-1/5">
+                  <carousel-item [data]="item" />
+                </div>
+              }
+              <div
+                class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5 flex-grow w-full flex items-center justify-center p-3">
+                <mt-button title="Load More Profiles" />
+              </div>
             </div>
             } @else {
             <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
@@ -65,12 +66,12 @@
       </section>
 
       <section class="_register ">
-        <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10">
+        <div class="container relative col-span-2 lg:xl:py-10 flex flex-row gap-0 lg:xl:gap-4 px-3 w-full lg:xl:px-10">
           <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
-            <p class="about tracking-widest uppercase">
+            <p class="about p-gradient tracking-widest uppercase">
               About Us
             </p>
-            <h1>
+            <h1 class="h1-gradient">
               Welcome to {{domain}} Matrimony
             </h1>
             <p>
@@ -105,14 +106,14 @@
               <div class="bar2"></div>
               <div class="bar3"></div>
             </div>
-            <div class="image-container border-white flex items-center justify-end h-full w-full rounded-full">
+            <div *ngIf="!isMobile" class="image-container">
               <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
             </div>
           </div>
         </div>
       </section>
 
-      <section class="_counter flex items-center justify-center min-h-96 ">
+      <!-- <section class="_counter flex items-center justify-center min-h-96 ">
         <div class="overlay min-h-96 w-full flex items-center justify-center backdrop-blur-lg">
           <div class="container h-full flex flex-row items-center justify-center gap-10">
             <div class="profiles text-center">
@@ -128,7 +129,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <!-- <section class="_features flex items-center justify-center min-h-96">
       <div class="container">

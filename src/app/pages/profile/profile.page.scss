@@ -24,3 +24,7 @@
 ::ng-deep .p-togglebutton {
     @apply max-w-48;
 }
+
+::ng-deep .p-toolbar {
+    @apply py-0 px-5;
+}

@@ -1,53 +1,63 @@
 <div class="personal-info-container lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
-  <form [formGroup]="formGroup" class="form-container w-full flex-auto overflow-auto md:lg:p-4">
-    <div class="grid gap-4 lg:gap-5 grid-cols-1 md:lg:grid-cols-4">
-      <app-input label="Father Name" type="text" class="flex-grow" [control]="formGroupControl['fatherName']"
-        formControlName="fatherName" [required]="true" />
+  <div class="form-wrapper w-full flex-auto overflow-auto">
+    @if (isDataAvailable) {
+    <form [formGroup]="formGroup" class="form-container w-full flex-auto overflow-auto md:lg:p-4">
+      <div class="grid gap-4 lg:gap-5 grid-cols-1 md:lg:grid-cols-4">
+        <app-input label="Father Name" type="text" class="flex-grow" [control]="formGroupControl['fatherName']"
+          formControlName="fatherName" [required]="true" />
 
-      <app-input label="Father Occupation" class="flex-grow" type="text"
-        [control]="formGroupControl['fatherOccupation']" formControlName="fatherOccupation" />
+        <app-input label="Father Occupation" class="flex-grow" type="text"
+          [control]="formGroupControl['fatherOccupation']" formControlName="fatherOccupation" />
 
-      <app-input label="Mother Name" class="flex-grow" type="text" [control]="formGroupControl['motherName']"
-        formControlName="motherName" />
+        <app-input label="Mother Name" class="flex-grow" type="text" [control]="formGroupControl['motherName']"
+          formControlName="motherName" />
 
-      <app-input label="Mother Occupation" class="flex-grow" type="text"
-        [control]="formGroupControl['motherOccupation']" formControlName="motherOccupation" />
+        <app-input label="Mother Occupation" class="flex-grow" type="text"
+          [control]="formGroupControl['motherOccupation']" formControlName="motherOccupation" />
 
-      <app-input label="No Of Brothers" class="flex-grow" type="number" [control]="formGroupControl['noOfBrothers']"
-        formControlName="noOfBrothers" />
+        <app-input label="No Of Brothers" class="flex-grow" type="number" [control]="formGroupControl['noOfBrothers']"
+          formControlName="noOfBrothers" />
 
 
-      <app-input label="No Of Married Brothers" type="number" [control]="formGroupControl['noOfMarriedBrothers']"
-        formControlName="noOfMarriedBrothers" />
+        <app-input label="No Of Married Brothers" type="number" [control]="formGroupControl['noOfMarriedBrothers']"
+          formControlName="noOfMarriedBrothers" />
 
-      <app-input label="No Of Sisters" type="number" [control]="formGroupControl['noOfSisters']"
-        formControlName="noOfSisters" />
+        <app-input label="No Of Sisters" type="number" [control]="formGroupControl['noOfSisters']"
+          formControlName="noOfSisters" />
 
-      <app-input label="No Of Married Sisters" type="number" class="" [control]="formGroupControl['noOfMarriedSisters']"
-        formControlName="noOfMarriedSisters" />
+        <app-input label="No Of Married Sisters" type="number" class=""
+          [control]="formGroupControl['noOfMarriedSisters']" formControlName="noOfMarriedSisters" />
 
-      @if (religionListOptions.length) {
-      <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
-        [controlValue]="formGroup.get('religionId')?.value"
-        (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
-      }
+        @if (religionListOptions.length) {
+        <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
+          [controlValue]="formGroup.get('religionId')?.value"
+          (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
+        }
 
-      @if (castListOptions.length) {
-      <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId"
-        [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"
-        [options]="castListOptions" class="flex-auto" />
-      }
+        @if (castListOptions.length) {
+        <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId"
+          [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"
+          [options]="castListOptions" class="flex-auto" />
+        }
 
-      @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-      <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
-        [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
-        (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions" class="flex-auto" />
-      }
+        @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+        <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
+          [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
+          (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions"
+          class="flex-auto" />
+        }
 
+      </div>
+    </form>
+    } @else {
+    <div class="h-28 w-full p-3 flex items-center justify-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
     </div>
-  </form>
+    }
+  </div>
+
   <div class="action w-full flex items-center justify-end gap-5 py-2 px-7 border-t border-t-gray-100">
-    <mt-button title="Cancel" [isCancel]="true" (action)="handleCancelAction()" />
-    <mt-button title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+    <mt-button title="Cancel" [disabled]="!isDataAvailable" [isCancel]="true" (action)="handleCancelAction()" />
+    <mt-button [disabled]="!isDataAvailable" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
   </div>
 </div>
