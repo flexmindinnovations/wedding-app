@@ -6,6 +6,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-about',
@@ -22,6 +23,7 @@ export class AboutPage implements OnInit, AfterViewInit {
   isDesktop: boolean = true;
   domain = DOMAIN;
   dialogRef: DynamicDialogRef | undefined;
+  sharedService = inject(SharedService);
 
   constructor(
     private authService: AuthService,
@@ -65,6 +67,7 @@ export class AboutPage implements OnInit, AfterViewInit {
 
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
   }
 
 }

@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Container } from '@tsparticles/engine';
 import { loadSlim } from "@tsparticles/slim";
 import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomePage implements OnInit {
   domain = DOMAIN;
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
+  sharedService = inject(SharedService);
 
   isVideoLoaded = false;
 
@@ -153,6 +155,7 @@ export class HomePage implements OnInit {
   }
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
   }
 
 }

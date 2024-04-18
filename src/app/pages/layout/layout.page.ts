@@ -197,8 +197,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.sharedService.getRequestStatus().subscribe(isNavigate => {
+      if (isNavigate) this.resetActiveClass();
+    })
   }
-
   setActivePageOnRefresh() {
     const currentRoute = this.router.url;
     let activeRoute: any = currentRoute.lastIndexOf('/');

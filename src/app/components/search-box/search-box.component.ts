@@ -125,7 +125,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
           // console.log('response: ', response);
 
           const subCastList = response?.subCastList;
-          console.log('subCastList: ', subCastList);
+          // console.log('subCastList: ', subCastList);
 
           this.castList = subCastList.map((item: any) => {
             return {

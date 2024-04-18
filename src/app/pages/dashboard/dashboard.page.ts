@@ -6,6 +6,7 @@ import { AnimationDirection } from 'src/app/components/carousel-item/carousel-it
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { HomeService } from 'src/app/services/home/home.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
 @Component({
@@ -28,6 +29,7 @@ export class DashboardPage implements OnInit {
 
   domain = DOMAIN;
   isVideoLoaded = false;
+  sharedService = inject(SharedService);
 
   profileCount = 100;
   branchCount = 10;
@@ -116,6 +118,7 @@ export class DashboardPage implements OnInit {
 
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
   }
 
 }

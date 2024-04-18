@@ -13,7 +13,7 @@
     }
 
     ::ng-deep .p-listbox {
-        @apply h-full border-none outline-none shadow-none sm:hidden;
+        @apply h-full border-none outline-none shadow-none;
 
         .p-listbox-list-wrapper {
             @apply h-full outline-none shadow-none;
