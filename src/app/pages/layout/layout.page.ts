@@ -129,6 +129,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
           this.notificationItems = [];
           if (profileStatus === ProfileStatus.incomplete) {
+            this.resetActiveClass();
+            this.router.navigateByUrl('profile/personal');
             this.notificationItems.push({
               key: 'profileStatus',
               text: 'Profile is incomplete',

@@ -46,7 +46,7 @@
             </li>
           </ol>
           @if (isLoggedIn) {
-          <mt-button title="Explore Profiles" />
+          <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
           } @else {
           <mt-button title="Register Now" (action)="handleRegister()" />
           }

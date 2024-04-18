@@ -55,11 +55,11 @@
               }
               <div
                 class="_loadMore col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-8 flex-grow w-full flex items-center justify-center p-3">
-                <mt-button size="small" title="Load More Profiles" />
+                <mt-button size="small" title="Load More Profiles" (action)="handleExploreProfiles()" />
               </div>
             </div>
             } @else {
-            <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+            <i class=" pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
             }
           </div>
         </div>
