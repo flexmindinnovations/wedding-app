@@ -128,6 +128,22 @@
         }
       </ul>
     </div>
+    <div class="wrapper">
+      <div class="Photos">
+        <h2>Photos</h2>
+      </div>
+      <ul>
+        <div class="flex items-center justify-center gap-4 max-h-56 w-full">
+          @for (item of userInfo?.photos; track $index) {
+          <li *ngIf="item?.value">
+            <div class="image-container w-52 h-48">
+              <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
+            </div>
+          </li>
+          }
+        </div>
+      </ul>
+    </div>
   </div>
 </div>
 } @else {
