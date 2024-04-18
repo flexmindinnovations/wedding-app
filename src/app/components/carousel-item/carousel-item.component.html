@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="text-container flex-auto flex flex-col gap-2 p-2">
-      <div class="info min-h-40 flex flex-col gap-2">
+      <div class="info min-h-24 flex flex-col gap-2">
         <div class="flex flex-col items-start justify-start">
           <p class="text-label opacity-80 select-none">Full Name</p>
           <p class="text-data select-none">{{data?.fullName}}</p>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <p-divider></p-divider>
-    <div class="audit-info flex items-center justify-between py-2 px-5 flex-none h-10 rounded-b-md">
+    <div class="audit-info flex items-center justify-between pt-0 pb-2 px-5 flex-none h-10 rounded-b-md">
       <p>#{{data?.customerId}}</p>
       <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
         [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>

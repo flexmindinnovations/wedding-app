@@ -5,10 +5,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import * as FileSaver from 'file-saver';
 import { environment } from 'src/environments/environment';
 import { v4 as uuidv4 } from 'uuid';
-import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { Buffer as buffer } from 'buffer';
 import * as moment from 'moment';
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 interface ObjectType {
   title: string;
@@ -93,82 +96,236 @@ export class DataExportComponent implements OnInit {
 
   exportPdf() {
     this.isLoading = true;
-    // const tableEl: any = document.getElementById('profileDataTable');
-    const tableEl: any = document.getElementById('userDataContainer');
-    // console.log('tableEl: ', tableEl);
-    let pageWidth = 595;
-    let pageHeight = 842;
-    var pageMargin = 20;
-
-    pageWidth -= pageMargin * 2;
-    pageHeight -= pageMargin * 2;
-
-    const imageUrlToBase64 = async (url: any) => {
-      const data = await fetch(url);
-      const blob = await data.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          const base64data = reader.result;
-          resolve(base64data);
-        };
-        reader.onerror = reject;
-      });
-    };
-
     const pdf = new jsPDF('p', 'pt', 'a4');
-    const logoImageSrc = '/assets/icon/logo.png';
-
+    const personalInfo = this.userInfo?.personalInfo;
+    const familyInfo = this.userInfo?.familyInfo;
+    const contactInfo = this.userInfo?.contactInfo;
+    const otherInfo = this.userInfo?.otherInfo;
     const imageModel = this.userInfo?.photos;
-    const personalInfo = this.personalInfoModel;
-    // imageModel.forEach((item: any) => {
-    //   const imageUrl = environment.endpoint + `/${item?.value}`;
-    //   this.imageUrlToBase64(imageUrl).then((respones: any) => {
-    //     const pageWidth = pdf.internal.pageSize.getWidth();
-    //     pdf.addImage(respones, 'png', pageWidth / 2, 100, 100, 100);
-    //   }).then(() => {
+    const images: any[] = [];
+    imageModel.forEach((item: any) => {
+      const imageUrl = environment.endpoint + `/${item?.value}`;
+      images.push(imageUrl);
+    });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const personalInfoData = this.buildTableBody(personalInfo);
+    const familyInfoData = this.buildTableBody(familyInfo);
+    const contactInfoData = this.buildTableBody(contactInfo);
+    const otherInfoInfoData = this.buildTableBody(otherInfo);
 
-    //   })
-    // });
-    pdf.setFontSize(12);
-    pdf.html(tableEl, {
-      width: 592,
-      margin: 20,
-      autoPaging: 'text',
-      html2canvas: {
-        scale: 0.7,
-        useCORS: true,
-        height: pdf.internal.pageSize.getHeight() - 100,
-        width: pdf.internal.pageSize.getWidth() - 100
-      },
-      image: {
-        type: 'png',
-        quality: 100
-      },
-      x: -50,
-      y: 40,
-      callback: (doc: jsPDF) => {
-        // pdf.output('dataurlnewwindow');
-        const profilName = personalInfo?.fullName + '_Profile';
-        pdf.save(profilName);
-        this.isLoading = false;
-      }
-    })
+    this.generatePdf(pageWidth, personalInfoData, familyInfoData, contactInfoData, otherInfoInfoData, images);
   }
 
-  async imageUrlToBase64(url: any) {
-    try {
-      const response = await fetch(url);
-      const blob = await response.arrayBuffer();
-      const contentType = response.headers.get('content-type');
-      const base64String = `data:${contentType};base64,${buffer.from(
-        blob,
-      ).toString('base64')}`;
-      return base64String;
-    } catch (err) {
-      return err;
-    }
+  async generatePdf(pageWidth: any, personalInfoData: any, familyInfoData: any, contactInfoData: any, otherInfoInfoData: any, images: any) {
+    const logoImageSrc = 'http://localhost:8100/assets/icon/logo.png';
+    const doc: TDocumentDefinitions = {
+      content: [
+        {
+          image: await <any>this.getBase64ImageFromURL(logoImageSrc),
+          height: 50,
+          width: 100,
+          style: {
+            alignment: 'center',
+            margin: [20, 20, 20, 20]
+          }
+        },
+        {
+          columns: [
+            {
+              width: '*',
+              alignment: 'center',
+              margin: [0, 10, 0, 0],
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Bio Date',
+                      fillColor: '#f9fafb',
+                      fontSize: 18,
+                      bold: true,
+                      margin: [10, 10, 10, 10]
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
+        },
+        {
+          text: 'Personal Information',
+          style: 'subheader'
+        },
+        {
+          table: {
+            headerRows: 0,
+            heights: 20,
+            body: personalInfoData,
+            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+          },
+          style: 'row',
+          layout: 'noBorders'
+        },
+        {
+          text: 'Family Information',
+          style: 'subheader'
+        },
+        {
+          table: {
+            headerRows: 0,
+            heights: 18,
+            body: familyInfoData,
+            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+          },
+          style: 'row',
+          layout: 'noBorders'
+        },
+        {
+          text: 'Conact Information',
+          style: 'subheader'
+        },
+        {
+          table: {
+            headerRows: 0,
+            heights: 18,
+            body: contactInfoData,
+            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+          },
+          style: 'row',
+          layout: 'noBorders'
+        },
+        {
+          text: 'Other Information',
+          style: 'subheader'
+        },
+        {
+          table: {
+            headerRows: 0,
+            heights: 18,
+            body: otherInfoInfoData,
+            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+          },
+          style: 'row',
+          layout: 'noBorders'
+        },
+        {
+          text: 'Photos',
+          style: 'subheader'
+        },
+        {
+          table: {
+            headerRows: 0,
+            heights: 20,
+            body: [
+              [
+                {
+                  columns: [
+                    {
+                      width: '*',
+                      alignment: 'left',
+                      margin: [20, 10, 10, 20],
+                      table: {
+                        widths: '*',
+                        body: [
+                          [
+                            {
+                              image: await <any>this.getBase64ImageFromURL(images[0]),
+                              height: 140,
+                              width: 140,
+                              style: {
+                                alignment: 'left',
+                              }
+                            }
+                          ],
+                        ],
+                      },
+                      layout: 'noBorders',
+                    },
+                    {
+                      width: '*',
+                      alignment: 'left',
+                      margin: [20, 10, 10, 20],
+                      table: {
+                        widths: '*',
+                        body: [
+                          [
+                            {
+                              image: await <any>this.getBase64ImageFromURL(images[1]),
+                              height: 140,
+                              width: 140,
+                              style: {
+                                alignment: 'left',
+                              }
+                            }
+                          ],
+                        ],
+                      },
+                      layout: 'noBorders'
+                    },
+                  ]
+                }
+              ]
+            ],
+            widths: '*',
+          },
+          style: 'row',
+          layout: 'noBorders',
+          columnGap: 20
+        },
+      ],
+      styles: {
+        subheader: {
+          fontSize: 12,
+          margin: [0, 10, 0, 10],
+          bold: true,
+        },
+        row: {
+          fontSize: 10,
+          alignment: 'left',
+          margin: [0, 5, 0, 5],
+          leadingIndent: 15,
+        }
+      }
+    };
+
+    pdfMake.createPdf(doc).open();
+    this.isLoading = false;
+  }
+
+  buildTableBody(data: any) {
+    var body: any = [];
+    const columns = ['Title', 'Value']
+    data.forEach((row: any) => {
+      const dataRow: any = [];
+      columns.forEach((col) => {
+        if (row?.value) dataRow.push(row[col.toLowerCase()].toString())
+      })
+      if (dataRow.length) body.push(dataRow);
+    });
+    return body;
+  }
+
+  getBase64ImageFromURL(url: any) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const dataURL = canvas.toDataURL("image/png");
+          resolve(dataURL);
+        }
+      };
+      img.onerror = error => {
+        reject(error);
+      };
+      img.src = url;
+    });
   }
 
   exportExcel() {
