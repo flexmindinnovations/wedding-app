@@ -8,6 +8,10 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { HomeService } from 'src/app/services/home/home.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { DialogService,DynamicDialogRef } from 'primeng/dynamicdialog';
+import * as moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -28,6 +32,7 @@ export class DashboardPage implements OnInit {
 
   domain = DOMAIN;
   isVideoLoaded = false;
+  id = uuidv4();
 
   profileCount = 100;
   branchCount = 10;
@@ -40,6 +45,12 @@ export class DashboardPage implements OnInit {
     auto: true,
   }
 
+  showLaunchOfferBanner = false;
+  showOfferMarqueue = false;
+  showQRPopup = false;
+  dialogRef: DynamicDialogRef | undefined;
+
+
   alert = inject(AlertService);
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
@@ -47,7 +58,7 @@ export class DashboardPage implements OnInit {
   };
 
   animateDirection: AnimationDirection = 'right';
-  constructor() {
+  constructor(private dialogService: DialogService,) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
   }
@@ -63,6 +74,13 @@ export class DashboardPage implements OnInit {
     observer.observe(this.host.nativeElement);
 
     this.getRandomProfiles();
+  }
+  ngAfterViewInit(): void {
+    const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
+    const futurDate = moment(currentDate).add(2, 'days');
+    if (futurDate.diff(currentDate, 'days') > 0) {
+      this.showLaunchOfferBanner = true;
+    }
   }
 
   handleOnLoadData(event: any) {
@@ -116,6 +134,28 @@ export class DashboardPage implements OnInit {
 
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
+  } 
+  
+  handleRegister() {
+    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+  }
+  closeOfferDialog() {
+    this.showOfferMarqueue = true;
+    this.showLaunchOfferBanner = false;
+    this.showQRPopup = false;
   }
 
+  handleCompletePayment() {
+    this.closeOfferDialog();
+    this.showQRPopup = true;
+  }
 }

@@ -6,6 +6,20 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
+    <section *ngIf="!showLaunchOfferBanner && showOfferMarqueue"
+      class="py-2 absolute w-full z-10 bg-white/90 backdrop-blur-md min-h-10 flex items-center justify-center"
+      (click)="handleRegister()">
+      <!-- @for (item of marqueueCount; track $index) { -->
+      <div class="w-full h-full flex items-center justify-center animate-marquee">
+        <p class="w-full h-full flex items-center justify-around gap-5 ">
+          <span class="min-w-48 ">🎉 Special Launch Offer! 🚀</span>
+          <span class="min-w-48">Register Now and Avail!</span>
+          <span class="min-w-48">Original Price: <b class="line-through font-bold">&#8377; 1549</b></span>
+          <span class="min-w-72">Limited Time Offer Price: <b class="font-bold">&#8377; 249/-</b> Only</span>
+        </p>
+      </div>
+      <!-- } -->
+    </section>
     <section class="video" [ngClass]="isVideoLoaded ? '' : 'flex items-center justify-center'">
       <video id="videoPlayer" autoplay muted loop playsInline (loadeddata)="handleOnLoadData($event)">
         <source src="/assets/videos/intro.mp4" type="video/mp4">
@@ -60,7 +74,8 @@
 
       <section class="_register ">
         <div class="container relative col-span-2 flex flex-row gap-4 w-full">
-          <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft" class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
+          <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+            class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
             <p class="about p-gradient tracking-widest uppercase">
               About Us
             </p>
@@ -93,7 +108,8 @@
 
             <mt-button title="Register Now" (action)="handleRegister()" />
           </div>
-          <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" class="content -z-[10] flex-grow w-full h-[inherit]">
+          <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright"
+            class="content -z-[10] flex-grow w-full h-[inherit]">
             <div class="bars">
               <div class="bar1"></div>
               <div class="bar2"></div>
@@ -130,11 +146,28 @@
           <app-card></app-card>
         </div>
       </section>
-
-
       <div class="footer">
         <app-footer></app-footer>
       </div>
     </div>
   </div>
 </ion-content>
+
+<ng-container>
+  <p-dialog #sessionExpired [(visible)]="showLaunchOfferBanner" [id]="id" [closable]="true" [showHeader]="false"
+    [modal]="true" [className]="'offer-dialog'" [style]="{ width: '25vw', padding: '0' }" [draggable]="true"
+    [resizable]="false">
+    <div
+      class="bg-[url('/assets/gif/Special_Launch_Offer.gif')] bg-no-repeat bg-contain bg-center object-fill min-h-96 flex flex-col items-center justify-center relative w-full gap-4">
+      <p class="close-icon">
+        <span class="pi pi-times select-none cursor-pointer absolute top-3 right-4" (click)="closeOfferDialog()"></span>
+      </p>
+      <div class="action offer-section w-full flex items-center justify-end">
+        <p-button label="Register Now" (onClick)="handleRegister()" />
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<!-- #63A4FF -->
+<!-- #83EAF1 -->

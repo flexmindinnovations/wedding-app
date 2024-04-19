@@ -246,4 +246,23 @@ section._counter {
     height: 10rem;
     width: 100%;
     z-index: -1;
+    // font-style: ;
+}
+
+::ng-deep .offer-dialog {
+    .p-dialog-content {
+        @apply p-0 rounded-lg;
+    }
+}
+
+::ng-deep .offer-section {
+    @apply absolute top-[67%] w-[130px];
+    .p-button {
+        @apply bg-gradient-to-br from-[#63A4FF] to-[#83EAF1];
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            @apply bg-gradient-to-tl;
+        } 
+    }
 }

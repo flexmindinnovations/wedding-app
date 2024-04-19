@@ -6,6 +6,20 @@
 
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
+    <section *ngIf="!showLaunchOfferBanner && showOfferMarqueue"
+      class="py-2 offer-overlay absolute w-full z-10 bg-white/90 backdrop-blur-md min-h-10 flex items-center justify-center"
+      (click)="handleRegister()">
+      <!-- @for (item of marqueueCount; track $index) { -->
+      <div class="w-full h-full flex items-center justify-center animate-marquee">
+        <p class="w-full offer-marqueue h-full flex items-center justify-around gap-5 ">
+          <span class="min-w-48 ">🎉 Special Launch Offer! 🚀</span>
+          <span class="min-w-48">Register Now and Avail!</span>
+          <span class="min-w-48">Original Price: <b class="line-through font-bold">&#8377; 1549</b></span>
+          <span class="min-w-72">Limited Time Offer Price: <b class="font-bold">&#8377; 249/-</b> Only</span>
+        </p>
+      </div>
+      <!-- } -->
+    </section>
     <section class="video">
       <video id="videoPlayer" autoplay muted loop playsInline (loadeddata)="handleOnLoadData($event)">
         <source src="/assets/videos/intro.mp4" type="video/mp4">
@@ -50,7 +64,7 @@
               class="profiles-wrapper grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-8 gap-y-4 gap-x-0 lg:gap-y-4 xl:gap-y-4 lg:gap-x-4 xl:gap-x-4">
               @for (item of profileList; track $index) {
               <div class="col-span-2">
-                <carousel-item [data]="item" />
+                <carousel-item class="flex h-full" [data]="item" />
               </div>
               }
               <div
@@ -67,7 +81,8 @@
 
       <section class="_register ">
         <div class="container relative col-span-2 lg:xl:py-10 flex flex-row gap-0 lg:xl:gap-4 px-3 w-full lg:xl:px-10">
-          <div class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
+          <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+            class="cta_register flex flex-col items-start justify-start gap-4  max-w-5xl mx-auto">
             <p class="about p-gradient tracking-widest uppercase">
               About Us
             </p>
@@ -106,7 +121,8 @@
               <div class="bar2"></div>
               <div class="bar3"></div>
             </div>
-            <div *ngIf="!isMobile" class="image-container">
+            <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" *ngIf="!isMobile"
+              class="image-container">
               <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
             </div>
           </div>
@@ -147,3 +163,38 @@
     <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
   </div>
 </ion-content>
+
+<ng-container>
+  <p-dialog #sessionExpired [(visible)]="showLaunchOfferBanner" [id]="id" [closable]="true" [showHeader]="false"
+    [modal]="true" [className]="'offer-dialog'" [style]="{ width: '25vw', padding: '0' }" [draggable]="true"
+    [resizable]="false">
+    <div
+      class="bg-[url('/assets/gif/Special_Launch_Offer.gif')] bg-no-repeat bg-contain bg-center object-fill min-h-96 flex flex-col items-center justify-center relative w-full gap-4">
+      <p class="close-icon">
+        <span class="pi pi-times select-none cursor-pointer absolute top-3 right-4" (click)="closeOfferDialog()"></span>
+      </p>
+      <div class="action offer-section w-full flex items-center justify-end">
+        <p-button label="Complete Payment" (onClick)="handleCompletePayment()" />
+      </div>
+    </div>
+  </p-dialog>
+
+  <p-dialog [(visible)]="showQRPopup" [className]="'offer-dialog'" [style]="{ width: '25vw', padding: '0' }">
+    <ng-template pTemplate="headless">
+      <div
+        class="bg-[#21182b] min-h-96 flex flex-col items-center justify-center relative w-full gap-4 rounded-lg">
+        <p class="close-icon">
+          <span class="text-white pi pi-times select-none cursor-pointer absolute top-3 right-4"
+            (click)="closeOfferDialog()"></span>
+        </p>
+        <div class="content">
+          <h3 class="text-xl mb-4 text-white block text-center">Pay &#8377; 249/-</h3>
+          <img class="h-60 w-48" src="/assets/image/qr.png" alt="QR">
+        </div>
+        <!-- <div class="action offer-section w-full flex items-center justify-end">
+          <p-button label="Register Now" (onClick)="handleRegister()" />
+        </div> -->
+      </div>
+    </ng-template>
+  </p-dialog>
+</ng-container>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, Observer, share } from 'rxjs';
@@ -12,13 +12,15 @@ import { particlesOptions } from 'src/app/util/util';
 import { v4 as uuidv4 } from 'uuid';
 import { Container } from '@tsparticles/engine';
 import { loadSlim } from "@tsparticles/slim";
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
@@ -47,6 +49,8 @@ export class HomePage implements OnInit {
     auto: true,
   }
 
+  showLaunchOfferBanner = false;
+
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
     this.handleOnScroll(event);
@@ -54,12 +58,18 @@ export class HomePage implements OnInit {
 
   animateDirection: AnimationDirection = 'right';
   dialogRef: DynamicDialogRef | undefined;
+  showOfferMarqueue = false;
+  marqueueCount = [];
+
+  id = uuidv4();
   constructor(
     private dialogService: DialogService,
-    private readonly ngParticlesService: NgParticlesService
+    private readonly ngParticlesService: NgParticlesService,
+    private dialogRefService: DynamicDialogRef
   ) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
+    this.marqueueCount.length = 3;
   }
 
   ngOnInit() {
@@ -78,6 +88,15 @@ export class HomePage implements OnInit {
       await loadSlim(engine);
     });
   }
+
+  ngAfterViewInit(): void {
+    const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
+    const futurDate = moment(currentDate).add(2, 'days');
+    if (futurDate.diff(currentDate, 'days') > 0) {
+      this.showLaunchOfferBanner = true;
+    }
+  }
+
 
   handleOnLoadData(event: any) {
     this.isVideoLoaded = true;
@@ -148,6 +167,11 @@ export class HomePage implements OnInit {
       item.isDisplayed = false;
     })
     this.profileList[this.currentItem].isDisplayed = true;
+  }
+
+  closeOfferDialog() {
+    this.showOfferMarqueue = true;
+    this.showLaunchOfferBanner = false;
   }
 
 }
