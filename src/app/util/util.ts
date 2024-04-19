@@ -83,6 +83,13 @@ export const tabItems = {
 
 export const MENU_ITEMS = [
     {
+        "id": 1,
+        "title": "Home",
+        "route": "",
+        "isActive": false,
+        "icon": homeIcon
+    },
+    {
         "id": 6,
         "title": "Blogs",
         "route": "blog",
@@ -138,7 +145,7 @@ export const particlesOptions = {
         actualOptions: {
             fullScreen: {
                 enable: false,
-                zIndex:0
+                zIndex: 0
             },
         },
         color: {

@@ -1,10 +1,9 @@
-<div class="wrapper grid grid-cols-3 gap-5">
+<div class="wrapper grid grid-cols-1 md:grid-cols-3 gap-5">
   <div class="max-w-md p-6 flex items-center justify-center">
-    <h1 class="h1-gradient text-center">
+    <h1 class="h1-gradient text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
       Why choose {{domain}}?
     </h1>
   </div>
-
   @for (item of cardItems; track $index) {
   <div class="card p-4 flex bg-white border border-gray-300 shadow-lg 
   transition ease-in-out delay-300 hover:shadow-inner cursor-pointer dark:bg-gray-800 dark:border-gray-600 min-h-40">

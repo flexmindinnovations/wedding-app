@@ -5,6 +5,8 @@ import { Message } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-about',
@@ -16,11 +18,12 @@ export class AboutPage implements OnInit, AfterViewInit {
   host = inject(ElementRef);
   ngZone = inject(NgZone);
   isLoggedIn: boolean = false;
-
+  router = inject(Router);
   isMobile: boolean = false;
   isDesktop: boolean = true;
   domain = DOMAIN;
   dialogRef: DynamicDialogRef | undefined;
+  sharedService = inject(SharedService);
 
   constructor(
     private authService: AuthService,
@@ -40,8 +43,8 @@ export class AboutPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
-    console.log('isLoggedIn: ', this.isLoggedIn);
-    
+    // console.log('isLoggedIn: ', this.isLoggedIn);
+
   }
 
   handleRegister() {
@@ -57,10 +60,14 @@ export class AboutPage implements OnInit, AfterViewInit {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      console.log('afterClose: ', afterClose);
+      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }
 
+  handleExploreProfiles() {
+    this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
+  }
 
 }

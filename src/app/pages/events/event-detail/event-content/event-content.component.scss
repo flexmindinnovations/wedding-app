@@ -1,0 +1,14 @@
+.image-container {
+    img {
+        @apply h-full w-full object-fill;
+    }
+}
+
+@media (max-width: 600px) {
+    .author-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+}

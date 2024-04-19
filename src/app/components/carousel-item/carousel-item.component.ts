@@ -36,7 +36,7 @@ export class CarouselItemComponent implements OnInit {
 
   handleProfileClick() {
     // console.log('data: ', this.data);
-    
+
   }
 
 }

@@ -33,6 +33,8 @@ export class SharedService {
 
   isReadOnlyMode = new Subject();
 
+  isNavigate = new Subject();
+
   blogData = new Subject();
   eventData = new Subject();
   imagesSelected = new Subject();
@@ -42,6 +44,14 @@ export class SharedService {
   }
   getEventData(): Observable<any> {
     return this.eventData.asObservable();
+  }
+
+  setRequestStatus(status: boolean) {
+    this.isNavigate.next({ status });
+  }
+
+  getRequestStatus(): Observable<any> {
+    return this.isNavigate.asObservable();
   }
 
   getBlogData(): Observable<any> {

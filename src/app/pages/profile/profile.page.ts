@@ -101,19 +101,19 @@ export class ProfilePage implements OnInit {
   handleExportAction() {
     this.dialogRef = this.dialogService.open(
       DataExportComponent, {
-        header: 'Data Export',
-        width: '80%',
-        baseZIndex: 10000,
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw'
-        },
-        maximizable: true
-      }
+      header: 'Data Export',
+      width: '80%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: true
+    }
     )
-    
+
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      console.log('afterClose: ', afterClose);
+      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }

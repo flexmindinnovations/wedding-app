@@ -40,7 +40,7 @@ export class EventsPage implements OnInit {
   }
 
   handlePopState() {
-    console.log('handlePopState: ');
+    // console.log('handlePopState: ');
 
     this.getEventList();
   }

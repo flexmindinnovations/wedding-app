@@ -6,6 +6,7 @@ import { AnimationDirection } from 'src/app/components/carousel-item/carousel-it
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { HomeService } from 'src/app/services/home/home.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
@@ -33,6 +34,7 @@ export class DashboardPage implements OnInit {
   domain = DOMAIN;
   isVideoLoaded = false;
   id = uuidv4();
+  sharedService = inject(SharedService);
 
   profileCount = 100;
   branchCount = 10;
@@ -90,7 +92,7 @@ export class DashboardPage implements OnInit {
   }
 
   handleOnScroll(event: any) {
-    console.log('event scroll: ', event);
+    // console.log('event scroll: ', event);
 
   }
 
@@ -147,11 +149,13 @@ export class DashboardPage implements OnInit {
       },
       maximizable: false
     })
+    this.sharedService.setRequestStatus(true);
   }
   closeOfferDialog() {
     this.showOfferMarqueue = true;
     this.showLaunchOfferBanner = false;
     this.showQRPopup = false;
+    
   }
 
   handleCompletePayment() {

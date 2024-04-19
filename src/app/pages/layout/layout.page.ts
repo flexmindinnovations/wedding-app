@@ -104,7 +104,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.sharedService.isUnAuthorizedRequest.subscribe((isUnAuthorizedRequest: any) => {
-      if(isUnAuthorizedRequest) {
+      if (isUnAuthorizedRequest) {
         this.showSessionExpiredDialog = true;
         this.cdr.detectChanges();
       }
@@ -128,7 +128,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           const { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill, profileStatus } = response;
           this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
           this.notificationItems = [];
-          if(profileStatus === ProfileStatus.incomplete) {
+          if (profileStatus === ProfileStatus.incomplete) {
+            this.resetActiveClass();
+            this.router.navigateByUrl('profile/personal');
             this.notificationItems.push({
               key: 'profileStatus',
               text: 'Profile is incomplete',
@@ -195,8 +197,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.sharedService.getRequestStatus().subscribe(isNavigate => {
+      if (isNavigate) this.resetActiveClass();
+    })
   }
-
   setActivePageOnRefresh() {
     const currentRoute = this.router.url;
     let activeRoute: any = currentRoute.lastIndexOf('/');
@@ -249,7 +253,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleLogoLoadError(event: any) {
-    console.log('event: ', event);
+    // console.log('event: ', event);
 
   }
 
@@ -273,7 +277,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNotificationItemClick(item: any) {
-    console.log('item: ', item);
+    // console.log('item: ', item);
     this.router.navigateByUrl(item?.route);
   }
 }

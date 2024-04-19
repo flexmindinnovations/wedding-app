@@ -49,8 +49,8 @@
           [controlValue]="formGroup.get('heightId')?.value" (onSelectionChange)="onSelectionChange($event, 'heightId')"
           [options]="heightListOptions" />
 
-        <app-dropdown *ngIf="educationListOptions.length" label="Education" [control]="formGroupControl['eduationId']"
-          formControlName="eduationId" [controlValue]="formGroup.get('eduationId')?.value"
+        <app-dropdown *ngIf="educationListOptions.length" label="Education" [control]="formGroupControl['educationId']"
+          formControlName="educationId" [controlValue]="formGroup.get('educationId')?.value"
           (onSelectionChange)="onSelectionChange($event, 'educationId')" [options]="educationListOptions" />
 
         @if (hasSpecialization && isSpecializationDataAvailable) {

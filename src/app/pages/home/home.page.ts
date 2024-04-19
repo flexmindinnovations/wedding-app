@@ -14,6 +14,8 @@ import { Container } from '@tsparticles/engine';
 import { loadSlim } from "@tsparticles/slim";
 import * as moment from 'moment';
 
+import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +26,7 @@ export class HomePage implements OnInit, AfterViewInit {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
+  router = inject(Router);
   isMobile: boolean = false;
   isDesktop: boolean = true;
   profileList: any[] = [];
@@ -35,6 +38,7 @@ export class HomePage implements OnInit, AfterViewInit {
   domain = DOMAIN;
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
+  sharedService = inject(SharedService);
 
   isVideoLoaded = false;
 
@@ -105,12 +109,12 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   handleOnScroll(event: any) {
-    console.log('event scroll: ', event);
+    // console.log('event scroll: ', event);
 
   }
 
   particlesLoaded(container: Container): void {
-    console.log(container);
+    // console.log(container);
   }
 
   handleRegister() {
@@ -126,7 +130,7 @@ export class HomePage implements OnInit, AfterViewInit {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      console.log('afterClose: ', afterClose);
+      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }
@@ -167,6 +171,10 @@ export class HomePage implements OnInit, AfterViewInit {
       item.isDisplayed = false;
     })
     this.profileList[this.currentItem].isDisplayed = true;
+  }
+  handleExploreProfiles() {
+    this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
   }
 
   closeOfferDialog() {

@@ -27,7 +27,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   isReligionSelected: boolean = false;
 
   fb = inject(FormBuilder);
-  
+
 
   constructor(
     private router: Router,
@@ -74,7 +74,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   handleOnSearch() {
     const formVal = this.formGroup.value;
-    if(this.formGroup.invalid) {
+    if (this.formGroup.invalid) {
       this.alertService.setAlertMessage('Please provide filter criteria', AlertType.warning);
       return;
     }
@@ -122,10 +122,10 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     this.castService.getCastListById(religionId).subscribe({
       next: (response: any) => {
         if (response) {
-          console.log('response: ', response);
+          // console.log('response: ', response);
 
           const subCastList = response?.subCastList;
-          console.log('subCastList: ', subCastList);
+          // console.log('subCastList: ', subCastList);
 
           this.castList = subCastList.map((item: any) => {
             return {
