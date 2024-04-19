@@ -155,8 +155,7 @@
 
 <ng-container>
   <p-dialog #sessionExpired [(visible)]="showLaunchOfferBanner" [id]="id" [closable]="true" [showHeader]="false"
-    [modal]="true" [className]="'offer-dialog'" [style]="{ width: '25vw', padding: '0' }" [draggable]="true"
-    [resizable]="false">
+    [modal]="true" [className]="'offer-dialog'" [style]="getDialogStyle()" [draggable]="true" [resizable]="false">
     <div
       class="bg-[url('/assets/gif/Special_Launch_Offer.gif')] bg-no-repeat bg-contain bg-center object-fill min-h-96 flex flex-col items-center justify-center relative w-full gap-4">
       <p class="close-icon">

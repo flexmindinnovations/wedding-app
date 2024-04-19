@@ -34,7 +34,7 @@ export class HomePage implements OnInit, AfterViewInit {
   homeService = inject(HomeService);
   currentItem = 0;
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
-
+  public screenWidth: any;
   domain = DOMAIN;
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
@@ -74,6 +74,7 @@ export class HomePage implements OnInit, AfterViewInit {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
     this.marqueueCount.length = 3;
+    this.onResize();
   }
 
   ngOnInit() {
@@ -182,4 +183,17 @@ export class HomePage implements OnInit, AfterViewInit {
     this.showLaunchOfferBanner = false;
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
+
+  }
 }

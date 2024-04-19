@@ -10,7 +10,7 @@ import { SharedService } from 'src/app/services/shared.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
-import { DialogService,DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 @Component({
@@ -35,7 +35,7 @@ export class DashboardPage implements OnInit {
   isVideoLoaded = false;
   id = uuidv4();
   sharedService = inject(SharedService);
-
+  public screenWidth: any;
   profileCount = 100;
   branchCount = 10;
   public observable: Observable<boolean>;
@@ -63,6 +63,7 @@ export class DashboardPage implements OnInit {
   constructor(private dialogService: DialogService,) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
     setTimeout(() => this.observer?.next(true), 2000);
+    this.onResize();
   }
 
   ngOnInit() {
@@ -136,8 +137,8 @@ export class DashboardPage implements OnInit {
 
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
-  } 
-  
+  }
+
   handleRegister() {
     this.dialogRef = this.dialogService.open(RegisterUserComponent, {
       header: 'Sign up',
@@ -155,11 +156,24 @@ export class DashboardPage implements OnInit {
     this.showOfferMarqueue = true;
     this.showLaunchOfferBanner = false;
     this.showQRPopup = false;
-    
+
   }
 
   handleCompletePayment() {
     this.closeOfferDialog();
     this.showQRPopup = true;
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
+
   }
 }
