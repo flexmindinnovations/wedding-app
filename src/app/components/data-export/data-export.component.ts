@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { DOMAIN } from 'src/app/util/theme';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -160,9 +161,9 @@ export class DataExportComponent implements OnInit {
         {
           table: {
             headerRows: 0,
-            heights: 20,
+            heights: 22,
             body: personalInfoData,
-            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+            widths: '*',
           },
           style: 'row',
           layout: 'noBorders'
@@ -176,7 +177,7 @@ export class DataExportComponent implements OnInit {
             headerRows: 0,
             heights: 18,
             body: familyInfoData,
-            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+            widths: '*',
           },
           style: 'row',
           layout: 'noBorders'
@@ -190,7 +191,7 @@ export class DataExportComponent implements OnInit {
             headerRows: 0,
             heights: 18,
             body: contactInfoData,
-            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+            widths: '*',
           },
           style: 'row',
           layout: 'noBorders'
@@ -204,7 +205,7 @@ export class DataExportComponent implements OnInit {
             headerRows: 0,
             heights: 18,
             body: otherInfoInfoData,
-            widths: [pageWidth / 2 - 50, pageWidth / 2 - 50],
+            widths: '*',
           },
           style: 'row',
           layout: 'noBorders'
@@ -289,7 +290,10 @@ export class DataExportComponent implements OnInit {
       }
     };
 
-    pdfMake.createPdf(doc).open();
+    // pdfMake.createPdf(doc).open();
+    const fileName = this.personalInfoModel?.fullName.replace(/\s/g, '_')+ '.pdf';
+    // pdfMake.createPdf(doc).open();
+    pdfMake.createPdf(doc).download(fileName);
     this.isLoading = false;
   }
 
