@@ -13,6 +13,7 @@ import { RegisterUserComponent } from 'src/app/modals/register-user/register-use
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -35,6 +36,7 @@ export class DashboardPage implements OnInit {
   isVideoLoaded = false;
   id = uuidv4();
   sharedService = inject(SharedService);
+  authService = inject(AuthService);
   public screenWidth: any;
   profileCount = 100;
   branchCount = 10;
@@ -140,17 +142,22 @@ export class DashboardPage implements OnInit {
   }
 
   handleRegister() {
-    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
-      header: 'Sign up',
-      width: '25%',
-      baseZIndex: 10000,
-      breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw'
-      },
-      maximizable: false
-    })
-    this.sharedService.setRequestStatus(true);
+    const isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
+      this.showQRPopup = true;
+    } else {
+      this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+        header: 'Sign up',
+        width: '25%',
+        baseZIndex: 10000,
+        breakpoints: {
+          '960px': '75vw',
+          '640px': '90vw'
+        },
+        maximizable: false
+      })
+      this.sharedService.setRequestStatus(true);
+    }
   }
   closeOfferDialog() {
     this.showOfferMarqueue = true;
