@@ -7,11 +7,11 @@
 <ion-content [fullscreen]="true">
   <div class="content-wrapper">
     <section *ngIf="!showLaunchOfferBanner && showOfferMarqueue"
-      class="py-2 absolute w-full z-10 bg-white/90 backdrop-blur-md min-h-10 flex items-center justify-center"
+      class="py-2 absolute w-full z-10 bg-red-500 backdrop-blur-md min-h-10 flex items-center justify-center"
       (click)="handleRegister()">
       <!-- @for (item of marqueueCount; track $index) { -->
       <div class="w-full h-full flex items-center justify-center animate-marquee">
-        <p class="w-full h-full flex items-center justify-around gap-5 ">
+        <p class="w-full h-full flex items-center text-white justify-around gap-5 ">
           <span class="min-w-48 ">🎉 Special Launch Offer! 🚀</span>
           <span class="min-w-48">Register Now and Avail!</span>
           <span class="min-w-48">Original Price: <b class="line-through font-bold">&#8377; 1549</b></span>
@@ -157,7 +157,7 @@
   <p-dialog #sessionExpired [(visible)]="showLaunchOfferBanner" [id]="id" [closable]="true" [showHeader]="false"
     [modal]="true" [className]="'offer-dialog'" [style]="getDialogStyle()" [draggable]="true" [resizable]="false">
     <div
-      class="bg-[url('/assets/gif/Special_Launch_Offer.gif')] bg-no-repeat bg-contain bg-center object-fill min-h-96 flex flex-col items-center justify-center relative w-full gap-4">
+      class="bg-[url('/assets/gif/Special_Launch_Offer.gif')] bg-no-repeat bg-cover object-fill min-h-96 flex flex-col items-center justify-center relative w-full gap-4">
       <p class="close-icon">
         <span class="pi pi-times select-none cursor-pointer absolute top-3 right-4" (click)="closeOfferDialog()"></span>
       </p>
