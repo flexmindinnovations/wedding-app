@@ -139,6 +139,7 @@ export class DashboardPage implements OnInit {
 
   handleExploreProfiles() {
     this.router.navigate(['/filter-profile']);
+    this.sharedService.setRequestStatus(true);
   }
 
   handleRegister() {
