@@ -1,8 +1,14 @@
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { fadeIn, fadeOut, scaleIn, scaleOut, slideLeft, slideRight } from 'src/app/animations/carousel.animation';
+import { AlertType } from 'src/app/enums/alert-types';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
+import { DataExportComponent } from '../data-export/data-export.component';
 
 @Component({
   selector: 'carousel-item',
@@ -21,8 +27,15 @@ export class CarouselItemComponent implements OnInit {
   @Input() data: any;
   isFavourite: boolean = false;
   imagePath: any = '';
+  showLoginDialog = false;
+  dialogRef: DynamicDialogRef | undefined;
+
   constructor(
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private userService: UserService,
+    private alertService: AlertService,
+    public dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -31,12 +44,59 @@ export class CarouselItemComponent implements OnInit {
   }
 
   handleIsFavourite() {
-    this.isFavourite = !this.isFavourite;
+    const isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
+      this.isFavourite = !this.isFavourite;
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const payload = {
+        customerLikeId: 0,
+        likerId: user?.user,
+        likedId: this.data?.customerId,
+        isLike: this.isFavourite
+      };
+      this.userService.setFavourite(payload).subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.alertService.setAlertMessage(response?.message, AlertType.success);
+          }
+        },
+        error: (error: any) => {
+          this.alertService.setAlertMessage('Failed to add profile to favourites', AlertType.error);
+        }
+      })
+    } else {
+      this.showLoginDialog = true;
+    }
   }
 
   handleProfileClick() {
-    // console.log('data: ', this.data);
+    if (this.authService.isLoggedIn()) {
+      const hasName = this.data?.fullName.replace(/\s/g, '').trim().length > 0 ? true : false;
+      const fullName = hasName ? + ' - ' + this.data?.fullName : '';
+      this.dialogRef = this.dialogService.open(
+        DataExportComponent, {
+        header: `View Profile Info ${fullName}`,
+        width: '80%',
+        data: {
+          ...this.data
+        },
+        baseZIndex: 10000,
+        breakpoints: {
+          '960px': '75vw',
+          '640px': '90vw'
+        },
+        maximizable: true
+      })
+    } else {
+      this.showLoginDialog = true;
+    }
+  }
 
+  handleButtonClick(src?: string) {
+    this.showLoginDialog = false;
+    setTimeout(() => {
+      if (src == 'login') this.router.navigateByUrl('login');
+    }, 300);
   }
 
 }

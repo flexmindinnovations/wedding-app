@@ -24,10 +24,25 @@ export class TimePickerComponent implements OnInit {
     this.sharedService.getIsReadOnlyMode().subscribe((readOnly: any) => {
       this.isDisabled = readOnly;
     })
-    this.time = new Date(this.value);
-    this.defaultDate = new Date(this.value);
+    if (!moment(this.value).isValid()) {
+      const parsedDateTime = this.parseTimeString(this.value);
+      this.time = new Date(parsedDateTime);
+      this.defaultDate = new Date(parsedDateTime);
+    } else {
+      this.time = new Date(this.value);
+      this.defaultDate = new Date(this.value);
+    }
   }
 
+  parseTimeString(timeString: any) {
+    const d = new Date();
+    if (timeString) {
+      const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+      d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+      d.setMinutes(parseInt(time[2]) || 0);
+    }
+    return d;
+  }
 
   handleSelectionChange(event: any, src?: string) {
     this.selectedTime.emit(event);

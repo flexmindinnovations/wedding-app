@@ -98,7 +98,7 @@ export class HomePage implements OnInit, AfterViewInit {
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
     if (futurDate.diff(currentDate, 'days') > 0) {
-      this.showLaunchOfferBanner = true;
+      this.showLaunchOfferBanner = false;
     }
   }
 

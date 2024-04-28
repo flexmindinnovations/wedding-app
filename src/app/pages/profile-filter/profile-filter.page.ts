@@ -38,6 +38,7 @@ export class ProfileFilterPage implements OnInit {
   searchCriteria: any;
 
   fb = inject(FormBuilder);
+  totalCount = 0; 
 
 
   sidebarVisible: boolean = false;
@@ -99,7 +100,7 @@ export class ProfileFilterPage implements OnInit {
               return newObj;
             }, {}
             );
-            this.filteredQueryParams = filteredQueryParams;
+          this.filteredQueryParams = filteredQueryParams;
           if (!this.isMobile) {
             this.seachFilteredProfiles(filteredQueryParams);
           }
@@ -115,10 +116,13 @@ export class ProfileFilterPage implements OnInit {
   seachFilteredProfiles(queryParams: any) {
     const isLogged = this.authService.isLoggedIn();
     if (isLogged) {
-      this.userService.getPaidFilteredProfileList(queryParams).subscribe({
+      const pageNumber = 1;
+      this.userService.getMatchedProfileList(queryParams, pageNumber, this.totalCount).subscribe({
         next: (response) => {
           if (response) {
-            this.filteredProfileList = response;
+            const {customerList, totalCount} = response;
+            this.filteredProfileList = customerList;
+            this.totalCount = totalCount;
             this.isLoading = false;
           }
         },
