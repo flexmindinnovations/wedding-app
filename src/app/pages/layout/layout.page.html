@@ -40,7 +40,7 @@
         <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
           [value]="notificationItems.length.toString()"></i>
         }
-        <p-menu #menu [model]="profileItems" [popup]="true" appendTo="body"></p-menu>
+        <p-menu #menu styleClass="profile-menu" [model]="profileItems" [popup]="true" appendTo="body" [autofocus]="false"></p-menu>
         <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
           image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" styleClass="mr-2"
           shape="circle"></p-avatar>

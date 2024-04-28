@@ -117,3 +117,38 @@ p {
   text-transform: uppercase;
   letter-spacing: 5px;
 }
+
+@layer reset {
+  .profile-menu {
+    min-width: 14rem;
+
+    ul {
+      li {
+        .p-focus {
+          @apply bg-transparent;
+        }
+
+        .logout {
+
+          .p-menuitem-content {
+            a {
+              @apply text-wr-600;
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+  .p-toolbar {
+    @apply px-5 py-1;
+
+    .p-toolbar-group-start {
+      @apply min-w-24 min-h-9;
+      .menu-icon {
+        @apply flex lg:hidden xl:hidden;
+      }
+    }
+  }
+}

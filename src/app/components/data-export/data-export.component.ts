@@ -11,6 +11,7 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { DOMAIN } from 'src/app/util/theme';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -38,9 +39,12 @@ export class DataExportComponent implements OnInit {
   isDataLoaded = false;
   isLoading = false;
   personalInfoModel: any;
+  dialogData: any;
+  hasData: boolean = false;
   constructor(
     private authService: AuthService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    public config: DynamicDialogConfig,
   ) { }
 
   ngOnInit() {
@@ -59,21 +63,30 @@ export class DataExportComponent implements OnInit {
       });
       headerEl.insertBefore(exportButton, headerEl.firstChild);
     }
+
   }
 
   getUserDetails() {
     this.isLoading = true;
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.authService.getCustomerForPDFById(user?.user).subscribe({
+    this.dialogData = this.config.data;
+    this.hasData = this.dialogData && Object.keys(this.dialogData).length > 2 ? true : false;
+    const customerId = this.hasData ? this.dialogData.customerId : JSON.parse(localStorage.getItem('user') || '{}')?.user;
+    if (customerId) this.getProfileData(customerId);
+  }
+
+  getProfileData(customerId: any) {
+    this.authService.getCustomerForPDFById(customerId).subscribe({
       next: (data: any) => {
         if (data) {
           const { personalInfoModel, familyInfoModel, contactInfoModel, otherInfoModel, imageInfoModel } = data;
           this.personalInfoModel = JSON.parse(JSON.stringify(personalInfoModel));
           personalInfoModel['dateOfBirth'] = moment(personalInfoModel['dateOfBirth']).format('dddd, D MMMM YYYY');
-          personalInfoModel['timeOfBirth'] = moment(personalInfoModel['timeOfBirth']).format('h:mm A');
+          personalInfoModel['timeOfBirth'] = this.getTime(personalInfoModel['timeOfBirth']);
           personalInfoModel['isPatrika'] = personalInfoModel['isPatrika'] == true ? 'Yes' : 'No';
           personalInfoModel['isPhysicallyAbled'] = personalInfoModel['isPhysicallyAbled'] == true ? 'Yes' : 'No';
           personalInfoModel['spectacles'] = personalInfoModel['spectacles'] == true ? 'Yes' : 'No';
+          console.log("personalInfoModel['timeOfBirth']: ", personalInfoModel['timeOfBirth']);
+
           const userInfo = {
             personalInfo: this.convertObjectToList(personalInfoModel),
             familyInfo: this.convertObjectToList(familyInfoModel),
@@ -89,10 +102,28 @@ export class DataExportComponent implements OnInit {
       error: (error: any) => {
         if (error) {
           this.isLoading = false;
-          this.alertService.setAlertMessage('Error:Failed to load user details', AlertType.error);
+          this.alertService.setAlertMessage('Error: Failed to load user details', AlertType.error);
         }
       }
     })
+  }
+
+  getTime(time: any) {
+    if (moment(time).isValid()) {
+      return moment(time).format('h:mm A');
+    } else {
+      return this.parseTimeString(time);
+    }
+  }
+
+  parseTimeString(timeString: any) {
+    const d = new Date();
+    if (timeString) {
+      const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+      d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+      d.setMinutes(parseInt(time[2]) || 0);
+    }
+    return d;
   }
 
   exportPdf() {
@@ -291,7 +322,9 @@ export class DataExportComponent implements OnInit {
     };
 
     // pdfMake.createPdf(doc).open();
-    const fileName = this.personalInfoModel?.fullName.replace(/\s/g, '_')+ '.pdf';
+    const fullName = this.personalInfoModel?.fullName.replace(/\s/g, '_') + '.pdf';
+    const timestamp = +new Date();
+    const fileName = fullName.replace('_', '').length > 0 ? fullName : timestamp.toString();
     // pdfMake.createPdf(doc).open();
     pdfMake.createPdf(doc).download(fileName);
     this.isLoading = false;
@@ -313,8 +346,9 @@ export class DataExportComponent implements OnInit {
   getBase64ImageFromURL(url: any) {
     return new Promise((resolve, reject) => {
       var img = new Image();
+      img.crossOrigin = "anonymous";
       img.setAttribute("crossOrigin", "anonymous");
-      img.onload = () => {
+      img.onload = (event: any) => {
         const canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -328,7 +362,7 @@ export class DataExportComponent implements OnInit {
       img.onerror = error => {
         reject(error);
       };
-      img.src = url;
+      img.src = url + "?not-from-cache-please";
     });
   }
 

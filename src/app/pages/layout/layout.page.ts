@@ -8,13 +8,15 @@ import { NavController } from '@ionic/angular';
 import { HostListener } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared.service';
-import { Observable, delay, of } from 'rxjs';
+import { Observable, delay, forkJoin, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { saveData } from 'src/app/store.actions';
 import { ProfileStatus } from 'src/app/enums/profile-status';
 import * as AOS from 'aos';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { AlertType } from 'src/app/enums/alert-types';
+import { UserService } from 'src/app/services/user/user.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-layout',
@@ -30,6 +32,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   authService = inject(AuthService);
   sharedService = inject(SharedService);
   alertService = inject(AlertService);
+  userService = inject(UserService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
   isDesktopMode: boolean = false;
@@ -44,8 +47,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   store = inject(Store<{ saveData: any }>);
   storeData!: Observable<any>;
   notificationItems: any[] = [];
+  favoriteProfiles = [];
 
-  profileItems = [
+  profileItems: MenuItem[] = [
     {
       items: [
         {
@@ -56,11 +60,19 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         {
+          label: 'Manage Favorite Profiles',
+          icon: 'pi pi-heart',
+          command: () => {
+            // this.router.navigateByUrl('profile/personal');
+          }
+        },
+        {
           separator: true
         },
         {
           label: 'Logout',
           icon: 'pi pi-sign-out',
+          styleClass: 'logout',
           command: () => {
             this.logoutUser();
           }
@@ -121,70 +133,27 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   getUserDetails() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const profileStatusParams = ['isFamilyInfoFill', 'isImagesAdded', 'isOtherInfoFill', 'isPersonInfoFill', 'isContactInfoFill'];
+    const profileDetails = this.authService.getCustomerProfileById(user?.user);
+    const favoriteList = this.userService.getFavouriteProfileList(user?.user);
+
+    forkJoin({ profileDetails, favoriteList }).subscribe({
+      next: (response) => {
+        if (response) {
+          const { profileDetails, favoriteList } = response;
+          if (profileDetails) {
+            this.setProfileDetails(profileDetails);
+          }
+          if (favoriteList?.length) this.favoriteProfiles = favoriteList;
+        }
+      },
+      error: (error) => {
+
+      }
+    })
+
     this.authService.getCustomerProfileById(user?.user).subscribe({
       next: (response) => {
         if (response) {
-          const { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill, profileStatus } = response;
-          this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
-          this.notificationItems = [];
-          if (profileStatus === ProfileStatus.incomplete) {
-            this.resetActiveClass();
-            this.router.navigateByUrl('profile/personal');
-            this.notificationItems.push({
-              key: 'profileStatus',
-              text: 'Profile is incomplete',
-              icon: 'pi pi-times',
-              route: 'profile/personal'
-            });
-          }
-          Object.keys(response).forEach((key) => {
-            const obj = {
-              key: key,
-              text: '',
-              icon: '',
-              route: ''
-            }
-            if (profileStatusParams.includes(key) && response[key] === false) {
-              switch (key) {
-                case profileStatusParams[0]:
-                  obj.key = key;
-                  obj.text = 'Family details are not updated.';
-                  obj.icon = 'pi pi-users';
-                  obj.route = 'profile/family';
-                  this.notificationItems.push(obj);
-                  break;
-                case profileStatusParams[1]:
-                  obj.key = key;
-                  obj.text = 'Profile Images are not uploaded.';
-                  obj.icon = 'pi pi-images';
-                  obj.route = 'profile/photos';
-                  this.notificationItems.push(obj);
-                  break;
-                case profileStatusParams[2]:
-                  obj.key = key;
-                  obj.text = 'Other required details are not updated.';
-                  obj.icon = 'pi pi-info-circle';
-                  obj.route = 'profile/other';
-                  this.notificationItems.push(obj);
-                  break;
-                case profileStatusParams[3]:
-                  obj.key = key;
-                  obj.text = 'Personal details are not updated.';
-                  obj.icon = 'pi pi-user';
-                  obj.route = 'profile/personal';
-                  this.notificationItems.push(obj);
-                  break;
-                case profileStatusParams[4]:
-                  obj.key = key;
-                  obj.text = 'Contact details are not updated.';
-                  obj.icon = 'pi pi-mobile';
-                  obj.route = 'profile/contact';
-                  this.notificationItems.push(obj);
-                  break;
-              }
-            }
-          })
 
         }
       },
@@ -195,10 +164,78 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  setProfileDetails(response: any) {
+    const profileStatusParams = ['isFamilyInfoFill', 'isImagesAdded', 'isOtherInfoFill', 'isPersonInfoFill', 'isContactInfoFill'];
+    const { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill, profileStatus } = response;
+    this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
+    this.notificationItems = [];
+    if (profileStatus === ProfileStatus.incomplete) {
+      this.resetActiveClass();
+      this.notificationItems.push({
+        key: 'profileStatus',
+        text: 'Profile is incomplete',
+        icon: 'pi pi-times',
+        route: 'profile/personal'
+      });
+    }
+    Object.keys(response).forEach((key) => {
+      const obj = {
+        key: key,
+        text: '',
+        icon: '',
+        route: ''
+      }
+      if (profileStatusParams.includes(key) && response[key] === false) {
+        switch (key) {
+          case profileStatusParams[0]:
+            obj.key = key;
+            obj.text = 'Family details are not updated.';
+            obj.icon = 'pi pi-users';
+            obj.route = 'profile/family';
+            this.notificationItems.push(obj);
+            break;
+          case profileStatusParams[1]:
+            obj.key = key;
+            obj.text = 'Profile Images are not uploaded.';
+            obj.icon = 'pi pi-images';
+            obj.route = 'profile/photos';
+            this.notificationItems.push(obj);
+            break;
+          case profileStatusParams[2]:
+            obj.key = key;
+            obj.text = 'Other required details are not updated.';
+            obj.icon = 'pi pi-info-circle';
+            obj.route = 'profile/other';
+            this.notificationItems.push(obj);
+            break;
+          case profileStatusParams[3]:
+            obj.key = key;
+            obj.text = 'Personal details are not updated.';
+            obj.icon = 'pi pi-user';
+            obj.route = 'profile/personal';
+            this.notificationItems.push(obj);
+            break;
+          case profileStatusParams[4]:
+            obj.key = key;
+            obj.text = 'Contact details are not updated.';
+            obj.icon = 'pi pi-mobile';
+            obj.route = 'profile/contact';
+            this.notificationItems.push(obj);
+            break;
+        }
+      }
+    })
+
+  }
+
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.sharedService.getRequestStatus().subscribe(isNavigate => {
       if (isNavigate) this.resetActiveClass();
+    })
+
+    this.sharedService.isLoggedInCompleted.subscribe(() => {
+      this.router.navigateByUrl('profile/personal');
     })
   }
   setActivePageOnRefresh() {

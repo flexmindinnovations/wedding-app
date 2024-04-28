@@ -27,6 +27,24 @@ export class UserService {
     return this.http.delete(`${this.endpoint}/deleteUser/${id}`)
   }
 
+  setFavourite(payload: any) {
+    return this.http.post(`${environment.endpoint}/api/CustomerLike/AddLike`, payload);
+  }
+
+  getFavouriteProfileList(customerId: any) {
+    return this.http.get(`${environment.endpoint}/api/CustomerLike/getLikedCustomerListByCustomerId`);
+  }
+
+  getMatchedProfileList(payload: any, pageNumber = 1, totalCount = 0): Observable<any> {
+    const urlPath = `${environment.endpoint}/api/Customer/getMatchedCustomerList`;
+    const paginationParams = `&pageNumber=${pageNumber}&totalCount=${totalCount}`;
+    if (payload) {
+      const payloadParams = new URLSearchParams(payload).toString();
+      urlPath + '?' + payloadParams
+    }
+    return this.http.get(urlPath + paginationParams);
+  }
+
   getPaidFilteredProfileList(payload: any): Observable<any> {
     const endpoint = environment.endpoint + `/api/Customer/getPaidCustomerFilterList?${new URLSearchParams(payload).toString()}`;
     return this.http.get(endpoint, payload);
