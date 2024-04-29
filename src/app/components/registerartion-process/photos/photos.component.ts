@@ -145,6 +145,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.photosData.emit(props);
           this.customerRegistrationService.setRequestStatus(true, 'add');
+          this.router.navigateByUrl("/");
         }
       },
       error: (error: any) => {
@@ -185,6 +186,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.photosData.emit(props);
           this.customerRegistrationService.setRequestStatus(true, 'update');
+          this.router.navigateByUrl("/");
         }
       },
       error: (error: any) => {

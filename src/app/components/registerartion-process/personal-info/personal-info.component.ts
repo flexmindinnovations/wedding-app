@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 import { forkJoin, map } from 'rxjs';
 import { AlertType } from 'src/app/enums/alert-types';
 import { ActionValue, FormStep } from 'src/app/interfaces/form-step-item';
@@ -69,7 +70,8 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
   isDataLoaded: boolean = false;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
   ) {
     this.setCurrentClass();
   }
@@ -235,6 +237,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           this.nextFormStep.emit('family');
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/family");
         }
       },
       error: (error: any) => {
@@ -276,6 +279,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.nextFormStep.emit('family');
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/family");
         }
       },
       error: (error: any) => {
