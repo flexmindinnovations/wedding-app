@@ -23,7 +23,7 @@
   <p-password [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
     (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
     [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
-    [placeholder]="placeholder" [required]="control.required" [toggleMask]="true" appendTo="body"></p-password>
+    [placeholder]="placeholder" [required]="control.required" [toggleMask]="true" [feedback]="false"></p-password>
   @if (control.hasError('min')) {
   <small id="username-help" class="p-error">Please minimum length required</small>
   }
