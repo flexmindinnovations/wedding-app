@@ -112,7 +112,8 @@ export class DataExportComponent implements OnInit {
     if (moment(time).isValid()) {
       return moment(time).format('h:mm A');
     } else {
-      return this.parseTimeString(time);
+      const parseString = moment(this.parseTimeString(time)).format('h:mm A');
+      return parseString;
     }
   }
 
@@ -172,7 +173,7 @@ export class DataExportComponent implements OnInit {
                 body: [
                   [
                     {
-                      text: 'Bio Date',
+                      text: 'Bio Data',
                       fillColor: '#f9fafb',
                       fontSize: 18,
                       bold: true,

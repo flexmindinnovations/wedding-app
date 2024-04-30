@@ -13,9 +13,9 @@
         <image-picker label="Photo 3" /> -->
     </div>
   </form>
-  <div class="action w-full flex items-center justify-end gap-5 py-2 px-7 border-t border-t-gray-100">
+  <div class="action w-full h-full flex items-center justify-end gap-5 py-2 px-7">
     <!-- <mt-button title="Cancel" [isCancel]="true" (action)="handleCancelAction()" /> -->
-    <mt-button [disabled]="selectedFiles.length < 2 || imgData.length < 2" title="Save" icon="pi pi-save"
+    <mt-button title="Save" icon="pi pi-save"
       (action)="handleClickOnNext()" />
   </div>
 </div>

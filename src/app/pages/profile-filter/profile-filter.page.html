@@ -75,7 +75,7 @@
         <ng-template pTemplate>
           <div class="w-full h-full grid grid-cols-2 gap-3 md:grid-cols-3
           lg:grid-cols-3 xl:grid-cols-4 p-2 relative overflow-auto">
-            @if (filteredProfileList.length && !isLoading) {
+            @if (filteredProfileList && filteredProfileList.length && !isLoading) {
             @for (item of filteredProfileList; track $index) {
             <div class="profile-item col-span-1 w-full ">
               <carousel-item [data]="item" />

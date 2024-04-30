@@ -6,6 +6,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'contact-info',
@@ -41,7 +42,8 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
   @Output() nextFormStep = new EventEmitter();
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
   ) {
   }
 
@@ -136,6 +138,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/other");
         }
       },
       error: (error: any) => {
@@ -179,6 +182,7 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.contactInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/other");
         }
       },
       error: (error: any) => {

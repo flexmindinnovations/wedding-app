@@ -7,6 +7,7 @@ import { CastService } from 'src/app/services/cast/cast.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'family-info',
@@ -44,7 +45,8 @@ export class FamilyInfoComponent implements OnInit {
 
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
   ) {
   }
 
@@ -128,6 +130,7 @@ export class FamilyInfoComponent implements OnInit {
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/contact");
         }
       },
       error: (error: any) => {
@@ -170,6 +173,7 @@ export class FamilyInfoComponent implements OnInit {
           this.isCompleted.emit(true);
           this.familyInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/contact");
         }
       },
       error: (error: any) => {

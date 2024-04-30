@@ -48,7 +48,8 @@ export class UserService {
   }
 
   getPaidFilteredProfileList(payload: any): Observable<any> {
-    const endpoint = environment.endpoint + `/api/Customer/getPaidCustomerFilterList?${new URLSearchParams(payload).toString()}`;
+    const queryParams = new URLSearchParams(payload).toString();    
+    const endpoint = environment.endpoint + `/api/Customer/getPaidCustomerFilterList?${queryParams}`;
     return this.http.get(endpoint, payload);
   }
   getFreeFilteredProfileList(payload: any): Observable<any> {

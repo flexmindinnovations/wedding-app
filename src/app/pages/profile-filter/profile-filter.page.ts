@@ -9,6 +9,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { CastService } from 'src/app/services/cast/cast.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { AlertType } from 'src/app/enums/alert-types';
 
 @Component({
   selector: 'app-profile-filter',
@@ -29,16 +31,17 @@ export class ProfileFilterPage implements OnInit {
   religionList: any[] = [];
   motherToungeList: any[] = [];
   castList: any[] = [];
-
+  isSearchFromQuery: boolean = false;
   isReligionSelected: boolean = false;
   isDataAvailable = false;
   isLoading = false;
   isError = false;
-
+  customerRegistrationService = inject(CustomerRegistrationService);
+  customerData: any;
   searchCriteria: any;
 
   fb = inject(FormBuilder);
-  totalCount = 0; 
+  totalCount = 0;
 
 
   sidebarVisible: boolean = false;
@@ -63,10 +66,42 @@ export class ProfileFilterPage implements OnInit {
     ];
   }
 
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.customerData = data;
+          const { personalInfoModel } = this.customerData;
+          const oppGender = this.getFilterGender(personalInfoModel['gender']);
+          this.searchCriteria = {
+            gender: oppGender
+          }
+          if (!this.isSearchFromQuery) {
+            this.seachFilteredProfiles(this.searchCriteria);
+            this.formGroup.patchValue(this.searchCriteria);
+          }
+          this.isDataAvailable = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.isDataAvailable = true;
+        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+  }
+
+  getFilterGender(gender: string) {
+    const oppositeGender = gender === 'male' ? 'female' : 'male';
+    return oppositeGender;
+  }
+
   ngAfterViewInit(): void {
     this.isLoading = true;
     this.getMasterData();
     this.activatedRoute.queryParams.subscribe((query: any) => {
+      if (typeof query === 'object' && Object.keys(query).length > 0) this.isSearchFromQuery = true;
       const filteredQueryParams = Object.keys(query).filter(objKey =>
         query[objKey]).reduce((newObj: any, key) => {
           newObj[key] = query[key];
@@ -74,7 +109,6 @@ export class ProfileFilterPage implements OnInit {
         }, {}
         );
       this.searchCriteria = filteredQueryParams;
-      this.seachFilteredProfiles(filteredQueryParams);
     })
   }
 
@@ -115,35 +149,37 @@ export class ProfileFilterPage implements OnInit {
 
   seachFilteredProfiles(queryParams: any) {
     const isLogged = this.authService.isLoggedIn();
-    if (isLogged) {
-      const pageNumber = 1;
-      this.userService.getMatchedProfileList(queryParams, pageNumber, this.totalCount).subscribe({
-        next: (response) => {
-          if (response) {
-            const {customerList, totalCount} = response;
-            this.filteredProfileList = customerList;
-            this.totalCount = totalCount;
+    if (Object.keys(queryParams).length > 0) {
+      if (isLogged) {
+        const pageNumber = 1;
+        this.userService.getPaidFilteredProfileList(queryParams).subscribe({
+          next: (response) => {
+            if (response) {
+              // const { customerList, totalCount } = response;
+              this.filteredProfileList = response;
+              // this.totalCount = totalCount;
+              this.isLoading = false;
+            }
+          },
+          error: (error) => {
+            this.isError = true;
             this.isLoading = false;
           }
-        },
-        error: (error) => {
-          this.isError = true;
-          this.isLoading = false;
-        }
-      })
-    } else {
-      this.userService.getFreeFilteredProfileList(queryParams).subscribe({
-        next: (response) => {
-          if (response) {
-            this.filteredProfileList = response;
+        })
+      } else {
+        this.userService.getFreeFilteredProfileList(queryParams).subscribe({
+          next: (response) => {
+            if (response) {
+              this.filteredProfileList = response;
+              this.isLoading = false;
+            }
+          },
+          error: (error) => {
+            this.isError = true;
             this.isLoading = false;
           }
-        },
-        error: (error) => {
-          this.isError = true;
-          this.isLoading = false;
-        }
-      })
+        })
+      }
     }
   }
 
@@ -204,6 +240,7 @@ export class ProfileFilterPage implements OnInit {
           this.formGroup.patchValue(this.searchCriteria);
           this.isDataAvailable = true;
           this.isLoading = false;
+          this.getCustomerDetails()
         }
       },
       error: (error: any) => {

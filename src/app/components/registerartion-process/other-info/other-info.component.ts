@@ -6,6 +6,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'other-info',
@@ -35,7 +36,8 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   isDataAvailable = false;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
   ) {
   }
 
@@ -133,6 +135,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/photos");
         }
       },
       error: (error: any) => {
@@ -176,6 +179,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
           this.isCompleted.emit(true);
           this.otherInfoData.emit(props);
           this.isDataAvailable = true;
+          this.router.navigateByUrl("profile/photos");
         }
       },
       error: (error: any) => {
