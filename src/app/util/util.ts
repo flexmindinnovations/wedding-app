@@ -73,6 +73,12 @@ export const tabItems = {
         //     "isActive": false
         // },
         {
+            id: 6,
+            "title": "Public Profile",
+            "route": "profiles/view/userId",
+            "isActive": false
+        },
+        {
             "id": 1,
             "title": "About",
             "route": "about",

@@ -60,6 +60,16 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         {
+          label: 'Public Profile',
+          icon: 'pi pi-link',
+          command: () => {
+            const user = JSON.parse(localStorage.getItem('user') || '');
+            if (user) {
+              this.router.navigateByUrl(`profiles/view/${user?.user}`);
+            }
+          }
+        },
+        {
           label: 'Manage Favorite Profiles',
           icon: 'pi pi-heart',
           command: () => {
@@ -256,9 +266,18 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   navigateToPage(item: any) {
-    this.setActivePageById(item.id);
-    this.navController.navigateForward(item.route);
-    this.isLoginPage = false;
+    console.log('item: ', item);
+    if (item?.id === 6) {
+      const user = JSON.parse(localStorage.getItem('user') || '');
+      if (user) {
+        const route = item.route.replace('userId', user?.user);
+        this.router.navigateByUrl(route);
+      }
+    } else {
+      this.setActivePageById(item.id);
+      this.navController.navigateForward(item.route);
+      this.isLoginPage = false;
+    }
   }
 
   setActivePageByRoute(param: string) {

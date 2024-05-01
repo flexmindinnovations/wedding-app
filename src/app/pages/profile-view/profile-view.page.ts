@@ -1,17 +1,18 @@
+import { map } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import * as FileSaver from 'file-saver';
 import { environment } from 'src/environments/environment';
-import { v4 as uuidv4 } from 'uuid';
 import { jsPDF } from 'jspdf';
-import * as moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { DOMAIN } from 'src/app/util/theme';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -20,76 +21,58 @@ interface ObjectType {
   value: any;
 }
 
-interface ExportColumn {
-  title: string;
-  dataKey: string;
-}
-
 @Component({
-  selector: 'app-data-export',
-  templateUrl: './data-export.component.html',
-  styleUrls: ['./data-export.component.scss'],
+  selector: 'app-profile-view',
+  templateUrl: './profile-view.page.html',
+  styleUrls: ['./profile-view.page.scss'],
 })
-export class DataExportComponent implements OnInit {
+export class ProfileViewPage implements OnInit {
+  isLoading: boolean = false;
+  isDataLoaded: boolean = false;
+  isLoggedIn = false;
 
-  userInfo: any = [];
-  exportColumns!: ExportColumn[];
   imageUrlPrefix = environment.endpoint;
-  id = uuidv4();
-  isDataLoaded = false;
-  isLoading = false;
+  userInfo: any;
   personalInfoModel: any;
-  dialogData: any;
-  hasData: boolean = false;
+  familyInfoModel: any;
+  contactInfoModel: any;
+  otherInfoModel: any;
+  imageInfoModel: any;
+
+  dialogRef: DynamicDialogRef | undefined;
+
   userId: any;
+
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private alertService: AlertService,
-    public config: DynamicDialogConfig,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
-    this.getUserDetails();
-    const headerEl = document.getElementsByClassName('p-dialog-header-icons')[0];
-    if (headerEl) {
-      const exportButton = document.createElement('button');
-      exportButton.type = 'button';
-      exportButton.classList.add('pButton');
-      exportButton.classList.add('pRipple');
-      exportButton.classList.add('p-dialog-header-icon');
-      exportButton.innerHTML = '<i class="pi pi-file-pdf"></i>';
-      exportButton.title = 'Export PDF';
-      exportButton.addEventListener('click', () => {
-        this.exportPdf();
-      });
-      headerEl.insertBefore(exportButton, headerEl.firstChild);
-    }
-
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.activatedRoute.params.subscribe((params: any) => {
+      const userId = params['id'];
+      this.userId = userId;
+      this.getUserDetails(userId);
+    })
   }
 
-  getUserDetails() {
+  getUserDetails(userId: any) {
     this.isLoading = true;
-    this.dialogData = this.config.data;
-    this.hasData = this.dialogData && Object.keys(this.dialogData).length > 2 ? true : false;
-    const customerId = this.hasData ? this.dialogData.customerId : JSON.parse(localStorage.getItem('user') || '{}')?.user;
-    if (customerId) {
-      this.userId = customerId;
-      this.getProfileData(customerId);
-    }
-  }
-
-  getProfileData(customerId: any) {
-    this.authService.getCustomerForPDFById(customerId).subscribe({
+    this.authService.getCustomerForPDFById(userId).subscribe({
       next: (data: any) => {
         if (data) {
           const { personalInfoModel, familyInfoModel, contactInfoModel, otherInfoModel, imageInfoModel } = data;
           this.personalInfoModel = JSON.parse(JSON.stringify(personalInfoModel));
+
           personalInfoModel['dateOfBirth'] = moment(personalInfoModel['dateOfBirth']).format('dddd, D MMMM YYYY');
           personalInfoModel['timeOfBirth'] = this.getTime(personalInfoModel['timeOfBirth']);
           personalInfoModel['isPatrika'] = personalInfoModel['isPatrika'] == true ? 'Yes' : 'No';
           personalInfoModel['isPhysicallyAbled'] = personalInfoModel['isPhysicallyAbled'] == true ? 'Yes' : 'No';
           personalInfoModel['spectacles'] = personalInfoModel['spectacles'] == true ? 'Yes' : 'No';
-          console.log("personalInfoModel['timeOfBirth']: ", personalInfoModel['timeOfBirth']);
 
           const userInfo = {
             personalInfo: this.convertObjectToList(personalInfoModel),
@@ -98,6 +81,12 @@ export class DataExportComponent implements OnInit {
             otherInfo: this.convertObjectToList(otherInfoModel),
             photos: this.convertObjectToList(imageInfoModel)
           };
+          this.personalInfoModel = userInfo?.personalInfo;
+          this.familyInfoModel = userInfo?.familyInfo;
+          this.contactInfoModel = userInfo?.contactInfo;
+          this.otherInfoModel = userInfo?.otherInfo;
+          this.imageInfoModel = userInfo?.photos;
+
           this.userInfo = userInfo;
           this.isDataLoaded = true;
           this.isLoading = false;
@@ -112,31 +101,19 @@ export class DataExportComponent implements OnInit {
     })
   }
 
-  getTime(time: any) {
-    if (moment(time).isValid()) {
-      return moment(time).format('h:mm A');
-    } else {
-      const parseString = moment(this.parseTimeString(time)).format('h:mm A');
-      return parseString;
-    }
-  }
-
-  parseTimeString(timeString: any) {
-    const d = new Date();
-    if (timeString) {
-      const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-      d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-      d.setMinutes(parseInt(time[2]) || 0);
-    }
-    return d;
-  }
-
   exportPdf() {
-    this.isLoading = true;
+    // this.isLoading = true;
     const pdf = new jsPDF('p', 'pt', 'a4');
     const personalInfo = this.userInfo?.personalInfo;
     const familyInfo = this.userInfo?.familyInfo;
-    const contactInfo = this.userInfo?.contactInfo;
+    const contactInfo = this.userInfo?.contactInfo.map((item: any) => {
+      if (item.title.includes('Whats Up')) {
+        item.title = 'WhatsApp Number';
+        item['color'] = 'blue',
+          item['link'] = this.getWhatsappLink(item?.value);
+      }
+      return item;
+    });
     const otherInfo = this.userInfo?.otherInfo;
     const imageModel = this.userInfo?.photos;
     const images: any[] = [];
@@ -147,9 +124,8 @@ export class DataExportComponent implements OnInit {
     const pageWidth = pdf.internal.pageSize.getWidth();
     let personalInfoData = this.buildTableBody(personalInfo);
     const familyInfoData = this.buildTableBody(familyInfo);
-    const contactInfoData = this.buildTableBody(contactInfo);
+    let contactInfoData = this.buildTableBody(contactInfo);
     const otherInfoInfoData = this.buildTableBody(otherInfo);
-
     const profileAudit = [
       // [
       //   {
@@ -168,11 +144,10 @@ export class DataExportComponent implements OnInit {
           link: this.getProfilLink(),
           color: 'blue',
           style: 'profilelink'
-        },
+        }
       ]
     ];
     personalInfoData = [...profileAudit, ...personalInfoData];
-
 
     contactInfoData.forEach((item: any) => {
       if (item[0] == 'WhatsApp Number') {
@@ -416,22 +391,23 @@ export class DataExportComponent implements OnInit {
     });
   }
 
-  exportExcel() {
-    import('xlsx').then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(this.userInfo);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, 'User Details');
-    });
+  getTime(time: any) {
+    if (moment(time).isValid()) {
+      return moment(time).format('h:mm A');
+    } else {
+      const parseString = moment(this.parseTimeString(time)).format('h:mm A');
+      return parseString;
+    }
   }
 
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE
-    });
-    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  parseTimeString(timeString: any) {
+    const d = new Date();
+    if (timeString) {
+      const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+      d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+      d.setMinutes(parseInt(time[2]) || 0);
+    }
+    return d;
   }
 
   convertObjectToList(obj: Record<string, any>): ObjectType[] {
@@ -455,6 +431,28 @@ export class DataExportComponent implements OnInit {
 
   getImageUrl(item: any) {
     return `${this.imageUrlPrefix}/${item?.value}`;
+  }
+
+  handleSignup() {
+    this.dialogRef = this.dialogService.open(
+      RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      if (afterClose) { }
+    });
+  }
+
+  handleLoginClick() {
+    this.router.navigateByUrl('login');
   }
 
   getProfilLink() {

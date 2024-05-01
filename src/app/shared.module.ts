@@ -63,6 +63,7 @@ import { VideoPlayerComponent } from './components/video-player/video-player.com
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DividerModule } from 'primeng/divider';
+import { ProfileViewPage } from './pages/profile-view/profile-view.page';
 
 const components = [
   FormStepperComponent,

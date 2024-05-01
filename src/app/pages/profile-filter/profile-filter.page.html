@@ -74,7 +74,7 @@
         </ng-template>
         <ng-template pTemplate>
           <div class="w-full h-full grid grid-cols-2 gap-3 md:grid-cols-3
-          lg:grid-cols-3 xl:grid-cols-4 p-2 relative overflow-auto">
+          lg:grid-cols-3 xl:grid-cols-4 relative overflow-auto">
             @if (filteredProfileList && filteredProfileList.length && !isLoading) {
             @for (item of filteredProfileList; track $index) {
             <div class="profile-item col-span-1 w-full ">
@@ -82,7 +82,7 @@
             </div>
             }
             } @else if(isLoading) {
-            <div class="h-28 w-full p-3 flex items-center justify-center">
+            <div class="h-full w-full p-3 flex items-center justify-center">
               <i class="pi pi-spin pi-spinner"></i>
             </div>
             } @else {

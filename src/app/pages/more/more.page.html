@@ -25,6 +25,16 @@
       <ion-label>Login</ion-label>
     </ion-item>
     } @else {
+
+    <ion-item lines="full" (click)="handleItemClick({
+        title: 'Public Profile',
+        icon: 'link-outline',
+        route: 'profiles/view/'
+      })">
+      <ion-icon slot="start" name="link-outline"></ion-icon>
+      <ion-label>Public Profile</ion-label>
+    </ion-item>
+
     <ion-item lines="full" (click)="handleItemClick({
         title: 'Profile',
         icon: 'person-outline',
