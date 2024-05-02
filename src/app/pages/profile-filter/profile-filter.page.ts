@@ -77,9 +77,14 @@ export class ProfileFilterPage implements OnInit {
           this.searchCriteria = {
             gender: oppGender
           }
+          console.log({searchCriteria: this.searchCriteria, isSearchFromQuery: this.isSearchFromQuery});
+          
           if (!this.isSearchFromQuery) {
             this.seachFilteredProfiles(this.searchCriteria);
-            this.formGroup.patchValue(this.searchCriteria);
+            setTimeout(() => {
+              this.formGroup.patchValue(this.searchCriteria);
+              console.log('formVal: ', this.formGroup.value);
+            })
           }
           this.isDataAvailable = true;
         }
@@ -237,7 +242,6 @@ export class ProfileFilterPage implements OnInit {
               title: item?.motherTongueName
             }
           });
-          this.formGroup.patchValue(this.searchCriteria);
           this.isDataAvailable = true;
           this.isLoading = false;
           this.getCustomerDetails()

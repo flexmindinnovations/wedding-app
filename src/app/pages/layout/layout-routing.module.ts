@@ -49,6 +49,10 @@ const routes: Routes = [
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'profiles/view/:id',
+        loadChildren: () => import('../profile-view/profile-view.module').then(m => m.ProfileViewPageModule)
+      },
+      {
         path: 'filter-profile',
         loadChildren: () => import('../profile-filter/profile-filter.module').then(m => m.ProfileFilterPageModule)
       },

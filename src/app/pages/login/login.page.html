@@ -1,28 +1,28 @@
-<ion-header *ngIf="isMobile" [translucent]="true" class="block md:lg:hidden ion-no-border">
+<!-- <ion-header *ngIf="isMobile" [translucent]="true" class="block md:lg:hidden ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button icon="arrow-back-outline"></ion-back-button>
     </ion-buttons>
     <ion-title></ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 <ion-content [fullscreen]="true">
-  <p-messages class="absolute top-10 right-10 z-10"></p-messages>
-  <ion-header *ngIf="isMobile" [translucent]="true" collapse="condense">
+  <p-messages class="absolute top-10 lg:right-10 xl:right-10 z-10"></p-messages>
+  <!-- <ion-header *ngIf="isMobile" [translucent]="true" collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Login</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
   <div class="content h-full w-full flex items-center justify-center md:lg:backdrop-blur-2xl ion-padding">
     <div
-      class="login-box bg-white shadow-lg rounded-md min-w-80 h-full backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
+      class="login-box bg-white shadow-lg rounded-md min-w-80 lg:h-full xl:h-full backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
       <div class="login-container ion-padding flex-grow bg-transparent md:lg:min-w-[28%] md:lg:flex-grow-0">
         <div class="header my-5">
           <h1 class="h1-gradient">Welcome back,</h1>
           <p class="p-gradient">Enter your credentials to continue</p>
         </div>
 
-        <div class="form-container h-[60%]">
+        <div class="form-container lg:h-[60%] xl:h-[60%]">
           <div class="login-form h-full flex flex-col gap-4 items-center justify-center">
             <form [formGroup]="formGroup" class="flex flex-col items-center justify-center gap-5 w-full"
               (keydown.enter)="handleSignIn()">

@@ -64,6 +64,7 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DividerModule } from 'primeng/divider';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { ProfileViewPage } from './pages/profile-view/profile-view.page';
 
 const components = [
   FormStepperComponent,

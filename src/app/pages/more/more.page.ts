@@ -15,6 +15,7 @@ export class MorePage implements OnInit, AfterViewInit {
   router = inject(NavController);
   authService = inject(AuthService);
   isLoggedIn: boolean = false;
+  userId: any;
   listItems = [
     {
       title: 'About',
@@ -31,6 +32,8 @@ export class MorePage implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit() {
+    const user = JSON.parse(localStorage.getItem('user') || '');
+    this.userId = user?.user;
   }
 
   ngAfterViewInit(): void {
@@ -39,6 +42,9 @@ export class MorePage implements OnInit, AfterViewInit {
 
   handleItemClick(item: { title: string; icon: string; route: string; }) {
     // this.router.navigateByUrl(item?.route);
+    if(item.route == 'profiles/view/') item.route = `profiles/view/${this.userId}`;
+    console.log('item: ', item.route);
+    
     this.router.navigateForward(item?.route);
   }
 

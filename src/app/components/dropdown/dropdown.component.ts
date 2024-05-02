@@ -68,6 +68,11 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   ngOnInit() {
     this.filteredOptions = JSON.parse(JSON.stringify(this.options));
     setTimeout(() => {
+      console.log('control: ', this.control.value);
+      console.log('controlValue: ', this.controlValue);
+      console.log('value: ', this.value);
+      
+      
       if (this.controlValue) {
         const selectedValue = this.options.find((item: any) => item[this.getId()] === this.controlValue);
         if (selectedValue) {

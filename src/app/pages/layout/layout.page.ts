@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnDest
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { MENU_ITEMS, tabItems } from 'src/app/util/util';
-import { faGem } from '@fortawesome/free-solid-svg-icons';
+import { faGem,faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { NavController } from '@ionic/angular';
 import { HostListener } from '@angular/core';
@@ -43,7 +43,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   dialogRef: DynamicDialogRef | undefined;
   menuItems = MENU_ITEMS;
   loginIcon: IconProp = faGem;
-  registerIcon: IconProp = faGem;
+  registerIcon: IconProp = faUserPlus;
   isLoginPage: boolean = false;
   isLoggedIn: boolean = false;
 
@@ -61,6 +61,16 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           icon: 'pi pi-user',
           command: () => {
             this.router.navigateByUrl('profile/personal');
+          }
+        },
+        {
+          label: 'Public Profile',
+          icon: 'pi pi-link',
+          command: () => {
+            const user = JSON.parse(localStorage.getItem('user') || '');
+            if (user) {
+              this.router.navigateByUrl(`profiles/view/${user?.user}`);
+            }
           }
         },
         {
@@ -260,9 +270,18 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   navigateToPage(item: any) {
-    this.setActivePageById(item.id);
-    this.navController.navigateForward(item.route);
-    this.isLoginPage = false;
+    console.log('item: ', item);
+    if (item?.id === 6) {
+      const user = JSON.parse(localStorage.getItem('user') || '');
+      if (user) {
+        const route = item.route.replace('userId', user?.user);
+        this.router.navigateByUrl(route);
+      }
+    } else {
+      this.setActivePageById(item.id);
+      this.navController.navigateForward(item.route);
+      this.isLoginPage = false;
+    }
   }
 
   setActivePageByRoute(param: string) {

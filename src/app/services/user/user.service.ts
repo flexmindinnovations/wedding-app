@@ -36,13 +36,15 @@ export class UserService {
   }
 
   getMatchedProfileList(payload: any, pageNumber = 1, totalCount = 0): Observable<any> {
-    const urlPath = `${environment.endpoint}/api/Customer/getMatchedCustomerList`;
+    // payload = {gender: 'male'};
+    let urlPath = `${environment.endpoint}/api/Customer/getMatchedCustomerList`;
     const paginationParams = `&pageNumber=${pageNumber}&totalCount=${totalCount}`;
-    if (payload) {
-      const payloadParams = new URLSearchParams(payload).toString();
-      urlPath + '?' + payloadParams
+    if (Object.keys(payload).length > 0) {
+      urlPath = `${urlPath}?${new URLSearchParams(payload).toString()}${paginationParams}`;
+    } else{
+      urlPath = `${urlPath}?pageNumber=${pageNumber}&totalCount=${totalCount}`;
     }
-    return this.http.get(urlPath + paginationParams);
+    return this.http.get(urlPath);
   }
 
   getPaidFilteredProfileList(payload: any): Observable<any> {
