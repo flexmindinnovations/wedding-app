@@ -1,9 +1,10 @@
-import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle,faAddressBook } from '@fortawesome/free-solid-svg-icons';
 import { ClickEvent, MoveDirection, OutMode } from "@tsparticles/engine";
 
 const homeIcon = faHome;
 const blogIcon = faBlog;
 const calenderIcon = faCalendarDays;
+const contactIcon = faAddressBook
 
 export const SLIDE_INTERVAL = 4000;
 
@@ -109,6 +110,13 @@ export const MENU_ITEMS = [
         "route": "about",
         "isActive": false,
         "icon": faExclamationCircle
+    },
+    {
+        "id": 9,
+        "title": "Contact",
+        "route": "contact",
+        "isActive": false,
+        "icon": contactIcon
     },
 ]
 

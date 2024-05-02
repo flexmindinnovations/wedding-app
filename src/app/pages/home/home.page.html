@@ -106,7 +106,11 @@
               </li>
             </ol>
 
-            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+            @if (isLoggedIn) {
+              <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+              } @else {
+              <mt-button title="Register Now" (action)="handleRegister()" />
+              }
           </div>
           <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright"
             class="content -z-[10] flex-grow w-full h-[inherit]">

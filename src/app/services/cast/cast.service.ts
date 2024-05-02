@@ -16,8 +16,8 @@ export class CastService {
     return this.http.get(endpoint);
   }
 
-  getCastList(): Observable<any> {
-    return this.http.get(`${this.endpoint}/GetCastList`);
+  getCastListByReligionId(religionId:any): Observable<any> {
+    return this.http.get(`${this.endpoint}/GetCastListByReligionId?religionId=${religionId}`);
   }
   getCastListById(castId: any): Observable<any> {
     return this.http.get(`${this.endpoint}/GetCastListById?castId=${castId}`)

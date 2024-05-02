@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.page.html',
-  styleUrls: ['./contact.page.scss'],
+  selector: 'app-refund-policy',
+  templateUrl: './refund-policy.page.html',
+  styleUrls: ['./refund-policy.page.scss'],
 })
-export class ContactPage implements OnInit {
+export class RefundPolicyPage implements OnInit {
   deviceService = inject(DeviceDetectorService);
   isMobile: boolean = false;
   isDesktop: boolean = true;

@@ -34,6 +34,12 @@
           <span>Login</span>
         </p>
       </ion-button>
+      <ion-button (click)="handleRegister()">
+        <p class="m-0 flex items-center justify-start gap-2">
+          <fa-icon [icon]="registerIcon" />
+          <span>Register</span>
+        </p>
+      </ion-button>
       } @else {
       <div class="protected-content flex items-center justify-start gap-3 ml-3">
         @if (notificationItems.length > 0) {

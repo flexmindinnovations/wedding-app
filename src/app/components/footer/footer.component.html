@@ -15,11 +15,11 @@
             About
           </p>
         </li>
-        <!-- <li (click)="handleFooterLinkClick('contact')">
+        <li (click)="handleFooterLinkClick('contact')">
             <p>
               Contact
             </p>
-          </li> -->
+          </li>
         <li (click)="handleFooterLinkClick('blogs')">
           <p>
             Blogs
@@ -44,6 +44,25 @@
           <a href="https://twitter.com/Susangam_India" title="X" target="_blank">
             <fa-icon [icon]="twitterIcon"></fa-icon>
           </a>
+        </li>
+      </ul>
+    </div>
+    <div class="_terms w-full py-1 px-2">
+      <ul>
+        <li (click)="handleFooterLinkClick('termsAndConditions')">
+          <p>
+            Terms & Conditions
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('privacyPolicy')">
+          <p>
+            Privacy Policy
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('refundPolicy')">
+          <p>
+            Refund Policy
+          </p>
         </li>
       </ul>
     </div>

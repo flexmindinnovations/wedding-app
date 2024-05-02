@@ -13,7 +13,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('../app/pages/layout/layout.module').then(m => m.LayoutPageModule)
-  },  {
+  },
+  {
     path: 'logout',
     loadChildren: () => import('./pages/logout/logout.module').then( m => m.LogoutPageModule)
   },
@@ -21,7 +22,7 @@ const routes: Routes = [
     path: 'profile-filter',
     loadChildren: () => import('./pages/profile-filter/profile-filter.module').then( m => m.ProfileFilterPageModule)
   },
-
+  
   // {
   //   path: '**',
   //   loadChildren: () => import('../app/pages/not-found/not-found.module').then(m => m.NotFoundPageModule)

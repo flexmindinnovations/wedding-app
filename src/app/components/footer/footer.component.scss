@@ -31,3 +31,18 @@ ul {
         letter-spacing: 1px;
     }
 }
+
+._terms{
+    ul {
+        @apply flex flex-row items-center justify-center w-full gap-2;
+
+        li {
+            @apply text-sm px-1 md:lg:text-base md:lg:px-3 border-r border-r-white/70 last:border-0;
+             
+            P {
+                @apply text-white text-sm font-light select-none;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}

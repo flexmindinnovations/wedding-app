@@ -11,7 +11,7 @@
   <p-calendar [(ngModel)]="value" [disabled]="control?.disabled" [id]="id"
     (ngModelChange)="handleOnChange($event, 'dt')" appendTo="body" [showButtonBar]="true" [iconDisplay]="'input'"
     [showIcon]="true"></p-calendar>
-  } @else if(type === "time" && presentaion==="time"){
+  } @else if(type === "date" && presentaion==="time"){
   <time-picker [disabled]="control?.disabled" class="w-full" [value]="value"
     (selectedTime)="handleOnChange($event, 'time')" />
   } @else if(type === "number"){
@@ -36,7 +36,7 @@
     [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
     [placeholder]="placeholder" [required]="isRequired" />
   @if (control.touched && control.invalid) {
-  <div class="validation-errors px-2 bg-transparent dark:bg-gray-700 mt-[2px]">
+  <div class="validation-errors block w-full px-2 bg-transparent dark:bg-dark-950 mt-[2px]">
     @if (control.hasError('required')) {
     <small id="username-help" class="p-error">{{label}} is
       required</small>

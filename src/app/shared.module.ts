@@ -63,6 +63,7 @@ import { VideoPlayerComponent } from './components/video-player/video-player.com
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DividerModule } from 'primeng/divider';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 const components = [
   FormStepperComponent,
@@ -126,7 +127,8 @@ const modules: any = [
   LoadingBarRouterModule,
   // for Core use:
   LoadingBarModule,
-  NgxParticlesModule
+  NgxParticlesModule,
+  NgxDocViewerModule
 ];
 
 @NgModule({

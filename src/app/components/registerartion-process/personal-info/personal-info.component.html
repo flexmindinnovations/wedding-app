@@ -17,7 +17,7 @@
         <app-input label="Date Of Birth" presentaion="date" type="date" [control]="formGroupControl['dateOfBirth']"
           formControlName="dateOfBirth" [controlValue]="formGroup.get('dateOfBirth')?.value || ''" />
 
-        <app-input label="Time Of Birth" presentaion="time" type="time" [control]="formGroupControl['timeOfBirth']"
+        <app-input label="Time Of Birth" presentaion="time" type="date" [control]="formGroupControl['timeOfBirth']"
           formControlName="timeOfBirth" (inputValue)="handleInputValue($event)" />
         <!-- 
         <app-input label="Occupation" type="text" [control]="formGroupControl['occupation']"
@@ -138,8 +138,8 @@
   </div>
 
   <div class="action w-full h-full flex items-center justify-end gap-5 py-2 px-7">
-    <mt-button title="Cancel" [disabled]="!isDataAvailable" [isCancel]="true" (action)="handleCancelAction()" />
-    <mt-button [disabled]="!isDataAvailable" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+    <!-- <mt-button title="Cancel" [disabled]="formGroup.invalid" [isCancel]="true" (action)="handleCancelAction()" /> -->
+    <mt-button [disabled]="formGroup.invalid" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
   </div>
 
 </div>

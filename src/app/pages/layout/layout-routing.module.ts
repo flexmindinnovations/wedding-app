@@ -61,6 +61,18 @@ const routes: Routes = [
         loadChildren: () => import('../more/more.module').then(m => m.MorePageModule)
       },
       {
+        path: 'privacy-policy',
+        loadChildren: () => import('../privacy-policy/privacy-policy.module').then( m => m.PrivacyPolicyPageModule)
+      },
+      {
+        path: 'refund-policy',
+        loadChildren: () => import('../refund-policy/refund-policy.module').then( m => m.RefundPolicyPageModule)
+      },
+      {
+        path: 'terms-condition',
+        loadChildren: () => import('../terms-condition/terms-condition.module').then( m => m.TermsConditionPageModule)
+      },    
+      {
         path: '**',
         loadChildren: () => import('../not-found/not-found.module').then(m => m.NotFoundPageModule)
       },

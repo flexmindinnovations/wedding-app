@@ -187,9 +187,13 @@ export class FamilyInfoComponent implements OnInit {
   onSelectionChange(event: any, src: string) {
     switch (src) {
       case 'religionId':
-        this.religionId = event?.religionId;
+        this.castListOptions = [];
+        this.subCastListOptions = [];
+        this.religionId = event?.id;
+        this.getCastListReligionId(event?.id)
         break;
       case 'castId':
+        this.subCastListOptions = [];
         this.hasSubCast = event?.hasSubcast;
         if (this.hasSubCast) this.getSubCastList(event?.id);
         break;
@@ -219,8 +223,8 @@ export class FamilyInfoComponent implements OnInit {
     })
   }
 
-  getCastList() {
-    this.castService.getCastList().subscribe({
+  getCastListReligionId(religionId:any) {
+    this.castService.getCastListByReligionId(religionId).subscribe({
       next: (response: any) => {
         if (response) {
           this.castListOptions = response.map((item: any) => {
@@ -263,7 +267,6 @@ export class FamilyInfoComponent implements OnInit {
           this.familyData = this.customerData['familyInfoModel'];
           this.isEditMode = this.customerData ? this.customerData['isFamilyInfoFill'] : false;
           this.getReligionList();
-          this.getCastList();
           if (this.familyData) {
             if (this.isEditMode) this.patchFormData();
           }

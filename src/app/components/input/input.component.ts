@@ -100,8 +100,8 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
     // this.disabled = isDisabled;
   }
   handleOnChange(event: any, src?: string) {
-    const value = event?.target?.value ? event?.target?.value : event;
-    this.hasValue = !!value;
+    const value = src === 'dt' || src === 'time' ? event : event?.target?.value;
+     this.hasValue = !!value;
     const formattedValue = src === 'dt' ? new Date(value).toLocaleDateString('en-GB') : value;
     this.inputValue.emit(formattedValue);
     this.onChange(value);

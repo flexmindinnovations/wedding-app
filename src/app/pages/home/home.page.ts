@@ -16,6 +16,7 @@ import * as moment from 'moment';
 
 import { Router } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -39,9 +40,9 @@ export class HomePage implements OnInit, AfterViewInit {
   particlesOptions: any = particlesOptions;
   particleId: any = uuidv4();
   sharedService = inject(SharedService);
-
+  isLoggedIn: boolean = false;
   isVideoLoaded = false;
-
+  authService = inject(AuthService);
   profileCount = 100;
   branchCount = 10;
   public observable: Observable<boolean>;
@@ -95,6 +96,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
     if (futurDate.diff(currentDate, 'days') > 0) {
