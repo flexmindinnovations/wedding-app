@@ -8,7 +8,7 @@
       </h2>
     </div>
     <div class="p-toolbar-group-end">
-      <mt-button *ngIf="isDataLoaded && isLoggedIn" title="Export Data" icon="pi pi-file-export"
+      <mt-button *ngIf="isDataLoaded && isLoggedIn" [size]="'small'" title="Export Data" icon="pi pi-file-export"
         (action)="exportPdf()"></mt-button>
     </div>
   </p-toolbar>

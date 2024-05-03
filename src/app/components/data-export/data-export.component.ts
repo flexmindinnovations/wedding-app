@@ -192,7 +192,7 @@ export class DataExportComponent implements OnInit {
   }
 
   async generatePdf(pageWidth: any, personalInfoData: any, familyInfoData: any, contactInfoData: any, otherInfoInfoData: any, images: any) {
-    const logoImageSrc = 'http://localhost:8100/assets/icon/logo.png';
+    const logoImageSrc = `${window.location.origin}/assets/icon/logo.png`;
     const doc: TDocumentDefinitions = {
       content: [
         {
@@ -235,7 +235,7 @@ export class DataExportComponent implements OnInit {
         {
           table: {
             headerRows: 0,
-            heights: 22,
+            heights: 18,
             body: personalInfoData,
             widths: '*',
           },

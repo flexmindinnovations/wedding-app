@@ -13,7 +13,7 @@ section.meet-members {
         @apply text-center font-normal text-sm;
     }
 
-   
+
 }
 
 section._register {
@@ -226,12 +226,10 @@ section._counter {
                 @apply flex gap-8 w-full items-end justify-center flex-nowrap absolute top-0 bottom-5 lg:xl:bottom-8 whitespace-nowrap overflow-hidden;
 
                 p {
-                    @apply text-base md:lg:text-2xl text-white font-bold flex-grow w-full text-center lg:xl:my-2;
-                    white-space: nowrap;
+                    @apply text-base md:lg:text-2xl text-white font-bold flex-grow text-center my-2 mx-5;
                     display: inline-block;
                     position: relative;
                     will-change: auto;
-                    animation: marquee 35s linear infinite;
                 }
             }
         }
@@ -245,7 +243,6 @@ section._counter {
                 display: inline-block;
                 position: relative;
                 will-change: auto;
-                animation: marquee 35s linear infinite;
             }
         }
     }
@@ -274,11 +271,12 @@ section._counter {
 
 ::ng-deep .offer-section {
     @apply absolute top-[67%] w-auto px-2 max-w-[180px];
+
     .p-button {
         @apply bg-gradient-to-br from-[#63A4FF] to-[#83EAF1] transition-all delay-500;
 
         &:hover {
             @apply bg-gradient-to-tl;
-        } 
+        }
     }
 }

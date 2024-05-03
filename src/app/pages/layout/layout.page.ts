@@ -57,6 +57,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           icon: 'pi pi-user',
           command: () => {
             this.router.navigateByUrl('profile/personal');
+            this.resetActiveClass();
           }
         },
         {
@@ -66,6 +67,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
             const user = JSON.parse(localStorage.getItem('user') || '');
             if (user) {
               this.router.navigateByUrl(`profiles/view/${user?.user}`);
+              this.resetActiveClass();
             }
           }
         },
@@ -85,6 +87,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           styleClass: 'logout',
           command: () => {
             this.logoutUser();
+            this.resetActiveClass();
           }
         }
       ]
@@ -180,7 +183,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(saveData({ profileStatusData: { isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } }))
     this.notificationItems = [];
     if (profileStatus === ProfileStatus.incomplete) {
-      this.resetActiveClass();
+      // this.resetActiveClass();
       this.notificationItems.push({
         key: 'profileStatus',
         text: 'Profile is incomplete',
@@ -252,11 +255,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     const currentRoute = this.router.url;
     let activeRoute: any = currentRoute.lastIndexOf('/');
     activeRoute = this.router.url.substring(activeRoute + 1, currentRoute.length);
-    if (activeRoute !== 'app') this.setActivePageByRoute(activeRoute);
-    else {
-      this.resetActiveClass();
-      this.setActivePageById(this.tabs[0].id);
-    }
+    if (activeRoute) this.setActivePageByRoute(activeRoute);
+    else this.setActivePageById(this.tabs[0].id);
   }
 
   handlePopState(event: any) {
@@ -266,26 +266,28 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   navigateToPage(item: any) {
-    console.log('item: ', item);
-    if (item?.id === 6) {
-      const user = JSON.parse(localStorage.getItem('user') || '');
-      if (user) {
-        const route = item.route.replace('userId', user?.user);
-        this.router.navigateByUrl(route);
-      }
-    } else {
+    // if (item?.id === 6) {
+    //   const user = JSON.parse(localStorage.getItem('user') || '');
+    //   if (user) {
+    //     const route = item.route.replace('userId', user?.user);
+    //     this.router.navigateByUrl(route);
+    //   }
+    // } else {
       this.setActivePageById(item.id);
       this.navController.navigateForward(item.route);
       this.isLoginPage = false;
-    }
+    // }
   }
 
   setActivePageByRoute(param: string) {
     this.resetActiveClass();
-    const selectedItemIndex = this.tabs.findIndex(tab => tab.route === param);
-    if (selectedItemIndex > -1) this.tabs[selectedItemIndex].isActive = true;
-    const desktopItemIndex = this.menuItems.findIndex(tab => tab.route === param);
-    if (desktopItemIndex > -1) this.menuItems[desktopItemIndex].isActive = true;
+    if(this.deviceService.isMobile()) {
+      const selectedItemIndex = this.tabs.findIndex(tab => tab.route === param);
+      if (selectedItemIndex > -1) this.tabs[selectedItemIndex].isActive = true;
+    } else {
+      const desktopItemIndex = this.menuItems.findIndex(tab => tab.route === param);
+      if (desktopItemIndex > -1) this.menuItems[desktopItemIndex].isActive = true;
+    }
     this.cdr.detectChanges();
   }
 
@@ -306,6 +308,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   redirectToHome() {
     this.resetActiveClass();
     this.router.navigateByUrl('/');
+    this.setActivePageById(this.tabs[0].id);
   }
 
   handleLogoLoadError(event: any) {
@@ -334,6 +337,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   handleNotificationItemClick(item: any) {
     // console.log('item: ', item);
+    this.resetActiveClass();
     this.router.navigateByUrl(item?.route);
   }
 }
