@@ -7,7 +7,7 @@
 }
 
 ::ng-deep ion-item::part(native) {
-    @apply bg-red-300;
+    // @apply bg-red-300;
 
     .input-wrapper {
         @apply bg-purple-600;

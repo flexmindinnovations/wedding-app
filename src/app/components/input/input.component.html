@@ -1,5 +1,5 @@
 <div class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-dark-950 text-sm">
-  <label for="{{id}}">{{label}}
+  <label for="{{id}}">{{label}}<span *ngIf="type === 'date' && presentaion==='date'">&nbsp;(MM/DD/YYYY)</span>
   </label>
   @if(isMultiline){
   <textarea [title]="label" [disabled]="control?.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()"
