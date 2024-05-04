@@ -97,7 +97,7 @@ export class LoginPage implements OnInit {
               this.isLoggedIn = true;
               of(true).
                 pipe(
-                  delay(2000)
+                  delay(1000)
                 ).subscribe(() => {
                   this.messageService.clear();
                   this.router.navigateForward('');

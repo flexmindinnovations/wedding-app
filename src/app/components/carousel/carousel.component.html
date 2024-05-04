@@ -1,5 +1,5 @@
 @if (slides?.length) {
-<p-carousel [value]="slides" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions" [circular]="true" [autoplayInterval]="3000">
+<p-carousel [value]="slides" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions" [circular]="true">
   <ng-template let-product pTemplate="item">
     <carousel-item class="flex items-center justify-center flex-col md:lg:min-w[70%] md:lg:max-w-[85%] m-auto"
         [data]="product" />
