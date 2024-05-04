@@ -248,7 +248,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.sharedService.isLoggedInCompleted.subscribe(() => {
-      this.router.navigateByUrl('profile/personal');
+      // this.router.navigateByUrl('profile/personal');
     })
   }
   setActivePageOnRefresh() {
