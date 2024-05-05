@@ -143,6 +143,21 @@ p {
     }
   }
 
+  .p-avatar-image {
+    @apply h-6 w-6;
+  }
+
+  .profile-splitter {
+    
+    // :nth-child(1) {
+    //   @apply basis-0 #{!important};
+    // }
+
+    // :nth-child(3) {
+    //   @apply basis-auto w-full #{!important};
+    // }
+  }
+
   .p-toolbar {
     @apply px-5 py-1;
 
