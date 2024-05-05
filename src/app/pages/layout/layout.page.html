@@ -20,7 +20,7 @@
     </ng-template>
     <ng-template pTemplate="end">
       @for (item of menuItems; track item.id) {
-      <ion-button class="px-2" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
+      <ion-button class="mx-1" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
         <p class="m-0 flex items-center justify-start gap-2 !font-semibold">
           <fa-icon [icon]="item.icon" />
           <span>{{item.title}}</span>
