@@ -1,0 +1,57 @@
+<div class="wrapper w-full flex flex-col items-center justify-center gap-5">
+  <div class="col-span-1 py-6 flex flex-col items-center justify-center gap-2">
+    <p class="p-gradient">
+      pricing
+    </p>
+    <h1 class="h1-gradient block w-full text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+      Choose the right plan for you
+    </h1>
+  </div>
+  <div class="pricing-table-container col-span-1">
+    <ul class="flex items-center justify-center gap-2">
+      @for (item of cardItems; track $index) {
+      <li class="card p-3 lg:min-w-80 rounded-none border-l border-r">
+        <div>
+          <div class="header border-b mb-2">
+            <h1 class="font-bold block text-center text-base" [ngClass]="item.styleClass">
+              {{item.planName}}
+            </h1>
+          </div>
+          <div class="body">
+            <div class="plan-info py-3">
+              <div class="original-price flex items-center justify-start gap-2">
+                <p>Original Price:</p>
+                <h1 class="h1-gradient">
+                  <b class="b-graident-line"><i class="pi pi-indian-rupee"></i>{{item.originalAmount}}</b>
+                </h1>
+              </div>
+              <div class="original-price flex items-center justify-start gap-2">
+                <p>Offer Price:</p>
+                <h1 class="h1-gradient"><b class="line-through"><i
+                      class="pi pi-indian-rupee"></i>{{item.discountAmount}} </b></h1><small>(Billed Annually)</small>
+              </div>
+            </div>
+
+            <div class="features my-4 border-b">
+              <p class="pricing-header">
+                Features:
+              </p>
+              <ul class="nested indent-10">
+                @for (planText of item.planFeature; track $index) {
+                <li>
+                  {{planText.text}}
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+          <div class="footer">
+            <mt-button size="small" [title]="item.actionName" (action)="handlePlanCardClick(item)"></mt-button>
+          </div>
+        </div>
+      </li>
+      }
+    </ul>
+  </div>
+
+</div>

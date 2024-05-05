@@ -45,6 +45,6 @@ export class ButtonComponent implements OnInit {
   }
 }
 
-export type ButtonSize = 'small' | 'large';
-export type ButtonTypes = 'normal' | 'default' | 'danger' | 'success';
+type ButtonSize = 'small' | 'large';
+type ButtonTypes = 'normal' | 'default' | 'danger' | 'success';
 type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';

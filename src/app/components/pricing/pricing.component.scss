@@ -1,0 +1,20 @@
+ul.nested {
+    li {
+        @apply text-sm my-2;
+        position: relative;
+        list-style-type: none;
+        text-align: justify;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 18px;
+            width: 18px;
+            height: 18px;
+            background-image: url('/assets/icon/check.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+}

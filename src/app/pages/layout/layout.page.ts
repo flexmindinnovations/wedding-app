@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnDest
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { MENU_ITEMS, tabItems } from 'src/app/util/util';
-import { faGem,faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faGem, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { NavController } from '@ionic/angular';
 import { HostListener } from '@angular/core';
@@ -51,7 +51,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   storeData!: Observable<any>;
   notificationItems: any[] = [];
   favoriteProfiles = [];
-  dialogService=inject(DialogService);
+  dialogService = inject(DialogService);
 
   profileItems: MenuItem[] = [
     {
@@ -141,6 +141,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
     this.sharedService.isUserDetailUpdated.subscribe((isUserUpdated: any) => {
       if (isUserUpdated && this.authService.isLoggedIn()) this.getUserDetails();
+    })
+
+    this.sharedService.footerItemClickEvent.subscribe((event: any) => {
+      this.setActivePageByRoute(event);
     })
   }
 
@@ -277,15 +281,15 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     //     this.router.navigateByUrl(route);
     //   }
     // } else {
-      this.setActivePageById(item.id);
-      this.navController.navigateForward(item.route);
-      this.isLoginPage = false;
+    this.setActivePageById(item.id);
+    this.navController.navigateForward(item.route);
+    this.isLoginPage = false;
     // }
   }
 
   setActivePageByRoute(param: string) {
     this.resetActiveClass();
-    if(this.deviceService.isMobile()) {
+    if (this.deviceService.isMobile()) {
       const selectedItemIndex = this.tabs.findIndex(tab => tab.route === param);
       if (selectedItemIndex > -1) this.tabs[selectedItemIndex].isActive = true;
     } else {
