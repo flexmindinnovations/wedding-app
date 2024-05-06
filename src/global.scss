@@ -99,6 +99,24 @@ p {
   -webkit-text-fill-color: transparent;
 }
 
+h1.pricing {
+  background: rgb(247, 0, 104);
+  background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+  color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.b-graident-line {
+  text-decoration: line-through;
+  text-decoration-line: line-through;
+  text-decoration-style: solid;
+  text-decoration-color: rgb(247, 0, 104);
+}
+
 .p-gradient {
   font-family: "Overpass", sans-serif;
   font-optical-sizing: auto;
@@ -118,6 +136,18 @@ p {
   -webkit-text-fill-color: transparent;
   text-transform: uppercase;
   letter-spacing: 5px;
+}
+
+p.pricing-header {
+  background: rgb(247, 0, 104);
+  background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+  color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
 }
 
 @layer reset {
@@ -143,11 +173,27 @@ p {
     }
   }
 
+  .p-avatar-image {
+    @apply h-6 w-6;
+  }
+
+  .profile-splitter {
+
+    // :nth-child(1) {
+    //   @apply basis-0 #{!important};
+    // }
+
+    // :nth-child(3) {
+    //   @apply basis-auto w-full #{!important};
+    // }
+  }
+
   .p-toolbar {
     @apply px-5 py-1;
 
     .p-toolbar-group-start {
       @apply min-w-24 min-h-9;
+
       .menu-icon {
         @apply flex lg:hidden xl:hidden;
       }

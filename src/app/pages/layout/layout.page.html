@@ -20,7 +20,7 @@
     </ng-template>
     <ng-template pTemplate="end">
       @for (item of menuItems; track item.id) {
-      <ion-button class="px-2" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
+      <ion-button class="mx-1" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
         <p class="m-0 flex items-center justify-start gap-2 !font-semibold">
           <fa-icon [icon]="item.icon" />
           <span>{{item.title}}</span>
@@ -47,7 +47,7 @@
           [value]="notificationItems.length.toString()"></i>
         }
         <p-menu #menu styleClass="profile-menu" [model]="profileItems" [popup]="true" appendTo="body" [autofocus]="false"></p-menu>
-        <p-avatar (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
+        <p-avatar styleClass="user-avatar" (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
           image="/assets/image/image-placeholder.png" styleClass="mr-2"
           shape="circle"></p-avatar>
       </div>

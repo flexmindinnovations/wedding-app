@@ -103,13 +103,13 @@ export const MENU_ITEMS = [
         "isActive": false,
         "icon": blogIcon
     },
-    {
-        "id": 7,
-        "title": "Events",
-        "route": "events",
-        "isActive": false,
-        "icon": calenderIcon
-    },
+    // {
+    //     "id": 7,
+    //     "title": "Events",
+    //     "route": "events",
+    //     "isActive": false,
+    //     "icon": calenderIcon
+    // },
     {
         "id": 8,
         "title": "About",

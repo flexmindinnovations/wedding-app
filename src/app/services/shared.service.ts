@@ -38,6 +38,7 @@ export class SharedService {
   blogData = new Subject();
   eventData = new Subject();
   imagesSelected = new Subject();
+  footerItemClickEvent = new Subject();
 
   getImagesSelected(): Observable<any> {
     return this.imagesSelected.asObservable();

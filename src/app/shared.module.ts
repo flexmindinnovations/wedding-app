@@ -65,6 +65,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DividerModule } from 'primeng/divider';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ProfileViewPage } from './pages/profile-view/profile-view.page';
+import { PricingComponent } from './components/pricing/pricing.component';
 
 const components = [
   FormStepperComponent,
@@ -87,7 +88,8 @@ const components = [
   RegisterUserComponent,
   CardComponent,
   DataExportComponent,
-  VideoPlayerComponent
+  VideoPlayerComponent,
+  PricingComponent
 ]
 
 const modules: any = [

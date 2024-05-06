@@ -18,7 +18,7 @@
 <ion-content [fullscreen]="true">
   <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
     <div class="form-container max-h-full flex-grow w-full">
-      <p-splitter [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
+      <p-splitter styleClass="profile-splitter" [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
         class="flex-grow w-full h-full">
         <ng-template class="hidden md:lg:xl:flex" pTemplate>
           <div class="w-full h-full">
@@ -32,9 +32,6 @@
           </div>
         </ng-template>
       </p-splitter>
-    </div>
-    <div class="block lg:xl:hidden h-full w-full">
-      <!-- <router-outlet></router-outlet> -->
     </div>
   </div>
 </ion-content>
