@@ -66,8 +66,8 @@ export class FamilyInfoComponent implements OnInit {
       noOfSisters: ['', [Validators.required]],
       noOfMarriedSisters: ['', [Validators.required]],
       religionId: ['', [Validators.required]],
-      castId: ['', [Validators.required]],
-      subCastId: ['', [Validators.required]]
+      castId: [null],
+      subCastId: [null]
     })
   }
 

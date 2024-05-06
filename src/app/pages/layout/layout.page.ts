@@ -129,6 +129,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
     window.onload = (event: any) => {
       AOS.refresh();
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if(user.profileStatus === 'InComplete'){
+        this.router.navigateByUrl('profile/personal');
+        }
       if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
@@ -249,10 +253,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.sharedService.getRequestStatus().subscribe(isNavigate => {
       if (isNavigate) this.resetActiveClass();
-    })
-
-    this.sharedService.isLoggedInCompleted.subscribe(() => {
-      // this.router.navigateByUrl('profile/personal');
     })
   }
   setActivePageOnRefresh() {
