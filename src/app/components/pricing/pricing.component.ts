@@ -78,7 +78,7 @@ export class PricingComponent implements OnInit {
     } else {
 
     }
-    console.log('plan: ', plan);
+    // console.log('plan: ', plan);
 
   }
 

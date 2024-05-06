@@ -42,6 +42,9 @@ export class FamilyInfoComponent implements OnInit {
   religionListOptions: any[] = [];
   sharedService = inject(SharedService);
   @Output() nextFormStep = new EventEmitter();
+  castIdValue:any;
+  subCastIdValue:any;
+  religionIdValue:any;
 
 
   constructor(
@@ -72,6 +75,9 @@ export class FamilyInfoComponent implements OnInit {
   }
 
   patchFormData() {
+    this.religionIdValue = this.familyData.religionId;
+    this.castIdValue = this.familyData?.castId;
+    this.subCastIdValue = this.familyData?.subCastId;
     this.formGroup.patchValue(this.familyData);
     this.cdref.detectChanges();
   }
@@ -86,6 +92,11 @@ export class FamilyInfoComponent implements OnInit {
 
   handleClickOnNext(src: string = 'family') {
     const formVal = { ...this.formGroup.value, customerId: this.customerData?.customerId };
+    if(this.religionId !== this.religionIdValue) {
+      if(formVal['castId'] !== this.castIdValue && !this.hasSubCast) {
+          formVal['subCastId'] = null;
+      }
+    }
     this.cdref.detectChanges();
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src);
