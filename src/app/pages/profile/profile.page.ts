@@ -74,8 +74,10 @@ export class ProfilePage implements OnInit {
   }
 
   handleListItemChange(event: any) {
-    this.router.navigateByUrl('profile/' + event.route);
-    this.selectedStep = event;
+    if(event?.route){
+      this.router.navigateByUrl('profile/' + event?.route);
+      this.selectedStep = event;
+    }
   }
 
   closeSIdebar(e: any): void {

@@ -60,8 +60,8 @@
 </div>
 
 <ng-container>
-  <p-dialog [(visible)]="showLogoutModal" appendTo="body" [modal]="true" [closable]="false" [style]="{ width: '30vw' }"
-    [draggable]="false" [resizable]="false">
+  <p-dialog [(visible)]="showLogoutModal" appendTo="body" [modal]="true" [closable]="false" [style]="getDialogStyle()"
+    [draggable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-3">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       <p>
@@ -73,7 +73,7 @@
 
 <ng-container>
   <p-dialog #sessionExpired [header]="'Session Expired'" [(visible)]="showSessionExpiredDialog" appendTo="body"
-    [modal]="true" [closable]="false" [style]="{ width: '33vw' }" [draggable]="false" [resizable]="false">
+    [modal]="true" [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-4">
       <p class="select-none">
         Your session is expired, please sign in again to continue.

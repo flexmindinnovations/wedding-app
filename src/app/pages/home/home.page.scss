@@ -140,7 +140,7 @@ section._counter {
     @apply relative w-screen flex flex-col;
 
     section.video {
-        @apply sticky h-[calc(100vh-70px)] min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;
+        @apply sticky h-[60vh] lg:xl:h-[calc(100vh-70px)] lg:xl:min-h-[calc(100vh-70px)] w-screen top-0 bottom-0;
         background-attachment: fixed;
 
         video {
@@ -148,14 +148,13 @@ section._counter {
         }
 
         .overlay {
-            @apply absolute top-0 bottom-0 h-[calc(100vh-70px)] w-full flex items-end justify-center bg-black/50;
+            @apply absolute top-0 bottom-0 h-[60vh] lg:xl:h-[calc(100vh-70px)] lg:xl:min-h-[calc(100vh-70px)] w-screen flex items-end justify-center bg-black/50;
 
             .marquee-text {
-                @apply flex gap-8 w-full items-end justify-center flex-nowrap absolute top-0 bottom-10 whitespace-nowrap overflow-hidden;
+                @apply flex gap-8 w-full items-end justify-center flex-nowrap absolute top-0 bottom-5 lg:xl:bottom-8 whitespace-nowrap overflow-hidden;
 
                 p {
-                    @apply text-xs md:lg:text-2xl text-white font-bold flex-grow text-center my-2 mx-5;
-                    white-space: nowrap;
+                    @apply text-base md:lg:text-2xl text-white font-bold flex-grow text-center my-2 mx-5;
                     display: inline-block;
                     position: relative;
                     will-change: auto;

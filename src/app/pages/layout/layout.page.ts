@@ -46,12 +46,16 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   registerIcon: IconProp = faUserPlus;
   isLoginPage: boolean = false;
   isLoggedIn: boolean = false;
-
+  public screenWidth: any;
   store = inject(Store<{ saveData: any }>);
   storeData!: Observable<any>;
   notificationItems: any[] = [];
   favoriteProfiles = [];
   dialogService = inject(DialogService);
+
+  constructor() {
+    this.onResize();
+  }
 
   profileItems: MenuItem[] = [
     {
@@ -364,5 +368,18 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
+
   }
 }
