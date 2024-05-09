@@ -33,3 +33,26 @@
     top: 70px;
     right: 20px;
 }
+
+@media screen and (max-width: 768px) {
+    .Success,
+    .Error,
+    .Warning {
+        @apply text-lg;
+    }
+
+    .Success button,
+    .Error button,
+    .Warning button {
+        @apply p-2;
+    }
+    ::ng-deep #alertContainer {
+        width: 80%; 
+        top: 10%; 
+    }
+
+    ::ng-deep .p-toast-top-right {
+        top: 50px; 
+        right: 0; 
+    }
+}

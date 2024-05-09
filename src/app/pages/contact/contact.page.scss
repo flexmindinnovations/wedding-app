@@ -3,6 +3,13 @@
     margin: 0 auto;
 }
 
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: none;
+        margin: 0 auto;
+    }
+}
+
 section._register {
 
     p.about {

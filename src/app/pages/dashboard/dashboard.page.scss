@@ -52,10 +52,10 @@ section._register {
     }
 
     .content {
-        @apply -z-[1] lg:z-[1] xl:z-[1] opacity-20 lg:xl:opacity-100;
+        @apply -z-[1] lg:z-[1] xl:z-[1];
 
         .bars {
-            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1];
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1] opacity-20 lg:xl:opacity-100;
             will-change: auto;
             animation: shake 45s linear infinite;
 
