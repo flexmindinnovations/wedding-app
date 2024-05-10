@@ -89,7 +89,7 @@ export class DataExportComponent implements OnInit {
           personalInfoModel['isPatrika'] = personalInfoModel['isPatrika'] == true ? 'Yes' : 'No';
           personalInfoModel['isPhysicallyAbled'] = personalInfoModel['isPhysicallyAbled'] == true ? 'Yes' : 'No';
           personalInfoModel['spectacles'] = personalInfoModel['spectacles'] == true ? 'Yes' : 'No';
-          console.log("personalInfoModel['timeOfBirth']: ", personalInfoModel['timeOfBirth']);
+          // console.log("personalInfoModel['timeOfBirth']: ", personalInfoModel['timeOfBirth']);
 
           const userInfo = {
             personalInfo: this.convertObjectToList(personalInfoModel),

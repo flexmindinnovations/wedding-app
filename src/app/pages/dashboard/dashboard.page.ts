@@ -86,6 +86,15 @@ export class DashboardPage implements OnInit {
     if (futurDate.diff(currentDate, 'days') > 0) {
       this.showLaunchOfferBanner = false;
     }
+   
+    // this.sharedService.getIsLoggedInEvent().subscribe((completed: any) => {
+    //   if (completed) {
+    //   const user = JSON.parse(localStorage.getItem('user') || '{}');
+    //   if(user.profileStatus === 'InComplete'){
+    //   this.router.navigateByUrl('profile/personal');
+    //   }
+    //   }
+    // })
   }
 
   handleOnLoadData(event: any) {

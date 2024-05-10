@@ -34,7 +34,8 @@ export class PhotosComponent implements OnInit, AfterViewInit {
   photoName: string = '';
   customerId: number = 0;
   router = inject(Router);
-  imgData: any[] = [];
+  imageData: any[] = [];
+  isDataLoaded: any = false;
 
   @Output() nextFormStep = new EventEmitter();
 
@@ -43,6 +44,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+   
     this.sharedService.handleNextButtonClick().subscribe((event: any) => {
       const props: FormStep = {
         source: event,
@@ -67,28 +69,31 @@ export class PhotosComponent implements OnInit, AfterViewInit {
     const photo1NameIndex = imageInfoModel?.imagePath2?.lastIndexOf('/') + 1;
     this.photoName = imageInfoModel?.imagePath2?.substring(photo1NameIndex, imageInfoModel?.imagePath2.length);
     if (this.thumbnailImage && this.photo1) {
-      this.imgData.push(this.thumbnailImage);
-      this.imgData.push(this.photo1);
+      this.imageData.push(this.thumbnailImage);
+      this.imageData.push(this.photo1);
     }
-    if (this.imgData.length === 2) this.sharedService.imagesSelected.next(true);
+    if (this.imageData.length === 2) this.sharedService.imagesSelected.next(true);
     this.cdref.detectChanges();
   }
 
   handleSelectedImage(event: any, src: string) {
     switch (src) {
       case 'thumbnail':
-        this.selectedFiles.push(event.file);
+        if (this.selectedFiles.length < 2) this.selectedFiles.push(event.file);
         break;
       case 'photo':
-        this.selectedFiles.push(event.file);
+        if (this.selectedFiles.length < 2) this.selectedFiles.push(event.file);
         break;
     }
     const filename = event?.file?.name;
-    if(filename && this.imgData.length < 2) {
-      this.imgData.push(filename);
+    if(filename && this.imageData.length < 2) {
+      this.imageData.push(filename);
     }
-    if (this.selectedFiles.length === 2) this.sharedService.imagesSelected.next(true);
-    this.cdref.detectChanges();
+    if (this.selectedFiles.length === 2) {
+      this.sharedService.imagesSelected.next(true);
+      this.isDataLoaded = true;
+      this.cdref.detectChanges();
+    }
   }
 
   handleClickOnPrevious(src: string) {
@@ -118,34 +123,15 @@ export class PhotosComponent implements OnInit, AfterViewInit {
     const formData: FormData = new FormData();
     formData.append('customerId', customerId);
     if(this.selectedFiles.length) {
-      this.selectedFiles.forEach((file: any) => {
-        formData.append('file', file, file.name);
-      })
-    }
+    this.selectedFiles.forEach((file: any) => {
+      formData.append('file', file, file.name);
+    })
+  }
     this.customerRegistrationService.savePhotos(formData).subscribe({
       next: (data: any) => {
         if (data) {
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
-          const props: FormStep = {
-            source: src,
-            data: [],
-            formId: 5,
-            action: ActionValue.next,
-            isCompleted: true,
-            previous: {
-              source: 'other',
-              data: {},
-              formId: 4,
-              action: ActionValue.previous,
-              isCompleted: true
-            },
-            next: null
-          }
-          this.sharedService.isUserDetailUpdated.next(true);
-          this.isCompleted.emit(true);
-          this.photosData.emit(props);
           this.customerRegistrationService.setRequestStatus(true, 'add');
-          this.router.navigateByUrl("/");
         }
       },
       error: (error: any) => {
@@ -159,34 +145,15 @@ export class PhotosComponent implements OnInit, AfterViewInit {
     const formData: FormData = new FormData();
     formData.append('customerId', customerId);
     if(this.selectedFiles.length) {
-      this.selectedFiles.forEach((file: any) => {
-        formData.append('file', file, file.name);
-      })
-    }
+    this.selectedFiles.forEach((file: any) => {
+      formData.append('file', file, file.name);
+    })
+  }
     this.customerRegistrationService.updatePhotos(formData, customerId).subscribe({
       next: (data: any) => {
         if (data) {
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
-          const props: FormStep = {
-            source: src,
-            data: [],
-            formId: 5,
-            action: ActionValue.next,
-            isCompleted: true,
-            previous: {
-              source: 'other',
-              data: {},
-              formId: 4,
-              action: ActionValue.previous,
-              isCompleted: true
-            },
-            next: null
-          }
-          this.sharedService.isUserDetailUpdated.next(true);
-          this.isCompleted.emit(true);
-          this.photosData.emit(props);
           this.customerRegistrationService.setRequestStatus(true, 'update');
-          this.router.navigateByUrl("/");
         }
       },
       error: (error: any) => {
@@ -200,11 +167,16 @@ export class PhotosComponent implements OnInit, AfterViewInit {
     this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {
-          this.customerData = data;
-          this.imagesData = this.customerData?.photos;
-          this.isEditMode = this.customerData && this.customerData['isImagesAdded'] ? true : false;
-          if (this.isEditMode) this.getCustomerImages()
+          // this.customerData = data;
+          // this.imagesData = this.customerData?.photos;
+          // this.isEditMode = this.customerData && this.customerData['isImagesAdded'] ? true : false;
+          // if (this.isEditMode) this.getCustomerImages()
           // this.isDataLoaded = true;
+          this.customerData = data;
+          this.isEditMode = data?.isImagesAdded;
+          this.photosData = data?.imageInfoModel;
+          if (this.isEditMode) this.getCustomerImages();
+          else this.isDataLoaded = true;
         }
       },
       error: (error) => {

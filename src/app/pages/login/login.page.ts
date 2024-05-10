@@ -151,7 +151,7 @@ export class LoginPage implements OnInit {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      console.log('afterClose: ', afterClose);
+      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }

@@ -1,9 +1,9 @@
 <ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
   <p-toolbar>
-    <div class="p-toolbar-group-start">
+    <div class="firstElement p-toolbar-group-start">
     </div>
     <div class="p-toolbar-group-center">
-      <h2 class="!m-0">
+      <h2 class="px-2">
         Profile Details
       </h2>
     </div>
@@ -20,10 +20,10 @@
     <div class="w-[80%] mx-auto h-full" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-lg'" *ngIf="personalInfoModel?.length">
       <div class="personal-info w-full h-auto py-3">
         <h5 class="block border-b">Personal Information</h5>
-        <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
           @for (item of personalInfoModel; track $index) {
           @if (item?.value) {
-          <li class="flex flex-col items-start justify-center">
+          <li class="itemContent flex flex-col items-start justify-center">
             <p class="title !font-semibold">
               {{item.title}}
             </p>
@@ -38,10 +38,10 @@
 
       <div class="family-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="familyInfoModel?.length">
         <h5 class="block border-b">Family Information</h5>
-        <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
           @for (item of familyInfoModel; track $index) {
           @if (item?.value) {
-          <li class="flex flex-col items-start justify-center">
+          <li class="itemContent flex flex-col items-start justify-center">
             <p class="title !font-semibold">
               {{item.title}}
             </p>
@@ -56,10 +56,10 @@
 
       <div class="contact-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="contactInfoModel?.length">
         <h5 class="block border-b">Contact Information</h5>
-        <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
           @for (item of contactInfoModel; track $index) {
           @if (item?.value) {
-          <li class="flex flex-col items-start justify-center">
+          <li class="itemContent flex flex-col items-start justify-center">
             <p class="title !font-semibold">
               {{item.title}}
             </p>
@@ -74,10 +74,10 @@
 
       <div class="other-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="otherInfoModel?.length">
         <h5 class="block border-b">Other Information</h5>
-        <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
           @for (item of otherInfoModel; track $index) {
           @if (item?.value) {
-          <li class="flex flex-col items-start justify-center">
+          <li class="itemContent flex flex-col items-start justify-center">
             <p class="title !font-semibold">
               {{item.title}}
             </p>
@@ -93,7 +93,7 @@
       <div class="photos-info w-full h-auto py-3" *ngIf="imageInfoModel?.length">
         <h5 class="block border-b">Photos</h5>
         <ul>
-          <div class="flex items-center justify-center gap-4 max-h-56 w-full">
+          <div class="itemImage flex items-center justify-center gap-4 max-h-56 w-full">
             @for (item of imageInfoModel; track $index) {
             <li *ngIf="item?.value">
               <div class="image-container w-52 h-48">

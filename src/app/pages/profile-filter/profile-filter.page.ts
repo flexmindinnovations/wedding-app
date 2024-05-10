@@ -77,13 +77,13 @@ export class ProfileFilterPage implements OnInit {
           this.searchCriteria = {
             gender: oppGender
           }
-          console.log({searchCriteria: this.searchCriteria, isSearchFromQuery: this.isSearchFromQuery});
+          // console.log({searchCriteria: this.searchCriteria, isSearchFromQuery: this.isSearchFromQuery});
           
           if (!this.isSearchFromQuery) {
             this.seachFilteredProfiles(this.searchCriteria);
             setTimeout(() => {
               this.formGroup.patchValue(this.searchCriteria);
-              console.log('formVal: ', this.formGroup.value);
+              // console.log('formVal: ', this.formGroup.value);
             })
           }
           this.isDataAvailable = true;

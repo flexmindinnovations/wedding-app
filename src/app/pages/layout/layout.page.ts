@@ -48,13 +48,17 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   registerIcon: IconProp = faUserPlus;
   isLoginPage: boolean = false;
   isLoggedIn: boolean = false;
-
+  public screenWidth: any;
   store = inject(Store<{ saveData: any }>);
   storeData!: Observable<any>;
   notificationItems: any[] = [];
   profileInterestList: any[] = [];
   favouriteProfiles = [];
   dialogService = inject(DialogService);
+
+  constructor() {
+    this.onResize();
+  }
 
   profileItems: MenuItem[] = [
     {
@@ -138,6 +142,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
     window.onload = (event: any) => {
       AOS.refresh();
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (user.profileStatus === 'InComplete') {
+        this.router.navigateByUrl('profile/personal');
+      }
       if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
@@ -266,10 +274,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.sharedService.getRequestStatus().subscribe(isNavigate => {
       if (isNavigate) this.resetActiveClass();
     })
-
-    this.sharedService.isLoggedInCompleted.subscribe(() => {
-      // this.router.navigateByUrl('profile/personal');
-    })
   }
 
   setActivePageOnRefresh() {
@@ -391,5 +395,19 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
+  }
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
+
   }
 }
