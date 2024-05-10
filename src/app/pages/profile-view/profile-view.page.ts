@@ -1,5 +1,5 @@
 import { map } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { AlertType } from 'src/app/enums/alert-types';
@@ -27,6 +27,7 @@ interface ObjectType {
   styleUrls: ['./profile-view.page.scss'],
 })
 export class ProfileViewPage implements OnInit {
+  @Input() customerId: any;
   isLoading: boolean = false;
   isDataLoaded: boolean = false;
   isLoggedIn = false;
@@ -53,6 +54,7 @@ export class ProfileViewPage implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.customerId) this.getUserDetails(this.customerId);
     this.activatedRoute.params.subscribe((params: any) => {
       const userId = params['id'];
       this.userId = userId;

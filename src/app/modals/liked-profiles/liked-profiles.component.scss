@@ -1,0 +1,28 @@
+::ng-deep .liked-profiles-modal {
+    .p-dialog-content {
+        @apply p-0;
+    }
+
+}
+
+.liked-profile-container {
+
+    ::ng-deep .profile-list {
+        @apply border-none h-full w-full outline-none shadow-none ring-0;
+    }
+
+    ::ng-deep .card {
+        @apply shadow-none;
+
+        .p-card-body {
+
+            .p-card-title {
+                @apply text-sm;
+            }
+
+            .p-card-content {
+                @apply py-3;
+            }
+        }
+    }
+}

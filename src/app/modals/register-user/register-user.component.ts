@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/api';
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -27,8 +27,6 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private alert: AlertService,
     private router: Router,
-    private dialogService: DialogService,
-    private dialogConfig: DynamicDialogConfig,
     private dialogRef: DynamicDialogRef
   ) { }
 

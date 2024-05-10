@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 import { DataExportComponent } from '../data-export/data-export.component';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'carousel-item',
@@ -35,7 +36,8 @@ export class CarouselItemComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private alertService: AlertService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
@@ -58,6 +60,7 @@ export class CarouselItemComponent implements OnInit {
         next: (response: any) => {
           if (response) {
             this.alertService.setAlertMessage(response?.message, AlertType.success);
+            this.getUpdatedFavouriteProfileList(user?.user);
           }
         },
         error: (error: any) => {
@@ -67,6 +70,20 @@ export class CarouselItemComponent implements OnInit {
     } else {
       this.showLoginDialog = true;
     }
+  }
+
+  getUpdatedFavouriteProfileList(userId: any) {
+    this.userService.getFavouriteProfileList(userId).subscribe({
+      next: (response) => {
+        if (response) {
+          const profileList = response;
+          this.sharedService.setFavouriteProfiles.next(profileList);
+        }
+      },
+      error: (error) => {
+        this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+      }
+    });
   }
 
   handleProfileClick() {

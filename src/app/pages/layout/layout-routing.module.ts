@@ -3,6 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutPage } from './layout.page';
 
+const isLoggedIn = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const hasUserObj = user && typeof user === 'object' && Object.keys(user).length > 0;
+  return hasUserObj && !!localStorage.getItem('token');
+}
+
 const routes: Routes = [
   {
     path: '',
@@ -10,8 +16,7 @@ const routes: Routes = [
     children: [
       {
         matcher: url => {
-          const token = localStorage.getItem('token');
-          if (token) {
+          if (isLoggedIn()) {
             return url.length ? { consumed: [] } : { consumed: url };
           }
           return null
@@ -20,8 +25,7 @@ const routes: Routes = [
       },
       {
         matcher: url => {
-          const token = localStorage.getItem('token');
-          if (!token) {
+          if (!isLoggedIn()) {
             return url.length ? { consumed: [] } : { consumed: url };
           }
           return null
@@ -66,16 +70,16 @@ const routes: Routes = [
       },
       {
         path: 'privacy-policy',
-        loadChildren: () => import('../privacy-policy/privacy-policy.module').then( m => m.PrivacyPolicyPageModule)
+        loadChildren: () => import('../privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyPageModule)
       },
       {
         path: 'refund-policy',
-        loadChildren: () => import('../refund-policy/refund-policy.module').then( m => m.RefundPolicyPageModule)
+        loadChildren: () => import('../refund-policy/refund-policy.module').then(m => m.RefundPolicyPageModule)
       },
       {
         path: 'terms-condition',
-        loadChildren: () => import('../terms-condition/terms-condition.module').then( m => m.TermsConditionPageModule)
-      },    
+        loadChildren: () => import('../terms-condition/terms-condition.module').then(m => m.TermsConditionPageModule)
+      },
       {
         path: '**',
         loadChildren: () => import('../not-found/not-found.module').then(m => m.NotFoundPageModule)
