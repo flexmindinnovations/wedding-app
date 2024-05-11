@@ -1,3 +1,41 @@
 ::ng-deep .p-splitter-horizontal {
     @apply h-full;
 }
+
+::ng-deep .p-toolbar {
+    @apply md:gap-0;
+}
+
+.mainContainer {
+    overflow: auto;
+    position: relative;
+    display: grid;
+    grid-gap: 1rem;
+  }
+  
+  @media screen and (min-width: 420px) {
+    .mainContainer {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (min-width: 768px) {
+    .mainContainer {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .mainContainer {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    ::ng-deep .p-toolbar {
+        @apply flex-nowrap gap-0 justify-start;
+         h3 {
+            font-size: 17px;
+        }
+    }
+}

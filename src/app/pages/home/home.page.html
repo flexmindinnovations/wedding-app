@@ -47,11 +47,12 @@
       </div>
     </section>
     <div class="flat-items flex flex-col gap-7 ">
-      <section class="search-box">
-        <div class="container ">
+      <section>
+        <div class="container search-box">
           <search-box class="w-full" />
         </div>
       </section>
+
 
       <section class="princing-section">
         <div class="container">
@@ -80,7 +81,7 @@
       </section>
 
       <section class="_register ">
-        <div class="container relative col-span-2 flex flex-row gap-4 w-full">
+        <div class="container relative col-span-2 lg:xl:py-10 flex flex-row gap-0 lg:xl:gap-4 px-3 w-full lg:xl:px-10">
           <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
             class="cta_register flex flex-col items-start justify-start gap-4 px-5 max-w-5xl mx-auto">
             <p class="about p-gradient tracking-widest uppercase">
@@ -112,21 +113,23 @@
                 <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
               </li>
             </ol>
-
+            <div
+            class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
             @if (isLoggedIn) {
-            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
-            } @else {
-            <mt-button title="Register Now" (action)="handleRegister()" />
-            }
+              <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+              } @else {
+              <mt-button title="Register Now" (action)="handleRegister()" />
+              }
+            </div>
           </div>
-          <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright"
-            class="content -z-[10] flex-grow md:w-full h-[inherit]">
+          <div class="content -z-[10] flex-grow md:w-full h-[inherit]">
             <div class="bars">
               <div class="bar1"></div>
               <div class="bar2"></div>
               <div class="bar3"></div>
             </div>
-            <div *ngIf="!isMobile" class="image-container">
+            <div pAnimateOnScroll enterClass="fadeinright" leaveClass="fadeoutright" *ngIf="!isMobile"
+              class="image-container">
               <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
             </div>
           </div>

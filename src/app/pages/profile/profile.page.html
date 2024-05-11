@@ -20,7 +20,7 @@
     <div class="form-container max-h-full flex-grow w-full">
       <p-splitter styleClass="profile-splitter" [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
         class="flex-grow w-full h-full">
-        <ng-template class="hidden md:lg:xl:flex" pTemplate>
+        <ng-template pTemplate>
           <div class="w-full h-full">
             <p-listbox (ngModelChange)="handleListItemChange($event)" class="h-full shadow-none"
               [options]="profileSteps" [(ngModel)]="selectedStep" optionLabel="name"></p-listbox>

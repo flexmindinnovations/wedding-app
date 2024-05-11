@@ -16,3 +16,11 @@
         justify-content: unset;
     }
 }
+@media screen and (max-width: 576px) {
+    ::ng-deep .p-toolbar {
+        @apply flex-nowrap gap-0;
+         h3 {
+            font-size: 17px;
+        }
+    }
+}

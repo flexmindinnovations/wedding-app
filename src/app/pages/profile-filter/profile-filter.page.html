@@ -2,14 +2,14 @@
   <p-toolbar>
     <div class="p-toolbar-group-start">
       <div class="menu-icon">
-        <p-button [styleClass]="'pi-bars'" (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true"
+        <p-button (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true"
           [text]="true" class="flex md:lg:xl:hidden"></p-button>
       </div>
     </div>
     <div class="p-toolbar-group-center">
-      <h2 class="!m-0">
+      <h3 class="m-0">
         Profile Search
-      </h2>
+      </h3>
     </div>
     <div class="p-toolbar-group-end">
       <p class="select-none">
@@ -23,7 +23,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
-    <div class="hidden md:block lg:block xl:block form-container max-h-full flex-grow w-full">
+    <div class="md:block lg:block xl:block form-container max-h-full flex-grow w-full">
       <p-splitter [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
         class="max-h-[calc(100vh-70px)] block h-full">
         <ng-template class="hidden md:lg:xl:flex md:lg:xl:h-full md:lg:xl:min-w-[20%]" pTemplate>
@@ -73,8 +73,7 @@
           </div>
         </ng-template>
         <ng-template pTemplate>
-          <div class="w-full h-full grid grid-cols-2 gap-3 md:grid-cols-3
-          lg:grid-cols-3 xl:grid-cols-4 relative overflow-auto">
+          <div class="mainContainer w-full h-full">
             @if (filteredProfileList && filteredProfileList.length && !isLoading) {
             @for (item of filteredProfileList; track $index) {
             <div class="profile-item col-span-1 w-full ">
@@ -88,7 +87,7 @@
             } @else {
             <div class="h-full w-full p-3 flex items-center justify-center md:col-span-3
             lg:col-span-4 xl:col-span-5">
-              <h2 class="select-none">
+              <h2 class="select-none text-center">
                 You filtered search does not match any record, try changing or removing search criteria.
               </h2>
             </div>

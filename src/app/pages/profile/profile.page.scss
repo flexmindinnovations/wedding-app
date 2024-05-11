@@ -22,7 +22,6 @@
     }
 }
 
-
 ::ng-deep .p-togglebutton {
     @apply max-w-48;
 }
@@ -33,6 +32,10 @@
 
 
 @media screen and (max-width: 768px) {
+    ::ng-deep .p-splitter.p-splitter-horizontal > div:first-child {
+        display: none;
+    }
+
     ::ng-deep .p-toolbar {
         @apply py-1 px-3;
     }
@@ -40,9 +43,9 @@
 
 @media screen and (max-width: 576px) {
     ::ng-deep .p-toolbar {
-        @apply py-0 px-1 flex-nowrap;
+        @apply flex-nowrap gap-0;
          h3 {
-            font-size: 16px;
+            font-size: 17px;
         }
     }
 }
