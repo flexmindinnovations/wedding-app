@@ -36,6 +36,8 @@
       <p>#{{data?.customerId}}</p>
       <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
         [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+        <span *ngIf="isLoggedIn && data.imagePath1 && data.imagePath2" class="cursor-pointer  text-blue-600" (click)="exportPdf(data?.customerId)"
+        [ngClass]="'pi pi-arrow-circle-down'"></span>
     </div>
   </div>
 </div>
@@ -75,6 +77,8 @@
         <p>#{{data?.customerId}}</p>
         <span class="cursor-pointer text-red-700 !text-lg" (click)="handleIsFavourite()"
           [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+            <span *ngIf="isLoggedIn && data.imagePath1 && data.imagePath2" class="cursor-cycle  text-blue-600" (click)="exportPdf(data?.customerId)"
+            [ngClass]="'pi pi-arrow-circle-down'"></span>
       </div>
     </div>
   </div>
