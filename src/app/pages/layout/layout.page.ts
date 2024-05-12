@@ -133,10 +133,10 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
     window.onload = (event: any) => {
       AOS.refresh();
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if(user.profileStatus === 'InComplete'){
-        this.router.navigateByUrl('profile/personal');
-        }
+      // const user = JSON.parse(localStorage.getItem('user') || '{}');
+      //   if(user.profileStatus === 'InComplete'){
+      //   this.router.navigateByUrl('profile/personal');
+      //   }
       if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
