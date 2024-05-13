@@ -20,6 +20,7 @@
   }
   
   @media screen and (min-width: 768px) {
+ 
     .mainContainer {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -38,4 +39,10 @@
             font-size: 17px;
         }
     }
+}
+
+@media screen and (max-width: 1023px) {
+     ::ng-deep .p-splitter.p-splitter-horizontal > div:first-child {
+      display: none;
+  }
 }

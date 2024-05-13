@@ -24,10 +24,9 @@ export class ProfileFilterPage implements OnInit {
 
   formGroup!: FormGroup;
   genderOptions: any = [];
-
   castService = inject(CastService);
   sharedService = inject(SharedService);
-
+  maritalStatusOptions: any = [];
   religionList: any[] = [];
   motherToungeList: any[] = [];
   castList: any[] = [];
@@ -64,6 +63,12 @@ export class ProfileFilterPage implements OnInit {
       { id: 'male', title: 'Male' },
       { id: 'female', title: 'Female' },
     ];
+    this.maritalStatusOptions = [
+      { id: 'married', title: 'Married' },
+      { id: 'single', title: 'Single' },
+      { id: 'divorced', title: 'Divorced' },
+      { id: 'widowed', title: 'Widowed' }
+    ]
   }
 
   getCustomerDetails(): void {
@@ -124,7 +129,8 @@ export class ProfileFilterPage implements OnInit {
       toAge: ['', [Validators.required]],
       cast: !['', [Validators.required]],
       subcast: ['', ![Validators.required]],
-      motherTongue: ['', [Validators.required]]
+      motherTongue: ['', [Validators.required]],
+      maritalStatus:['', [Validators.required]],
     })
 
     this.formGroup.valueChanges.subscribe((control) => {
@@ -209,11 +215,12 @@ export class ProfileFilterPage implements OnInit {
   }
 
   onSelectionChange(event: any, src: string) {
-    const value = event?.id;
     switch (src) {
       case 'castId':
         this.isReligionSelected = true;
-        this.getCastList(value);
+        this.getCastList(event?.id);
+        break;
+        case 'maritalStatus':
         break;
     }
   }

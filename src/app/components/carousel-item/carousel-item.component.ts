@@ -127,7 +127,7 @@ export class CarouselItemComponent implements OnInit {
   getUserDetails(customerId: any) {
     this.isLoading = true;
     this.authService.getCustomerForPDFById(customerId).subscribe({
-      next: (data: any) => {
+      next: async (data: any) => {
         if (data) {
           const { personalInfoModel, familyInfoModel, contactInfoModel, otherInfoModel, imageInfoModel } = data;
           this.personalInfoModel = JSON.parse(JSON.stringify(personalInfoModel));
@@ -151,7 +151,6 @@ export class CarouselItemComponent implements OnInit {
           this.imageInfoModel = userInfo?.photos;
           this.userInfo = userInfo;
           this.isDataLoaded = true;
-          this.isLoading = false;
           const pdf = new jsPDF('p', 'pt', 'a4');
           const personalInfo = this.userInfo?.personalInfo;
           const familyInfo = this.userInfo?.familyInfo;
@@ -202,7 +201,8 @@ export class CarouselItemComponent implements OnInit {
                 }
             }
           })
-          this.generatePdf(pageWidth, personalInfoData, familyInfoData, contactInfoData, otherInfoInfoData, images);
+         await this.generatePdf(pageWidth, personalInfoData, familyInfoData, contactInfoData, otherInfoInfoData, images);
+         this.isLoading = false;
         }
       },
       error: (error: any) => {
@@ -214,8 +214,13 @@ export class CarouselItemComponent implements OnInit {
     })
   }
 
-  exportPdf(customerId:any){
-       this.getUserDetails(customerId);
+  exportPdf(data:any,customerId:any){
+    this.customerId = customerId;
+    if(data?.imagePath1 && data.imagePath2){
+      this.getUserDetails(customerId);
+    }else{
+      this.alertService.setAlertMessage('Profile is not updated', AlertType.error);
+    }    
   }
 
   async generatePdf(pageWidth: any, personalInfoData: any, familyInfoData: any, contactInfoData: any, otherInfoInfoData: any, images: any) {
@@ -497,7 +502,8 @@ export class CarouselItemComponent implements OnInit {
 
   getProfilLink() {
     const domainName = DOMAIN.toLocaleLowerCase();
-    const link = `https://www.${domainName}.com/profiles/view/${this.customerId}`;
+    const origin = `${window.location.origin}`;
+    const link = `${origin}.com/profiles/view/${this.customerId}`;
     return link;
   }
 
