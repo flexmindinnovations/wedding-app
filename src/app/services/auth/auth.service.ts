@@ -13,7 +13,9 @@ export class AuthService {
   constructor() { }
 
   isLoggedIn() {
-    return !!localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const hasUserObj = user && typeof user === 'object' && Object.keys(user).length > 0;
+    return hasUserObj && !!localStorage.getItem('token');
   }
 
   loginCustomer(payload: any): Observable<any> {
@@ -21,7 +23,7 @@ export class AuthService {
   }
 
   getCustomerProfileById(userId: number): Observable<any> {
-    return this.http.get(`${this.endpoint}/GetCustomerById/${userId}`);
+    return this.http.get(`${this.endpoint}/GetCustomerById/${userId ?? 0}`);
   }
 
   getCustomerForPDFById(userId: number): Observable<any> {

@@ -122,11 +122,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     this.castService.getCastListById(religionId).subscribe({
       next: (response: any) => {
         if (response) {
-          // console.log('response: ', response);
-
-          const subCastList = response?.subCastList;
-          // console.log('subCastList: ', subCastList);
-
+         const subCastList = response?.subCastList;
           this.castList = subCastList.map((item: any) => {
             return {
               id: item?.subCastId,

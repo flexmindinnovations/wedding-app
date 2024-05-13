@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -17,6 +17,8 @@ import { SharedModule } from 'src/app/shared.module';
     SharedModule,
     ProfileViewPageRoutingModule
   ],
-  declarations: [ProfileViewPage]
+  exports: [ProfileViewPage],
+  declarations: [ProfileViewPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ProfileViewPageModule {}
+export class ProfileViewPageModule { }

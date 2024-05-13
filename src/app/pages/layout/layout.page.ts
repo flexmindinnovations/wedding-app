@@ -19,6 +19,8 @@ import { UserService } from 'src/app/services/user/user.service';
 import { MenuItem } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { environment } from 'src/environments/environment';
+import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
 
 @Component({
   selector: 'app-layout',
@@ -50,7 +52,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   store = inject(Store<{ saveData: any }>);
   storeData!: Observable<any>;
   notificationItems: any[] = [];
-  favoriteProfiles = [];
+  profileInterestList: any[] = [];
+  favouriteProfiles = [];
   dialogService = inject(DialogService);
 
   constructor() {
@@ -83,7 +86,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           label: 'Manage Favorite Profiles',
           icon: 'pi pi-heart',
           command: () => {
-            // this.router.navigateByUrl('profile/personal');
+            this.OpenLikedProfileModal();
           }
         },
         {
@@ -116,6 +119,12 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     });
 
     observer.observe(this.host.nativeElement);
+
+    this.sharedService.getFavouriteProfiles().subscribe((favouriteProfiles: any) => {
+      if (favouriteProfiles) {
+        this.favouriteProfiles = favouriteProfiles;
+      }
+    });
 
     this.sharedService.getIsLoggedInEvent().subscribe((completed: any) => {
       if (completed) {
@@ -162,35 +171,25 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   getUserDetails() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const profileDetails = this.authService.getCustomerProfileById(user?.user);
-    const favoriteList = this.userService.getFavouriteProfileList(user?.user);
+    if (user && typeof user === 'object' && Object.keys(user).length > 0) {
+      const profileDetails = this.authService.getCustomerProfileById(user?.user);
+      const favoriteList = this.userService.getFavouriteProfileList(user?.user);
+      const interestList = this.userService.getCustomerInterestList(user?.user);
 
-    forkJoin({ profileDetails, favoriteList }).subscribe({
-      next: (response) => {
-        if (response) {
-          const { profileDetails, favoriteList } = response;
-          if (profileDetails) {
-            this.setProfileDetails(profileDetails);
+      forkJoin({ profileDetails, favoriteList, interestList }).subscribe({
+        next: (response) => {
+          if (response) {
+            const { profileDetails, favoriteList, interestList } = response;
+            if (profileDetails) this.setProfileDetails(profileDetails);
+            if (favoriteList?.length) this.sharedService.setFavouriteProfiles.next(favoriteList);
+            if (interestList?.length) this.setProfileInterestList(interestList);
           }
-          if (favoriteList?.length) this.favoriteProfiles = favoriteList;
+        },
+        error: (error) => {
+          this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
         }
-      },
-      error: (error) => {
-
-      }
-    })
-
-    this.authService.getCustomerProfileById(user?.user).subscribe({
-      next: (response) => {
-        if (response) {
-
-        }
-      },
-      error: (error: any) => {
-        const err = error?.error;
-        const errorMessage = err.message ? err?.message : 'Something went wrong';
-      }
-    })
+      })
+    }
   }
 
   setProfileDetails(response: any) {
@@ -257,12 +256,27 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  setProfileInterestList(interestList: any[]) {
+    const profileInterests = interestList.map((item: any) => {
+      const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
+      const fullPath = `${environment.endpoint}/${imagePath}`;
+      const obj = {
+        customerId: item?.customerId,
+        fullName: item?.fullName,
+        image: fullPath
+      }
+      return obj;
+    });
+    this.profileInterestList = profileInterests;
+  }
+
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.sharedService.getRequestStatus().subscribe(isNavigate => {
       if (isNavigate) this.resetActiveClass();
     })
   }
+
   setActivePageOnRefresh() {
     const currentRoute = this.router.url;
     let activeRoute: any = currentRoute.lastIndexOf('/');
@@ -278,17 +292,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   navigateToPage(item: any) {
-    // if (item?.id === 6) {
-    //   const user = JSON.parse(localStorage.getItem('user') || '');
-    //   if (user) {
-    //     const route = item.route.replace('userId', user?.user);
-    //     this.router.navigateByUrl(route);
-    //   }
-    // } else {
     this.setActivePageById(item.id);
     this.navController.navigateForward(item.route);
     this.isLoginPage = false;
-    // }
   }
 
   setActivePageByRoute(param: string) {
@@ -324,8 +330,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleLogoLoadError(event: any) {
-    // console.log('event: ', event);
-
   }
 
   resetActiveClass() {
@@ -348,9 +352,13 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNotificationItemClick(item: any) {
-    // console.log('item: ', item);
     this.resetActiveClass();
     this.router.navigateByUrl(item?.route);
+  }
+
+  handleIntrestItemClick(item: any) {
+    this.resetActiveClass();
+    this.router.navigateByUrl(`profiles/view/${item?.customerId}`);
   }
   handleRegister() {
     this.dialogRef = this.dialogService.open(RegisterUserComponent, {
@@ -365,10 +373,31 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }
+
+  OpenLikedProfileModal() {
+    this.dialogRef = this.dialogService.open(LikedProfilesComponent, {
+      header: 'Manage Favourite Profiles',
+      styleClass: 'liked-profiles-modal',
+      closable: true,
+      width: this.isDesktopMode ? '80%' : '90%',
+      height: this.isDesktopMode ? '70%' : '80%',
+      maximizable: true,
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      data: this.favouriteProfiles,
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      if (afterClose) { }
+    });
+  }
+  
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
     this.screenWidth = window.innerWidth;

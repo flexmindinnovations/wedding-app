@@ -42,14 +42,18 @@
       </ion-button>
       } @else {
       <div class="protected-content flex items-center justify-start gap-3 ml-3">
+        @if (profileInterestList.length) {
+        <i [pTooltip]="'Profile interest list'" class="badge pi pi-heart-fill cursor-pointer"
+          (click)="profileInterestListPanel.toggle($event)" pBadge [value]="profileInterestList.length.toString()"></i>
+        }
         @if (notificationItems.length > 0) {
         <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
           [value]="notificationItems.length.toString()"></i>
         }
-        <p-menu #menu styleClass="profile-menu" [model]="profileItems" [popup]="true" appendTo="body" [autofocus]="false"></p-menu>
+        <p-menu #menu styleClass="profile-menu" [model]="profileItems" [popup]="true" appendTo="body"
+          [autofocus]="false"></p-menu>
         <p-avatar styleClass="user-avatar" (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
-          image="/assets/image/image-placeholder.png" styleClass="mr-2"
-          shape="circle"></p-avatar>
+          image="/assets/image/image-placeholder.png" styleClass="mr-2" shape="circle"></p-avatar>
       </div>
       }
     </ng-template>
@@ -93,6 +97,24 @@
         <p class="flex flex-row items-center justify-start gap-3">
           <i [ngClass]="item?.icon"></i>
           {{item?.text}}
+        </p>
+      </li>
+      }
+    </ul>
+  </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel #profileInterestListPanel appendTo="body">
+  <ng-template pTemplate="content">
+    <ul class="flex flex-col m-0">
+      @for (item of profileInterestList; track $index) {
+      <li (click)="handleIntrestItemClick(item); profileInterestListPanel.toggle($event)">
+        <p class="flex font-semibold flex-row items-center justify-start gap-3">
+          <p-avatar styleClass="mr-2" [image]="item?.image" shape="circle"></p-avatar>
+          <b>{{item?.fullName}}</b>
+        </p>
+        <p class="text-xs">
+          Have recently shown interest in your profile.
         </p>
       </li>
       }

@@ -32,7 +32,11 @@ export class UserService {
   }
 
   getFavouriteProfileList(customerId: any) {
-    return this.http.get(`${environment.endpoint}/api/CustomerLike/getLikedCustomerListByCustomerId`);
+    return this.http.get(`${environment.endpoint}/api/CustomerLike/getLikedCustomerListByCustomerId?CustomerId=${customerId}`);
+  }
+  
+  getCustomerInterestList(customerId: any) {
+    return this.http.get(`${environment.endpoint}/api/CustomerLike/getInterestCustomerListByCustomerId?CustomerId=${customerId}`);
   }
 
   getMatchedProfileList(payload: any, pageNumber = 1, totalCount = 0): Observable<any> {

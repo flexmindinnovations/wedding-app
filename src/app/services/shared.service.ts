@@ -40,6 +40,12 @@ export class SharedService {
   imagesSelected = new Subject();
   footerItemClickEvent = new Subject();
 
+  setFavouriteProfiles = new Subject();
+
+  getFavouriteProfiles(): Observable<any> {
+    return this.setFavouriteProfiles.asObservable();
+  }
+
   getImagesSelected(): Observable<any> {
     return this.imagesSelected.asObservable();
   }

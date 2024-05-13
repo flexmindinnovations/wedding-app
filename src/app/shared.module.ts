@@ -66,6 +66,8 @@ import { DividerModule } from 'primeng/divider';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ProfileViewPage } from './pages/profile-view/profile-view.page';
 import { PricingComponent } from './components/pricing/pricing.component';
+import { LikedProfilesComponent } from './modals/liked-profiles/liked-profiles.component';
+import { CardModule } from 'primeng/card';
 
 const components = [
   FormStepperComponent,
@@ -89,7 +91,8 @@ const components = [
   CardComponent,
   DataExportComponent,
   VideoPlayerComponent,
-  PricingComponent
+  PricingComponent,
+  LikedProfilesComponent,
 ]
 
 const modules: any = [
@@ -131,7 +134,8 @@ const modules: any = [
   // for Core use:
   LoadingBarModule,
   NgxParticlesModule,
-  NgxDocViewerModule
+  NgxDocViewerModule,
+  CardModule
 ];
 
 @NgModule({

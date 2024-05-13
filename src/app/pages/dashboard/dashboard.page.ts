@@ -104,15 +104,12 @@ export class DashboardPage implements OnInit {
   }
 
   handleOnScroll(event: any) {
-    // console.log('event scroll: ', event);
-
   }
 
   getRandomProfiles() {
     this.homeService.getRandomProfiles().subscribe({
       next: (response: any) => {
         if (response) {
-          // console.log('response: ', response[0]);
           const data = response.map((item: any) => {
             item['isDisplayed'] = false;
             return item;

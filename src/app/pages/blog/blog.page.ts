@@ -39,8 +39,6 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handlePopState() {
-    // console.log('handlePopState: ');
-
     this.getBlogList();
   }
 
