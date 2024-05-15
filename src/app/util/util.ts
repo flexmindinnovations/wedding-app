@@ -1,10 +1,11 @@
-import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle,faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle,faAddressBook, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { ClickEvent, MoveDirection, OutMode } from "@tsparticles/engine";
 
 const homeIcon = faHome;
 const blogIcon = faBlog;
 const calenderIcon = faCalendarDays;
-const contactIcon = faAddressBook
+const contactIcon = faAddressBook;
+const aboutIcon = faCircleInfo;
 
 export const SLIDE_INTERVAL = 4000;
 
@@ -38,12 +39,19 @@ export const tabItems = {
             "isActive": false,
             "icon": blogIcon
         },
+        // {
+        //     "id": 3,
+        //     "title": "Events",
+        //     "route": "events",
+        //     "isActive": false,
+        //     "icon": calenderIcon
+        // },
         {
             "id": 3,
-            "title": "Events",
-            "route": "events",
+            "title": "About",
+            "route": "about",
             "isActive": false,
-            "icon": calenderIcon
+            "icon": aboutIcon
         },
         {
             "id": 4,

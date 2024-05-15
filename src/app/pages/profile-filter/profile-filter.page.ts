@@ -46,6 +46,8 @@ export class ProfileFilterPage implements OnInit {
   isCountryListAvailable = false;
   isStateListAvailable = false;
   isCityListAvailable = false;
+  pageNumber = 1;
+  itemsPerPage = 20;
 
 
   sidebarVisible: boolean = false;
@@ -60,7 +62,9 @@ export class ProfileFilterPage implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private authService: AuthService
-  ) { }
+  ) { 
+    this.isMobile = this.deviceService.isMobile();
+  }
 
   ngOnInit() {
     this.initFormGroup();
@@ -87,7 +91,7 @@ export class ProfileFilterPage implements OnInit {
           this.searchCriteria = {
             gender: oppGender
           }
-          
+
           if (!this.isSearchFromQuery) {
             this.seachFilteredProfiles(this.searchCriteria);
             setTimeout(() => {
@@ -103,6 +107,14 @@ export class ProfileFilterPage implements OnInit {
         this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })
+  }
+
+  getFirstItemIndex(): number {
+    return (this.pageNumber - 1) * this.itemsPerPage + 1;
+  }
+
+  getLastItemIndex(): number {
+    return Math.min(this.pageNumber * this.itemsPerPage, this.totalCount);
   }
 
   getFilterGender(gender: string) {
@@ -133,7 +145,7 @@ export class ProfileFilterPage implements OnInit {
       cast: !['', [Validators.required]],
       subcast: ['', ![Validators.required]],
       motherTongue: ['', [Validators.required]],
-      maritalStatus:['', [Validators.required]],
+      maritalStatus: ['', [Validators.required]],
       countryId: ['', [Validators.required]],
       stateId: ['', [Validators.required]],
       cityId: ['', [Validators.required]],
@@ -165,17 +177,34 @@ export class ProfileFilterPage implements OnInit {
     this.seachFilteredProfiles(this.filteredQueryParams);
   }
 
+  handlePage(action: any) {
+    let queryParams = { ...this.filteredQueryParams };
+    switch (action) {
+      case 'next':
+        this.pageNumber += 1;
+        break;
+      case 'prev':
+        if (this.pageNumber > 1) this.pageNumber--;
+        else this.pageNumber = 1;
+        break;
+    }
+    queryParams = { ...queryParams, pageNumber: this.pageNumber, totalCount: this.totalCount };
+    this.seachFilteredProfiles(queryParams);
+  }
+
   seachFilteredProfiles(queryParams: any) {
     const isLogged = this.authService.isLoggedIn();
     if (Object.keys(queryParams).length > 0) {
       if (isLogged) {
-        const pageNumber = 1;
+        const pageNumber = this.pageNumber;
+        queryParams = { ...queryParams, pageNumber, totalCount: this.totalCount ?? 0 }
+        this.filteredProfileList = [];
         this.userService.getPaidFilteredProfileList(queryParams).subscribe({
           next: (response) => {
             if (response) {
-              // const { customerList, totalCount } = response;
-              this.filteredProfileList = response;
-              // this.totalCount = totalCount;
+              const { customerList, totalCount } = response;
+              this.filteredProfileList = customerList;
+              this.totalCount = totalCount;
               this.isLoading = false;
             }
           },
@@ -227,14 +256,14 @@ export class ProfileFilterPage implements OnInit {
         this.isReligionSelected = true;
         this.getCastList(event?.id);
         break;
-        case 'maritalStatus':
+      case 'maritalStatus':
         break;
-        case 'countryId':
-          this.getStateByCountry(event?.id);
-          break;
-        case 'stateId':
-          this.getCityByState(event?.id);
-          break;
+      case 'countryId':
+        this.getStateByCountry(event?.id);
+        break;
+      case 'stateId':
+        this.getCityByState(event?.id);
+        break;
     }
   }
 

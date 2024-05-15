@@ -1,13 +1,14 @@
 <ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
-  <p-toolbar>
+  <p-toolbar styleClass="tBar">
     <div class="p-toolbar-group-start">
-      <p-button *ngIf="isMobile" (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
+      <p-button  styleClass="navButton" *ngIf="isMobile" (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
         class="flex md:lg:xl:hidden"></p-button>
+        <h3 class="m-0">
+          Profile Information
+        </h3>
     </div>
     <div class="p-toolbar-group-center">
-      <h3 class="m-0">
-        Profile Information
-      </h3>
+  
     </div>
     <div class="p-toolbar-group-end">
       <mt-button title="Export Data" icon="pi pi-file-export" (action)="handleExportAction()"></mt-button>

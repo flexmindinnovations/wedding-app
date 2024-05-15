@@ -30,6 +30,34 @@
     @apply py-2 px-5;
 }
 
+::ng-deep .tBar {
+    @apply flex items-center justify-between;
+  }
+  
+  ::ng-deep .p-toolbar-group-start {
+    @apply flex items-center justify-start gap-3 w-full lg:xl:w-auto min-w-[50vw]  lg:xl:min-w-16;
+  
+    p-button {
+      @apply w-8 p-0;
+    }
+  }
+  ::ng-deep .p-toolbar-group-center {
+    @apply flex items-center justify-center w-full lg:xl:w-auto;
+  }
+  ::ng-deep .p-toolbar-group-end {
+    @apply flex items-center justify-end w-full lg:xl:w-auto min-w-[40vw];
+    p {
+      @apply text-xs lg:xl:text-base;
+    }
+  }
+
+::ng-deep .navButton {
+    @apply bg-none flex items-center justify-start p-0 w-full;
+  
+    .pi-bars {
+      @apply text-xl;
+    }
+  }
 
 @media screen and (max-width: 768px) {
     ::ng-deep .p-splitter.p-splitter-horizontal > div:first-child {

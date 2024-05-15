@@ -4,6 +4,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DOMAIN } from 'src/app/util/theme';
 
 @Component({
   selector: 'app-more',
@@ -12,16 +13,17 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class MorePage implements OnInit, AfterViewInit {
   loginIcon: IconProp = faRightFromBracket;
+  domain = DOMAIN;
   router = inject(NavController);
   authService = inject(AuthService);
   isLoggedIn: boolean = false;
   userId: any;
   listItems = [
-    {
-      title: 'About',
-      icon: 'information-circle-outline',
-      route: '/about'
-    },
+    // {
+    //   title: 'About',
+    //   icon: 'information-circle-outline',
+    //   route: '/about'
+    // },
     {
       title: 'Contact Us',
       icon: 'mail-outline',

@@ -1,4 +1,4 @@
-<ion-header *ngIf="isMobile" [translucent]="true" class="ion-no-border">
+<ion-header *ngIf="isMobile" [translucent]="true" class="md:lg:2xl:hidden ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button icon="arrow-back-outline"></ion-back-button>
@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <div class="content flex flex-col h-full w-full">
+  <div class="content flex flex-col relative w-screen">
     <section class="_register flex-grow">
       <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10 mx-auto">
         <div class="cta_register flex flex-col items-start justify-between gap-4 max-w-2xl md:max-w-2xl mx-auto">

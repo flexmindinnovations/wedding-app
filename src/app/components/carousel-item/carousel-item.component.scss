@@ -56,10 +56,11 @@ p {
 }
 
 .mobile {
+    @apply max-h-60;
     .item-container {
 
         .image-container {
-            @apply max-w-32 min-h-32 h-full p-2;
+            @apply max-w-32 min-h-32 max-h-40 h-full p-2;
 
             img {
                 @apply rounded-t-md w-full h-full;

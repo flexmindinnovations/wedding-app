@@ -1,48 +1,81 @@
 ::ng-deep .p-splitter-horizontal {
-    @apply h-full;
+  @apply h-full;
 }
 
 ::ng-deep .p-toolbar {
-    @apply md:gap-0;
+  @apply md:gap-0;
 }
 
 .mainContainer {
-    overflow: auto;
-    position: relative;
-    display: grid;
-    grid-gap: 1rem;
-  }
-  
-  @media screen and (min-width: 420px) {
-    .mainContainer {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media screen and (min-width: 768px) {
- 
-    .mainContainer {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media screen and (min-width: 1024px) {
-    .mainContainer {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
+  overflow: auto;
+  position: relative;
+  display: grid;
+  grid-gap: 1rem;
+}
 
-  @media screen and (max-width: 576px) {
-    ::ng-deep .p-toolbar {
-        @apply flex-nowrap gap-0 justify-start;
-         h3 {
-            font-size: 17px;
-        }
+@media screen and (min-width: 420px) {
+  .mainContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 768px) {
+
+  .mainContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .mainContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  ::ng-deep .p-toolbar {
+    @apply flex-nowrap gap-0 justify-start;
+
+    h3 {
+      font-size: 17px;
     }
+  }
 }
 
 @media screen and (max-width: 1023px) {
-     ::ng-deep .p-splitter.p-splitter-horizontal > div:first-child {
-      display: none;
+  ::ng-deep .p-splitter.p-splitter-horizontal>div:first-child {
+    display: none;
+  }
+}
+
+::ng-deep .tBar {
+  @apply flex items-center justify-between;
+}
+
+::ng-deep .p-toolbar-group-start {
+  @apply flex items-center justify-start gap-3 w-full lg:xl:w-auto min-w-[50vw] lg:xl:min-w-16;
+
+  p-button {
+    @apply w-8 p-0;
+  }
+}
+
+::ng-deep .p-toolbar-group-center {
+  @apply flex items-center justify-center w-full lg:xl:w-auto;
+}
+
+::ng-deep .p-toolbar-group-end {
+  @apply flex items-center justify-end w-full lg:xl:w-auto min-w-[30vw];
+
+  p {
+    @apply text-xs lg:xl:text-base;
+  }
+}
+
+::ng-deep .navButton {
+  @apply bg-none flex items-center justify-start p-0 w-full;
+
+  .pi-bars {
+    @apply text-xl;
   }
 }

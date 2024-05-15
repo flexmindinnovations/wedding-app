@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { fadeIn, fadeOut, scaleIn, scaleOut, slideLeft, slideRight } from 'src/app/animations/carousel.animation';
@@ -55,6 +55,7 @@ export class CarouselItemComponent implements OnInit {
   otherInfoModel: any;
   imageInfoModel: any;
   customerId :any;
+  public screenWidth: any;
   
   constructor(
     private router: Router,
@@ -63,7 +64,9 @@ export class CarouselItemComponent implements OnInit {
     private alertService: AlertService,
     public dialogService: DialogService,
     private sharedService: SharedService
-  ) { }
+  ) { 
+    this.onResize();
+  }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -542,6 +545,19 @@ export class CarouselItemComponent implements OnInit {
       }
     }
     return convertedList;
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
+
   }
 }
 

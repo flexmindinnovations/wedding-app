@@ -195,7 +195,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     formVal['spectacles'] = this.spectacles;
     formVal['isPatrika'] = this.showPatrika;
     formVal['isPhysicallyAbled'] = this.isPhysicallyAbled;
-    formVal['timeOfBirth'] = moment(formVal['timeOfBirth']).format();
+    formVal['timeOfBirth'] = formVal['timeOfBirth'] ? moment(formVal['timeOfBirth']).format() : '';
     if (this.formGroup.valid) {
       if (this.isEditMode) this.updateCustomerInfo(formVal, src)
       else this.saveNewCustomerInfo(formVal, src)

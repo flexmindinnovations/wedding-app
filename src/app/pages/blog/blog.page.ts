@@ -19,7 +19,7 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
   deviceDetector = inject(DeviceDetectorService);
   sharedService = inject(SharedService);
   blogList: any[] = [];
-
+  isMobile: boolean = false;
   domain = DOMAIN;
 
   subs: Subscription[] = [];

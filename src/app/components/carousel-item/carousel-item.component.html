@@ -86,7 +86,7 @@
 
 <ng-container>
   <p-dialog #sessionExpired [header]="'Sign in Required'" [(visible)]="showLoginDialog" appendTo="body" [modal]="true"
-    [closable]="false" [style]="{ width: '33vw' }" [draggable]="false" [resizable]="false">
+    [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-4">
       <p class="select-none">
         To perform this action, please sign in and add this profile to your favorites. Would you like to login?
