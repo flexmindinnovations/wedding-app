@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { DOMAIN } from 'src/app/util/theme';
 
 @Component({
   selector: 'app-contact',
@@ -10,6 +11,7 @@ export class ContactPage implements OnInit {
   deviceService = inject(DeviceDetectorService);
   isMobile: boolean = false;
   isDesktop: boolean = true;
+  domain = DOMAIN;
   host = inject(ElementRef);
   constructor() { }
   ngOnInit(): void {
