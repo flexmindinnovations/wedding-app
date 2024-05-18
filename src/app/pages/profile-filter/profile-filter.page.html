@@ -72,13 +72,22 @@
                   (onSelectionChange)="onSelectionChange($event, 'cityId')" [options]="cityList" />
                 }
 
-                <app-dropdown label="Religion" [showClear]="true" labelColor="text-white"
-                  [control]="formGroupControl['cast']" formControlName="cast" [showClear]="true"
-                  (onSelectionChange)="onSelectionChange($event, 'castId')" [options]="religionList" class="w-full" />
-
-                @if (isReligionSelected && castList.length) {
-                <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
-                  (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="w-full" />
+                @if (religionListOptions.length) {
+                  <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
+                    (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" class="w-full"/>
+                  }
+          
+                  @if (castListOptions.length) {
+                  <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+                     (onSelectionChange)="onSelectionChange($event, 'cast')"
+                    [options]="castListOptions" class="w-full" />
+                  }
+          
+                  @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+                  <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']"
+                     formControlName="subCast"
+                    (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
+                    class="w-full" />
                 }
                 <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
                   formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
@@ -176,15 +185,23 @@
             [options]="cityList" />
           }
 
-          <app-dropdown label="Religion" [showClear]="true" labelColor="text-white" [control]="formGroupControl['cast']"
-            formControlName="cast" [showClear]="true" (onSelectionChange)="onSelectionChange($event, 'castId')"
-            [options]="religionList" class="w-full" />
-
-          @if (isReligionSelected && castList.length) {
-          <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
-            (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="w-full" />
+          @if (religionListOptions.length) {
+            <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId" class="w-full"
+              (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
+            }
+    
+            @if (castListOptions.length) {
+            <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId" class="w-full"
+               (onSelectionChange)="onSelectionChange($event, 'castId')"
+              [options]="castListOptions" />
+            }
+    
+            @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+            <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']"
+               formControlName="subCastId"
+              (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions"
+              class="w-full" />
           }
-
 
           <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
             formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -48,7 +48,14 @@ export class ProfileFilterPage implements OnInit {
   isCityListAvailable = false;
   pageNumber = 1;
   itemsPerPage = 20;
-
+  castListOptions: any[] = [];
+  subCastListOptions: any[] = [];
+  hasSubCast: boolean = false;
+  subCastId: boolean = false;
+  religionId: any;
+  isSubCastDataAvailable: boolean = false;
+  religionListOptions: any[] = [];
+  cdref = inject(ChangeDetectorRef);
 
   sidebarVisible: boolean = false;
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
@@ -62,7 +69,7 @@ export class ProfileFilterPage implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private authService: AuthService
-  ) { 
+  ) {
     this.isMobile = this.deviceService.isMobile();
   }
 
@@ -91,7 +98,6 @@ export class ProfileFilterPage implements OnInit {
           this.searchCriteria = {
             gender: oppGender
           }
-
           if (!this.isSearchFromQuery) {
             this.seachFilteredProfiles(this.searchCriteria);
             setTimeout(() => {
@@ -134,6 +140,11 @@ export class ProfileFilterPage implements OnInit {
         }, {}
         );
       this.searchCriteria = filteredQueryParams;
+        if (this.searchCriteria && Object.keys(this.searchCriteria).length > 0) {
+          this.formGroup.patchValue(this.searchCriteria);
+          this.cdref.detectChanges();
+        }
+      this.seachFilteredProfiles(this.searchCriteria);
     })
   }
 
@@ -142,8 +153,9 @@ export class ProfileFilterPage implements OnInit {
       gender: ['', [Validators.required]],
       fromAge: ['', [Validators.required]],
       toAge: ['', [Validators.required]],
-      cast: !['', [Validators.required]],
-      subcast: ['', ![Validators.required]],
+      religionId: ['', [Validators.required]],
+      cast: ['', [Validators.required]],
+      subCast: ['', [Validators.required]],
       motherTongue: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       countryId: ['', [Validators.required]],
@@ -252,9 +264,20 @@ export class ProfileFilterPage implements OnInit {
 
   onSelectionChange(event: any, src: string) {
     switch (src) {
-      case 'castId':
-        this.isReligionSelected = true;
-        this.getCastList(event?.id);
+      case 'religionId':
+        this.castListOptions = [];
+        this.subCastListOptions = [];
+        this.religionId = event?.id;
+        this.getCastListReligionId(event?.id)
+        break;
+      case 'cast':
+        this.subCastListOptions = [];
+        this.hasSubCast = event?.hasSubcast;
+        if (this.hasSubCast) this.getSubCastList(event?.id);
+        break;
+      case 'subCast':
+        const subCastId = event?.id;
+        this.subCastId = subCastId;
         break;
       case 'maritalStatus':
         break;
@@ -272,14 +295,14 @@ export class ProfileFilterPage implements OnInit {
   }
 
   getMasterData() {
-    const religionList = this.castService.getReligionList();
+    const religionListOptions = this.castService.getReligionList();
     const motherToungeList = this.sharedService.getMotherToungeList();
-    forkJoin({ religionList, motherToungeList }).subscribe({
+    forkJoin({ religionListOptions, motherToungeList }).subscribe({
       next: (response: any) => {
         if (response) {
-          const { religionList, motherToungeList } = response;
-          this.religionList = religionList;
-          this.religionList = religionList.map((item: any) => {
+          const { religionListOptions, motherToungeList } = response;
+          this.religionListOptions = religionListOptions;
+          this.religionListOptions = religionListOptions.map((item: any) => {
             return {
               id: item?.religionId,
               title: item?.religionName
@@ -302,23 +325,39 @@ export class ProfileFilterPage implements OnInit {
     })
   }
 
-  getCastList(religionId: number) {
-    this.castService.getCastListById(religionId).subscribe({
+  getCastListReligionId(religionId: any) {
+    this.castService.getCastListByReligionId(religionId).subscribe({
       next: (response: any) => {
         if (response) {
-          const subCastList = response?.subCastList;
-          this.castList = subCastList.map((item: any) => {
+          this.castListOptions = response.map((item: any) => {
+            return {
+              id: item?.castId,
+              title: item?.castName,
+              hasSubcast: item?.hasSubcast
+            }
+          })
+        }
+      },
+      error: (error) => { }
+    })
+  }
+
+  getSubCastList(castId: number) {
+    this.subCastListOptions = [];
+    this.isSubCastDataAvailable = false;
+    this.castService.getSubCastListByCast(castId).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.subCastListOptions = response.map((item: any) => {
             return {
               id: item?.subCastId,
               title: item?.subCastName
             }
-          });
+          })
+          this.isSubCastDataAvailable = true;
         }
-
       },
-      error: (error: any) => {
-        this.isError = true;
-      }
+      error: (error) => { }
     })
   }
   getCountryList() {
