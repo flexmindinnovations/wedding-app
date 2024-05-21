@@ -31,7 +31,7 @@ export class ProfileViewPage implements OnInit {
   isLoading: boolean = false;
   isDataLoaded: boolean = false;
   isLoggedIn = false;
-
+  headerColor: string = '#ff646b';
   imageUrlPrefix = environment.endpoint;
   userInfo: any;
   personalInfoModel: any;
@@ -55,11 +55,13 @@ export class ProfileViewPage implements OnInit {
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
     if (this.customerId) this.getUserDetails(this.customerId);
-    this.activatedRoute.params.subscribe((params: any) => {
-      const userId = params['id'];
-      this.userId = userId;
-      this.getUserDetails(userId);
-    })
+    else {
+      this.activatedRoute.params.subscribe((params: any) => {
+        const userId = params['id'];
+        this.userId = userId;
+        this.getUserDetails(userId);
+      })
+    }
   }
 
   getUserDetails(userId: any) {
@@ -193,7 +195,8 @@ export class ProfileViewPage implements OnInit {
                   [
                     {
                       text: 'Bio Data',
-                      fillColor: '#f9fafb',
+                      fillColor: this.headerColor,
+                      color: '#fff',
                       fontSize: 18,
                       bold: true,
                       margin: [10, 10, 10, 10]
@@ -206,22 +209,83 @@ export class ProfileViewPage implements OnInit {
           ]
         },
         {
-          text: 'Personal Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Personal Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
             headerRows: 0,
-            heights: 18,
+            heights: 16,
             body: personalInfoData,
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Family Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Family Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -231,11 +295,51 @@ export class ProfileViewPage implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Conact Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Conact Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -245,11 +349,51 @@ export class ProfileViewPage implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Other Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Other Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -259,11 +403,51 @@ export class ProfileViewPage implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Photos',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Photos',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -322,8 +506,27 @@ export class ProfileViewPage implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders',
-          columnGap: 20
+          columnGap: 20,
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
       ],
       styles: {
@@ -331,11 +534,13 @@ export class ProfileViewPage implements OnInit {
           fontSize: 12,
           margin: [0, 10, 0, 10],
           bold: true,
+          fillColor: 'black',
+          color: '#fff'
         },
         row: {
           fontSize: 10,
           alignment: 'left',
-          margin: [0, 5, 0, 5],
+          margin: 0,
           leadingIndent: 15,
         },
         profilelink: {
@@ -403,12 +608,13 @@ export class ProfileViewPage implements OnInit {
   }
 
   parseTimeString(timeString: any) {
-    const d = new Date();
-    if (timeString) {
+    let d: any = new Date();
+    const isValidDate = timeString == 'Invalid date' ? false : true;
+    if (timeString && isValidDate) {
       const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
       d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
       d.setMinutes(parseInt(time[2]) || 0);
-    }
+    } else d = '';
     return d;
   }
 

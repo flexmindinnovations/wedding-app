@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared.module';
 import { StoreModule } from '@ngrx/store';
 import { dataReducer } from './store.reducer';
+import { DOMAIN } from './util/theme';
 
 @NgModule({
   declarations: [AppComponent],

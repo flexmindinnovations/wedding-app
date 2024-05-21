@@ -68,6 +68,8 @@ export class CarouselItemComponent implements OnInit {
         }
       })
     } else {
+      const { customerId } = this.data;
+      sessionStorage.setItem('inquiry', customerId);
       this.showLoginDialog = true;
     }
   }
@@ -105,6 +107,8 @@ export class CarouselItemComponent implements OnInit {
         maximizable: true
       })
     } else {
+      const { customerId } = this.data;
+      sessionStorage.setItem('inquiry', customerId);
       this.showLoginDialog = true;
     }
   }
@@ -112,7 +116,11 @@ export class CarouselItemComponent implements OnInit {
   handleButtonClick(src?: string) {
     this.showLoginDialog = false;
     setTimeout(() => {
-      if (src == 'login') this.router.navigateByUrl('login');
+      if (src == 'login') {
+        this.router.navigateByUrl('login');
+      } else {
+        sessionStorage.removeItem('inquiry');
+      }
     }, 300);
   }
 

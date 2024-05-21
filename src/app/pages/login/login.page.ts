@@ -101,7 +101,10 @@ export class LoginPage implements OnInit {
                 ).subscribe(() => {
                   this.messageService.clear();
                   this.router.navigateForward('');
-                  this.sharedService.isLoggedInCompleted.next(true);
+                  sessionStorage.setItem('isLoggedInCompleted', 'true');
+                  setTimeout(() => {
+                    this.sharedService.isLoggedInCompleted.next(true);
+                  }, 500);
                 });
             });
         }

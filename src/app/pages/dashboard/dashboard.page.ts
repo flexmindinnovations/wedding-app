@@ -86,15 +86,29 @@ export class DashboardPage implements OnInit {
     if (futurDate.diff(currentDate, 'days') > 0) {
       this.showLaunchOfferBanner = false;
     }
-   
-    // this.sharedService.getIsLoggedInEvent().subscribe((completed: any) => {
-    //   if (completed) {
-    //   const user = JSON.parse(localStorage.getItem('user') || '{}');
-    //   if(user.profileStatus === 'InComplete'){
-    //   this.router.navigateByUrl('profile/personal');
-    //   }
-    //   }
-    // })
+
+    window.addEventListener('load', () => {
+      const pendingInquery: any = sessionStorage.getItem('inquiry');
+      if (pendingInquery && pendingInquery > 0) {
+        this.router.navigateByUrl(`profiles/view/${pendingInquery}`);
+        setTimeout(() => {
+          sessionStorage.removeItem('inquiry');
+          sessionStorage.removeItem('isLoggedInCompleted');
+        }, 1000);
+      } else {
+        const isLoggedInCompleted: any = sessionStorage.getItem('isLoggedInCompleted');
+        if (isLoggedInCompleted) {
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          if (user.profileStatus === 'InComplete') {
+            this.router.navigateByUrl('profile/personal');
+          }
+          setTimeout(() => {
+            sessionStorage.removeItem('isLoggedInCompleted');
+            sessionStorage.removeItem('inquiry');
+          }, 1000);
+        }
+      }
+    });
   }
 
   handleOnLoadData(event: any) {

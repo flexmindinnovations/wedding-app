@@ -21,6 +21,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { environment } from 'src/environments/environment';
 import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
+import { DOMAIN } from 'src/app/util/theme';
 
 @Component({
   selector: 'app-layout',
@@ -29,6 +30,25 @@ import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-prof
 })
 export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   tabs = tabItems.displayed;
+  isDesktopMode: boolean = false;
+  showLogoutModal = false;
+  showSessionExpiredDialog = false;
+  dialogRef: DynamicDialogRef | undefined;
+  menuItems = MENU_ITEMS;
+  loginIcon: IconProp = faGem;
+  registerIcon: IconProp = faUserPlus;
+  public screenWidth: any;
+  storeData!: Observable<any>;
+  notificationItems: any[] = [];
+  profileInterestList: any[] = [];
+  favouriteProfiles = [];
+  USER_TABLE = 'userDetails';
+
+  isLoginPage: boolean = false;
+  isLoggedIn: boolean = false;
+
+  store = inject(Store<{ saveData: any }>);
+  dialogService = inject(DialogService);
   router = inject(Router);
   navController = inject(NavController);
   cdr = inject(ChangeDetectorRef);
@@ -39,24 +59,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   userService = inject(UserService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
-  isDesktopMode: boolean = false;
-  showLogoutModal = false;
-  showSessionExpiredDialog = false;
-  dialogRef: DynamicDialogRef | undefined;
-  menuItems = MENU_ITEMS;
-  loginIcon: IconProp = faGem;
-  registerIcon: IconProp = faUserPlus;
-  isLoginPage: boolean = false;
-  isLoggedIn: boolean = false;
-  public screenWidth: any;
-  store = inject(Store<{ saveData: any }>);
-  storeData!: Observable<any>;
-  notificationItems: any[] = [];
-  profileInterestList: any[] = [];
-  favouriteProfiles = [];
-  dialogService = inject(DialogService);
 
-  constructor() {
+  constructor(
+  ) {
     this.onResize();
   }
 
@@ -142,11 +147,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
     window.onload = (event: any) => {
       AOS.refresh();
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (user.profileStatus === 'InComplete') {
-        this.router.navigateByUrl('profile/personal');
-      }
-      if (this.authService.isLoggedIn()) this.getUserDetails();
+      // if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
     this.sharedService.isUnAuthorizedRequest.subscribe((isUnAuthorizedRequest: any) => {
@@ -396,7 +397,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       if (afterClose) { }
     });
   }
-  
+
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
     this.screenWidth = window.innerWidth;
