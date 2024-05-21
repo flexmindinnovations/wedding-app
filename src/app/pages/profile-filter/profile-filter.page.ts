@@ -316,7 +316,7 @@ export class ProfileFilterPage implements OnInit {
           });
           this.isDataAvailable = true;
           this.isLoading = false;
-          this.getCustomerDetails()
+          if(this.authService.isLoggedIn()) this.getCustomerDetails();
         }
       },
       error: (error: any) => {

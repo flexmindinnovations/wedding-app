@@ -42,6 +42,7 @@ export class CarouselItemComponent implements OnInit {
   @Input() data: any;
   isFavourite: boolean = false;
   imagePath: any = '';
+  headerColor: string = '#ff646b';
   showLoginDialog = false;
   dialogRef: DynamicDialogRef | undefined;
   isLoggedIn = false;
@@ -251,6 +252,7 @@ export class CarouselItemComponent implements OnInit {
     }    
   }
 
+ 
   async generatePdf(pageWidth: any, personalInfoData: any, familyInfoData: any, contactInfoData: any, otherInfoInfoData: any, images: any) {
     const logoImageSrc = `${window.location.origin}/assets/icon/logo.png`;
     const doc: TDocumentDefinitions = {
@@ -276,7 +278,8 @@ export class CarouselItemComponent implements OnInit {
                   [
                     {
                       text: 'Bio Data',
-                      fillColor: '#f9fafb',
+                      fillColor: this.headerColor,
+                      color: '#fff',
                       fontSize: 18,
                       bold: true,
                       margin: [10, 10, 10, 10]
@@ -289,22 +292,83 @@ export class CarouselItemComponent implements OnInit {
           ]
         },
         {
-          text: 'Personal Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Personal Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
             headerRows: 0,
-            heights: 18,
+            heights: 16,
             body: personalInfoData,
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Family Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Family Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -314,11 +378,51 @@ export class CarouselItemComponent implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Conact Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Conact Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -328,11 +432,51 @@ export class CarouselItemComponent implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Other Information',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Other Information',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -342,11 +486,51 @@ export class CarouselItemComponent implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders'
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0 || i === node.table.body.length) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
         {
-          text: 'Photos',
-          style: 'subheader'
+          columns: [
+            {
+              width: '*',
+              alignment: 'left',
+              margin: 0,
+              table: {
+                widths: '*',
+                body: [
+                  [
+                    {
+                      text: 'Photos',
+                      fillColor: this.headerColor,
+                      color: '#fff',
+                      fontSize: 12,
+                      bold: true,
+                      margin: 5
+                    }
+                  ],
+                ],
+              },
+              layout: 'noBorders',
+            },
+          ]
         },
         {
           table: {
@@ -405,8 +589,27 @@ export class CarouselItemComponent implements OnInit {
             widths: '*',
           },
           style: 'row',
-          layout: 'noBorders',
-          columnGap: 20
+          columnGap: 20,
+          layout: {
+            hLineWidth: function (i, node: any) {
+              if (i === 0) {
+                return 0;
+              }
+              return (i === node.table.headerRows) ? 2 : 1;
+            },
+            vLineWidth: function (i) {
+              return 1;
+            },
+            hLineColor: function (i) {
+              return '#ddd';
+            },
+            vLineColor: function (i) {
+              return '#ddd';
+            },
+            paddingTop: function (i) {
+              return 8;
+            },
+          }
         },
       ],
       styles: {
@@ -414,11 +617,13 @@ export class CarouselItemComponent implements OnInit {
           fontSize: 12,
           margin: [0, 10, 0, 10],
           bold: true,
+          fillColor: 'black',
+          color: '#fff'
         },
         row: {
           fontSize: 10,
           alignment: 'left',
-          margin: [0, 5, 0, 5],
+          margin: 0,
           leadingIndent: 15,
         },
         profilelink: {
@@ -432,13 +637,14 @@ export class CarouselItemComponent implements OnInit {
     const timestamp = +new Date();
     let fileName = timestamp.toString() + '_' + `${DOMAIN}_Profile.pdf`;
     if (fullName) {
-      fullName = this.personalInfoModel?.fullName?.replace(/\s/g, '_') + '.pdf';
-      fileName = fullName ? fullName + '_' + timestamp.toString() : `${DOMAIN}_Profile.pdf`;
+      fullName = this.personalInfoModel?.fullName?.replace(/\s/g, '_');
+      fileName = fullName ? fullName + '_' + timestamp.toString()+ '.pdf' : `${DOMAIN}_Profile.pdf`;
     }
     // pdfMake.createPdf(doc).open();
     pdfMake.createPdf(doc).download(fileName);
     this.isLoading = false;
   }
+
 
   buildTableBody(data: any) {
     var body: any = [];
