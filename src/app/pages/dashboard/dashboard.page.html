@@ -62,7 +62,7 @@
           <div class="member-list-container flex items-center justify-center p-2">
             @if (profileList.length) {
             <div
-              class="profiles-wrapper grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-8 gap-y-4 gap-x-0 lg:gap-y-4 xl:gap-y-4 lg:gap-x-4 xl:gap-x-4">
+              class="profiles-wrapper grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-8 gap-y-4 gap-x-0 lg:gap-y-4 xl:gap-y-4 lg:gap-x-4 xl:gap-x-4 w-full md:w-[80%]">
               @for (item of profileList; track $index) {
               <div class="col-span-2">
                 <carousel-item class="flex h-full" [data]="item" />
@@ -88,7 +88,7 @@
               About Us
             </p>
             <h1 class="h1-gradient">
-              Welcome to {{domain}} Matrimony
+              Welcome to {{domain}} Matrimonial Services
             </h1>
             <p>
               Marriage, also known as matrimony or wedlock, is like a special bond that ties two people together.
@@ -113,8 +113,10 @@
                 <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
               </li>
             </ol>
-
+            <div
+            class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
             <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+            </div>
           </div>
           <div class="content -z-[10] flex-grow md:w-full h-[inherit]">
             <div class="bars">

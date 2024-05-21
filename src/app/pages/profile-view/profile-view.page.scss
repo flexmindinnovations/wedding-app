@@ -1,8 +1,4 @@
 @media screen and (max-width: 640px) {
-    .firstElement{
-        padding: 8px 20px;
-        display: none;
-    }
     .itemContent{
         flex-direction: row;
         justify-content: flex-start;
@@ -14,5 +10,13 @@
     .itemImage{
         flex-direction: column;
         justify-content: unset;
+    }
+}
+@media screen and (max-width: 576px) {
+    ::ng-deep .p-toolbar {
+        @apply flex-nowrap gap-0;
+         h3 {
+            font-size: 17px;
+        }
     }
 }

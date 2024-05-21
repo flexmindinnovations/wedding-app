@@ -65,7 +65,7 @@
 
 <ng-container>
   <p-dialog [(visible)]="showLogoutModal" appendTo="body" [modal]="true" [closable]="false" [style]="getDialogStyle()"
-    [draggable]="false">
+    [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-3">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       <p>
@@ -75,7 +75,7 @@
   </p-dialog>
 </ng-container>
 
-<ng-container>
+<!-- <ng-container>
   <p-dialog #sessionExpired [header]="'Session Expired'" [(visible)]="showSessionExpiredDialog" appendTo="body"
     [modal]="true" [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-4">
@@ -87,7 +87,7 @@
       </div>
     </div>
   </p-dialog>
-</ng-container>
+</ng-container> -->
 
 <p-overlayPanel #notificationPanel appendTo="body">
   <ng-template pTemplate="content">
@@ -108,7 +108,7 @@
   <ng-template pTemplate="content">
     <ul class="flex flex-col m-0">
       @for (item of profileInterestList; track $index) {
-      <li (click)="handleNotificationItemClick(item); profileInterestListPanel.toggle($event)">
+      <li (click)="handleIntrestItemClick(item); profileInterestListPanel.toggle($event)">
         <p class="flex font-semibold flex-row items-center justify-start gap-3">
           <p-avatar styleClass="mr-2" [image]="item?.image" shape="circle"></p-avatar>
           <b>{{item?.fullName}}</b>

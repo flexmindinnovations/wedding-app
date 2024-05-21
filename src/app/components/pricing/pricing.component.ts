@@ -72,13 +72,11 @@ export class PricingComponent implements OnInit {
       })
 
       this.dialogRef.onClose.subscribe((afterClose: any) => {
-        // console.log('afterClose: ', afterClose);
         if (afterClose) { }
       });
     } else {
 
     }
-    // console.log('plan: ', plan);
 
   }
 

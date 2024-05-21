@@ -36,6 +36,8 @@
       <p>#{{data?.customerId}}</p>
       <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
         [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+        <span *ngIf="isLoggedIn" class="cursor-pointer  text-blue-600" (click)="exportPdf(data,data?.customerId)"
+        [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
     </div>
   </div>
 </div>
@@ -75,6 +77,8 @@
         <p>#{{data?.customerId}}</p>
         <span class="cursor-pointer text-red-700 !text-lg" (click)="handleIsFavourite()"
           [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+            <span *ngIf="isLoggedIn" class="cursor-cycle  text-blue-600" (click)="exportPdf(data,data?.customerId)"
+            [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
       </div>
     </div>
   </div>
@@ -82,7 +86,7 @@
 
 <ng-container>
   <p-dialog #sessionExpired [header]="'Sign in Required'" [(visible)]="showLoginDialog" appendTo="body" [modal]="true"
-    [closable]="false" [style]="{ width: '33vw' }" [draggable]="false" [resizable]="false">
+    [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
     <div class="flex flex-col items-center justify-center h-full w-full gap-4">
       <p class="select-none">
         To perform this action, please sign in and add this profile to your favorites. Would you like to login?

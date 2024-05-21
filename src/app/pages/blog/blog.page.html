@@ -1,3 +1,12 @@
+<ion-header *ngIf="isMobile" [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Blogs</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
 <div class="content-wrapper flex-grow bg-white dark:bg-dark-900 overflow-auto">
   <section class="static bg-bg-blog min-h-80 bg-center object-cover bg-cover bg-no-repeat">
     <div
@@ -9,7 +18,7 @@
           Insights, Tips, and Stories</h1>
       </div>
       <p class="text-sm text-white w-[80%] text-justify mx-auto">
-        Welcome to the {{domain}} matrimony blog—a place where love stories unfold, connections deepen, and hearts find their forever homes. Whether you’re a starry-eyed bride, a hopeful groom, or a caring family member cheering from the sidelines, our blog is your compass on this beautiful journey.
+        Welcome to the {{domain}} Matrimonial Services blog—a place where love stories unfold, connections deepen, and hearts find their forever homes. Whether you’re a starry-eyed bride, a hopeful groom, or a caring family member cheering from the sidelines, our blog is your compass on this beautiful journey.
       </p>
     </div>
   </section>
@@ -56,3 +65,4 @@
     <app-footer></app-footer>
   </div>
 </div>
+</ion-content>

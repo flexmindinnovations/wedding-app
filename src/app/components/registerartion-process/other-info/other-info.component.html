@@ -1,4 +1,4 @@
-<div class="personal-info-container md:lg:h-full flex flex-col items-start justify-center md:lg:ion-padding">
+<div class="personal-info-container h-full flex flex-col items-start justify-center md:lg:ion-padding">
   <div class="form-wrapper w-full flex-auto overflow-auto">
     @if (isDataAvailable) {
     <form [formGroup]="formGroup" class="form-container w-full flex-auto overflow-auto md:lg:p-4">
@@ -25,7 +25,7 @@
     }
   </div>
 
-  <div class="action w-full h-full flex items-center justify-end gap-5 py-2 px-7">
+  <div class="action w-full h-full flex items-center justify-center sm:justify-end  gap-5 py-2 px-7">
     <!-- <mt-button title="Cancel" [disabled]="formGroup.invalid" [isCancel]="true" (action)="handleCancelAction()" /> -->
     <mt-button [disabled]="formGroup.invalid" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
   </div>

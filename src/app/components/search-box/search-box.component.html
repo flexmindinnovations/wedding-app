@@ -6,36 +6,72 @@
   </div>
 
   <div class="criteria py-4">
-    <form [formGroup]="formGroup" class="grid grid-cols-2 gap-3 md:lg:flex md:lg:items-end md:lg:justify-center">
-      <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
-        (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
-        [options]="genderOptions" class="flex-auto" />
+    <form [formGroup]="formGroup">
+      <div class="flex flex-col justify-center items-center gap-4">
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:items-end lg:justify-center">
+          <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+            (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
+            [options]="genderOptions" class="flex-auto" />
 
-      <app-input label="Age From" type="number" labelColor="text-gray-700"
-        [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
-        formControlName="fromAge" class="flex-auto" />
+          <app-input label="Age From" type="number" labelColor="text-gray-700"
+            [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
+            formControlName="fromAge" class="flex-auto" />
 
-      <app-input label="Age To" type="number" labelColor="text-gray-700" [controlValue]="formGroup.get('toAge')?.value"
-        [control]="formGroupControl['toAge']" formControlName="toAge" class="flex-auto" />
+          <app-input label="Age To" type="number" labelColor="text-gray-700"
+            [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']" formControlName="toAge"
+            class="flex-auto" />
 
-      <app-dropdown label="Religion" labelColor="text-white" [control]="formGroupControl['cast']"
-        formControlName="cast" (onSelectionChange)="onSelectionChange($event, 'castId')"
-        [options]="religionList" class="flex-auto" />
+            @if (religionListOptions.length) {
+              <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
+                (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
+              }
+      
+              @if (castListOptions.length) {
+              <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+                 (onSelectionChange)="onSelectionChange($event, 'cast')"
+                [options]="castListOptions" class="flex-auto" />
+              }
+      
+              @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+              <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']"
+                 formControlName="subCast"
+                (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
+                class="flex-auto" />
+              }
 
-      @if (isReligionSelected && castList.length) {
-      <app-dropdown label="subcast" [control]="formGroupControl['subcast']" formControlName="subcast"
-        (onSelectionChange)="onSelectionChange($event, 'subcastId')" [options]="castList" class="flex-auto" />
-      }
+          <app-dropdown label="Marital Status" [control]="formGroupControl['maritalStatus']"
+            formControlName="maritalStatus" [options]="maritalStatusOptions"
+            (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
+          <app-dropdown label="Mother Tongue" [control]="formGroupControl['motherTongue']"
+            formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
+            [options]="motherToungeList" class="flex-auto" />
 
-      <app-dropdown label="Mother Tongue" [control]="formGroupControl['motherTongue']" formControlName="motherTongue"
-        (onSelectionChange)="onSelectionChange($event, 'motherTongueId')" [options]="motherToungeList"
-        class="flex-auto" />
+          @if (countryList.length) {
+          <app-dropdown label="Country" class="w-full" [control]="formGroupControl['countryId']"
+            [controlValue]="formGroup.get('countryId')?.value"
+            (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
+            [options]="countryList" />
+          }
 
-      <div class="action col-span-2 flex-grow-0 lg:xl:col-span-1 h-full mt-auto flex flex-none w-full lg:xl:w-24">
-        <mt-button size="large" icon="pi pi-search" class="w-full" title="Search" (action)="handleOnSearch()" />
+          @if (stateList.length) {
+          <app-dropdown label="State" class="w-full" [control]="formGroupControl['stateId']" formControlName="stateId"
+            [controlValue]="formGroup.get('stateId')?.value" (onSelectionChange)="onSelectionChange($event, 'stateId')"
+            [options]="stateList" />
+          }
+
+          @if (cityList.length) {
+          <app-dropdown label="City" class="w-full" [control]="formGroupControl['cityId']" formControlName="cityId"
+            [controlValue]="formGroup.get('cityId')?.value" (onSelectionChange)="onSelectionChange($event, 'cityId')"
+            [options]="cityList" />
+          }
+
+        </div>
+        <div class="h-full w-full mt-auto flex flex-auto xl:w-30 lg:w-36 md:w-36">
+          <mt-button size="large" class="w-full"  title="Search" (action)="handleOnSearch()" />
+        </div>
       </div>
-
     </form>
   </div>
 </div>

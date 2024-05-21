@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -24,10 +24,9 @@ export class ProfileFilterPage implements OnInit {
 
   formGroup!: FormGroup;
   genderOptions: any = [];
-
   castService = inject(CastService);
   sharedService = inject(SharedService);
-
+  maritalStatusOptions: any = [];
   religionList: any[] = [];
   motherToungeList: any[] = [];
   castList: any[] = [];
@@ -39,10 +38,24 @@ export class ProfileFilterPage implements OnInit {
   customerRegistrationService = inject(CustomerRegistrationService);
   customerData: any;
   searchCriteria: any;
-
+  countryList: any = [];
+  stateList: any = [];
+  cityList: any = [];
   fb = inject(FormBuilder);
   totalCount = 0;
-
+  isCountryListAvailable = false;
+  isStateListAvailable = false;
+  isCityListAvailable = false;
+  pageNumber = 1;
+  itemsPerPage = 20;
+  castListOptions: any[] = [];
+  subCastListOptions: any[] = [];
+  hasSubCast: boolean = false;
+  subCastId: boolean = false;
+  religionId: any;
+  isSubCastDataAvailable: boolean = false;
+  religionListOptions: any[] = [];
+  cdref = inject(ChangeDetectorRef);
 
   sidebarVisible: boolean = false;
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
@@ -56,7 +69,9 @@ export class ProfileFilterPage implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private authService: AuthService
-  ) { }
+  ) {
+    this.isMobile = this.deviceService.isMobile();
+  }
 
   ngOnInit() {
     this.initFormGroup();
@@ -64,6 +79,12 @@ export class ProfileFilterPage implements OnInit {
       { id: 'male', title: 'Male' },
       { id: 'female', title: 'Female' },
     ];
+    this.maritalStatusOptions = [
+      { id: 'married', title: 'Married' },
+      { id: 'single', title: 'Single' },
+      { id: 'divorced', title: 'Divorced' },
+      { id: 'widowed', title: 'Widowed' }
+    ]
   }
 
   getCustomerDetails(): void {
@@ -77,13 +98,10 @@ export class ProfileFilterPage implements OnInit {
           this.searchCriteria = {
             gender: oppGender
           }
-          // console.log({searchCriteria: this.searchCriteria, isSearchFromQuery: this.isSearchFromQuery});
-          
           if (!this.isSearchFromQuery) {
             this.seachFilteredProfiles(this.searchCriteria);
             setTimeout(() => {
               this.formGroup.patchValue(this.searchCriteria);
-              // console.log('formVal: ', this.formGroup.value);
             })
           }
           this.isDataAvailable = true;
@@ -95,6 +113,14 @@ export class ProfileFilterPage implements OnInit {
         this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })
+  }
+
+  getFirstItemIndex(): number {
+    return (this.pageNumber - 1) * this.itemsPerPage + 1;
+  }
+
+  getLastItemIndex(): number {
+    return Math.min(this.pageNumber * this.itemsPerPage, this.totalCount);
   }
 
   getFilterGender(gender: string) {
@@ -114,6 +140,11 @@ export class ProfileFilterPage implements OnInit {
         }, {}
         );
       this.searchCriteria = filteredQueryParams;
+        if (this.searchCriteria && Object.keys(this.searchCriteria).length > 0) {
+          this.formGroup.patchValue(this.searchCriteria);
+          this.cdref.detectChanges();
+        }
+      this.seachFilteredProfiles(this.searchCriteria);
     })
   }
 
@@ -122,9 +153,14 @@ export class ProfileFilterPage implements OnInit {
       gender: ['', [Validators.required]],
       fromAge: ['', [Validators.required]],
       toAge: ['', [Validators.required]],
-      cast: !['', [Validators.required]],
-      subcast: ['', ![Validators.required]],
-      motherTongue: ['', [Validators.required]]
+      religionId: ['', [Validators.required]],
+      cast: ['', [Validators.required]],
+      subCast: ['', [Validators.required]],
+      motherTongue: ['', [Validators.required]],
+      maritalStatus: ['', [Validators.required]],
+      countryId: ['', [Validators.required]],
+      stateId: ['', [Validators.required]],
+      cityId: ['', [Validators.required]],
     })
 
     this.formGroup.valueChanges.subscribe((control) => {
@@ -145,6 +181,7 @@ export class ProfileFilterPage implements OnInit {
           }
         })
     })
+    this.getCountryList();
   }
 
   handleFilter() {
@@ -152,17 +189,34 @@ export class ProfileFilterPage implements OnInit {
     this.seachFilteredProfiles(this.filteredQueryParams);
   }
 
+  handlePage(action: any) {
+    let queryParams = { ...this.filteredQueryParams };
+    switch (action) {
+      case 'next':
+        this.pageNumber += 1;
+        break;
+      case 'prev':
+        if (this.pageNumber > 1) this.pageNumber--;
+        else this.pageNumber = 1;
+        break;
+    }
+    queryParams = { ...queryParams, pageNumber: this.pageNumber, totalCount: this.totalCount };
+    this.seachFilteredProfiles(queryParams);
+  }
+
   seachFilteredProfiles(queryParams: any) {
     const isLogged = this.authService.isLoggedIn();
     if (Object.keys(queryParams).length > 0) {
       if (isLogged) {
-        const pageNumber = 1;
+        const pageNumber = this.pageNumber;
+        queryParams = { ...queryParams, pageNumber, totalCount: this.totalCount ?? 0 }
+        this.filteredProfileList = [];
         this.userService.getPaidFilteredProfileList(queryParams).subscribe({
           next: (response) => {
             if (response) {
-              // const { customerList, totalCount } = response;
-              this.filteredProfileList = response;
-              // this.totalCount = totalCount;
+              const { customerList, totalCount } = response;
+              this.filteredProfileList = customerList;
+              this.totalCount = totalCount;
               this.isLoading = false;
             }
           },
@@ -209,11 +263,29 @@ export class ProfileFilterPage implements OnInit {
   }
 
   onSelectionChange(event: any, src: string) {
-    const value = event?.id;
     switch (src) {
-      case 'castId':
-        this.isReligionSelected = true;
-        this.getCastList(value);
+      case 'religionId':
+        this.castListOptions = [];
+        this.subCastListOptions = [];
+        this.religionId = event?.id;
+        this.getCastListReligionId(event?.id)
+        break;
+      case 'cast':
+        this.subCastListOptions = [];
+        this.hasSubCast = event?.hasSubcast;
+        if (this.hasSubCast) this.getSubCastList(event?.id);
+        break;
+      case 'subCast':
+        const subCastId = event?.id;
+        this.subCastId = subCastId;
+        break;
+      case 'maritalStatus':
+        break;
+      case 'countryId':
+        this.getStateByCountry(event?.id);
+        break;
+      case 'stateId':
+        this.getCityByState(event?.id);
         break;
     }
   }
@@ -223,14 +295,14 @@ export class ProfileFilterPage implements OnInit {
   }
 
   getMasterData() {
-    const religionList = this.castService.getReligionList();
+    const religionListOptions = this.castService.getReligionList();
     const motherToungeList = this.sharedService.getMotherToungeList();
-    forkJoin({ religionList, motherToungeList }).subscribe({
+    forkJoin({ religionListOptions, motherToungeList }).subscribe({
       next: (response: any) => {
         if (response) {
-          const { religionList, motherToungeList } = response;
-          this.religionList = religionList;
-          this.religionList = religionList.map((item: any) => {
+          const { religionListOptions, motherToungeList } = response;
+          this.religionListOptions = religionListOptions;
+          this.religionListOptions = religionListOptions.map((item: any) => {
             return {
               id: item?.religionId,
               title: item?.religionName
@@ -253,24 +325,108 @@ export class ProfileFilterPage implements OnInit {
     })
   }
 
-  getCastList(religionId: number) {
-    this.castService.getCastListById(religionId).subscribe({
+  getCastListReligionId(religionId: any) {
+    this.castService.getCastListByReligionId(religionId).subscribe({
       next: (response: any) => {
         if (response) {
-          const subCastList = response?.subCastList;
-          this.castList = subCastList.map((item: any) => {
+          this.castListOptions = response.map((item: any) => {
+            return {
+              id: item?.castId,
+              title: item?.castName,
+              hasSubcast: item?.hasSubcast
+            }
+          })
+        }
+      },
+      error: (error) => { }
+    })
+  }
+
+  getSubCastList(castId: number) {
+    this.subCastListOptions = [];
+    this.isSubCastDataAvailable = false;
+    this.castService.getSubCastListByCast(castId).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.subCastListOptions = response.map((item: any) => {
             return {
               id: item?.subCastId,
               title: item?.subCastName
             }
-          });
+          })
+          this.isSubCastDataAvailable = true;
         }
-
       },
-      error: (error: any) => {
-        this.isError = true;
+      error: (error) => { }
+    })
+  }
+  getCountryList() {
+    this.sharedService.getCountryList().subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.countryList = data?.map((item: any) => {
+            const obj = {
+              id: item?.countryId,
+              title: item?.countryName
+            }
+            return obj;
+          });
+          this.isCountryListAvailable = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+
       }
     })
   }
 
+  getStateByCountry(countryId: number) {
+    if (countryId) {
+      this.stateList = [];
+      this.cityList = [];
+      this.sharedService.getStatByCountry(countryId).subscribe({
+        next: (data: any[]) => {
+          if (data) {
+            this.stateList = data?.map((item: any) => {
+              const obj = {
+                id: item?.stateId,
+                title: item?.stateName
+              }
+              return obj;
+            });
+            this.isStateListAvailable = true;
+          }
+        },
+        error: (error) => {
+          console.log('error: ', error);
+
+        }
+      })
+    }
+
+  }
+  getCityByState(stateId: number) {
+    this.cityList = [];
+    if (stateId) {
+      this.sharedService.getCityByState(stateId).subscribe({
+        next: (data: any[]) => {
+          if (data) {
+            this.cityList = data?.map((item: any) => {
+              const obj = {
+                id: item?.cityId,
+                title: item?.cityName
+              }
+              return obj;
+            });
+            this.isCityListAvailable = true;
+          }
+        },
+        error: (error) => {
+          console.log('error: ', error);
+
+        }
+      })
+    }
+  }
 }

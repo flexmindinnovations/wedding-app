@@ -112,12 +112,9 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   handleOnScroll(event: any) {
-    // console.log('event scroll: ', event);
-
   }
 
   particlesLoaded(container: Container): void {
-    // console.log(container);
   }
 
   handleRegister() {
@@ -133,7 +130,6 @@ export class HomePage implements OnInit, AfterViewInit {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }
@@ -142,7 +138,6 @@ export class HomePage implements OnInit, AfterViewInit {
     this.homeService.getRandomProfiles().subscribe({
       next: (response: any) => {
         if (response) {
-          // console.log('response: ', response[0]);
           const data = response.map((item: any) => {
             item['isDisplayed'] = false;
             return item;

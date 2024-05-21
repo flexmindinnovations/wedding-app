@@ -93,7 +93,6 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     this.authService.signUp(payload).subscribe({
       next: (data: any) => {
         if (data) {
-          // console.log('data: ', data);
           if (data?.status === true) {
             this.showRegisterLoader = false;
             this.alert.setAlertMessage(data?.message, AlertType.success);

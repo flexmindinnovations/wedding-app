@@ -262,6 +262,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
       const fullPath = `${environment.endpoint}/${imagePath}`;
       const obj = {
+        customerId: item?.customerId,
         fullName: item?.fullName,
         image: fullPath
       }
@@ -330,8 +331,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleLogoLoadError(event: any) {
-    // console.log('event: ', event);
-
   }
 
   resetActiveClass() {
@@ -354,9 +353,13 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNotificationItemClick(item: any) {
-    // console.log('item: ', item);
     this.resetActiveClass();
     this.router.navigateByUrl(item?.route);
+  }
+
+  handleIntrestItemClick(item: any) {
+    this.resetActiveClass();
+    this.router.navigateByUrl(`profiles/view/${item?.customerId}`);
   }
   handleRegister() {
     this.dialogRef = this.dialogService.open(RegisterUserComponent, {
@@ -371,7 +374,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }
@@ -393,7 +395,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.dialogRef.onClose.subscribe((afterClose: any) => {
-      // console.log('afterClose: ', afterClose);
       if (afterClose) { }
     });
   }

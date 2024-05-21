@@ -31,7 +31,6 @@ export class VideoPlayerComponent implements OnInit {
   // Instantiate a Video.js player OnInit
   ngOnInit() {
     this.player = videojs(this.target.nativeElement, this.options, () => {
-      // console.log('onPlayerReady', this.player);
     });
   }
 

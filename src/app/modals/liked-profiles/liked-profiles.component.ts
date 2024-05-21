@@ -226,7 +226,6 @@ export class LikedProfilesComponent implements OnInit {
     this.userService.getFavouriteProfileList(userId).subscribe({
       next: (response) => {
         if (response) {
-          console.log('response: ', response);
           const profileList = response;
           this.profileList = profileList.map((item: any) => {
             item['fullName'] = item.fullName.replace(/\s/g, '') ? item.fullName : 'Unknown';
