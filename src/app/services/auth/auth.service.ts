@@ -39,5 +39,6 @@ export class AuthService {
     localStorage.removeItem('profile');
     localStorage.removeItem('user');
     localStorage.removeItem('userId');
+    localStorage.removeItem('role');
   }
 }

@@ -25,6 +25,7 @@ export class DropdownComponent implements OnInit, AfterViewInit, ControlValueAcc
   @Input() options: any[] = [];
   @Input() isMultiSelect: boolean = false;
   @Input() controlValue: any;
+  @Input() mandatory:boolean = true;
 
   @Output() onSelectionChange: any = new EventEmitter();
   value: any;

@@ -21,6 +21,7 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
   @Input() isMultiline: boolean = false;
   @Input() showClear: boolean = false;
   @Input('required') isRequired: true | false = false;
+  @Input() mandatory : boolean = true;
   @Input() placeholder: string = '';
   @Input() controlValue: string = '';
   @Input() presentaion: 'date' | 'time' | 'date-time' | undefined;

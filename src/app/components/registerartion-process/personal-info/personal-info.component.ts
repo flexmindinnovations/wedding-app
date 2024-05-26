@@ -126,12 +126,12 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
-      timeOfBirth: !['', [Validators.required]],
+      timeOfBirth: ['', ![Validators.required]],
       occupationId: ['', [Validators.required]],
       handycapId: !['', [Validators.required]],
       otherPhysicalText: ['', ![Validators.required]],
       maritalStatus: ['', [Validators.required]],
-      hobbies: ['', ![Validators.required]],
+      hobbies: ['', [Validators.required]],
       bloodGroupId: !['', ![Validators.required]],
       foodPreferencesId: !['', ![Validators.required]]
     });
