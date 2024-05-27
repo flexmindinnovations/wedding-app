@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="content-wrapper">
+  <div class="content-wrapper" id="contentWrapper">
     <section *ngIf="!showLaunchOfferBanner && showOfferMarqueue"
       class="py-2 offer-overlay absolute w-full z-10 bg-red-500 backdrop-blur-md min-h-10 flex items-center justify-center"
       (click)="handleRegister()">
@@ -21,8 +21,8 @@
       <!-- } -->
     </section>
     <section class="video">
-      <video id="videoPlayer" [autoplay]="true"
-      [muted]="true" [loop]="true" [playsInline]="true" (loadeddata)="handleOnLoadData($event)">
+      <video id="videoPlayer" [autoplay]="true" [muted]="true" [loop]="true" [playsInline]="true"
+        (loadeddata)="handleOnLoadData($event)">
         <source src="/assets/videos/intro.mp4" type="video/mp4">
       </video>
       <div class="overlay">
@@ -47,8 +47,20 @@
     </section>
     <div class="flat-items flex flex-col gap-3 md:gap-4 lg:xl:gap-7">
       <section>
+        <div class="container">
+          <mt-button title="Complete Payment" (action)="handlePayment()"></mt-button>
+        </div>
+      </section>
+  
+      <section>
         <div class="container search-box">
           <search-box class="w-full" />
+        </div>
+      </section>
+
+      <section class="princing-section">
+        <div class="container">
+          <app-pricing></app-pricing>
         </div>
       </section>
 
@@ -113,9 +125,8 @@
                 <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
               </li>
             </ol>
-            <div
-            class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
-            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+            <div class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
+              <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
             </div>
           </div>
           <div class="content -z-[10] flex-grow md:w-full h-[inherit]">

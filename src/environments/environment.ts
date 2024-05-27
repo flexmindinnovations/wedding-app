@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  endpoint: 'https://webapi.susangam.com'
+  endpoint: 'https://webapi.susangam.com',
+  paymentTestingUrl: 'https://test.payu.in/_payment',
+  paymentProdingUrl: 'https://secure.payu.in/_payment'
 };
 
 /*

@@ -14,6 +14,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { HASH_STRING, MERCHANT_KEY_TEST, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -80,6 +81,7 @@ export class DashboardPage implements OnInit {
 
     this.getRandomProfiles();
   }
+
   ngAfterViewInit(): void {
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
@@ -89,12 +91,16 @@ export class DashboardPage implements OnInit {
 
     window.addEventListener('load', () => {
       const pendingInquery: any = sessionStorage.getItem('inquiry');
+      const planInquery: any = JSON.parse(sessionStorage.getItem('plan') || '{}');
+      const customerData: any = JSON.parse(sessionStorage.getItem('customerData') || '{}');
       if (pendingInquery && pendingInquery > 0) {
         this.router.navigateByUrl(`profiles/view/${pendingInquery}`);
         setTimeout(() => {
           sessionStorage.removeItem('inquiry');
           sessionStorage.removeItem('isLoggedInCompleted');
         }, 1000);
+      } else if (planInquery && typeof planInquery === 'object' && Object.keys(planInquery).length > 0) {
+
       } else {
         const isLoggedInCompleted: any = sessionStorage.getItem('isLoggedInCompleted');
         if (isLoggedInCompleted) {
@@ -202,6 +208,49 @@ export class DashboardPage implements OnInit {
     } else {
       return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
+  }
+
+  handlePayment() {
+
+    const uniqueId = generateTxnId();
+    // const successPaymentResponse = `${window.location.href}success`;
+    // const failurePaymentResponse = `${window.location.href}failed`;
+    const successPaymentResponse = `https://${this.domain}.com/success`;
+    const failurePaymentResponse = `https://${this.domain}.com/failed`;
+    const paymentObj: any = {
+      key: MERCHANT_KEY_TEST,
+      txnid: uniqueId,
+      amount: '999',
+      productinfo: 'DeluxPackage',
+      firstname: 'Shaikh',
+      // lastname: 'Shafique',
+      email: 'shafiquddin2k@gmail.com',
+      phone: '9881399773',
+      surl: successPaymentResponse,
+      furl: failurePaymentResponse,
+    };
+
+    const paymentObjMapper = new PaymentProvider(
+      MERCHANT_KEY_TEST,
+      paymentObj.txnid,
+      paymentObj.productinfo,
+      paymentObj.amount,
+      paymentObj.email,
+      paymentObj.firstname,
+      paymentObj.phone,
+    );
+    const htmlPaymentString = paymentHtmlPayload(paymentObjMapper);
+    paymentObj['hash'] = HASH_STRING;
+    const encodedParams = new URLSearchParams(paymentObj).toString();
+    const url = environment.paymentTestingUrl + "?" + encodedParams;
+
+    const anchorTag = document.createElement('a');
+    anchorTag.href = url;
+    anchorTag.target = '_blank';
+    anchorTag.click();
+    const container = document.getElementById('contentWrapper');
+    container?.appendChild(anchorTag);
+    console.log('anchorTag: ', anchorTag);
 
   }
 }
