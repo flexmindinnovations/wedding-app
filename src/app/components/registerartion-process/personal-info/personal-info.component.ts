@@ -12,7 +12,7 @@ import { EducationService } from 'src/app/services/education/education.service';
 import { HeightService } from 'src/app/services/height/height.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { COLOR_SCHEME, TITHI_LIST, findInvalidControlsRecursive, getRandomNumber, inputThemeVariables } from 'src/app/util/theme';
-import { APP_LOADER } from 'src/app/util/util';
+import { APP_LOADER, dropdownValidator } from 'src/app/util/util';
 
 
 @Component({
@@ -120,17 +120,17 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       // customerPassword: ['', ![Validators.required]],
       locationOfBirth: ['', [Validators.required]],
       shakeDate: !['', [Validators.required]],
-      gender: ['', [Validators.required]],
-      heightId: ['', [Validators.required]],
-      educationId: ['', [Validators.required]],
+      gender: ['', [Validators.required,dropdownValidator()]],
+      heightId: ['', [Validators.required,dropdownValidator()]],
+      educationId: ['', [Validators.required,dropdownValidator()]],
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
       timeOfBirth: ['', ![Validators.required]],
-      occupationId: ['', [Validators.required]],
+      occupationId: ['', [Validators.required,dropdownValidator()]],
       handycapId: !['', [Validators.required]],
       otherPhysicalText: ['', ![Validators.required]],
-      maritalStatus: ['', [Validators.required]],
+      maritalStatus: ['', [Validators.required,dropdownValidator()]],
       hobbies: ['', [Validators.required]],
       bloodGroupId: !['', ![Validators.required]],
       foodPreferencesId: !['', ![Validators.required]]

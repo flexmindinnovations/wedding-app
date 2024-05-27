@@ -123,6 +123,16 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
     this.controlValue = '';
     this.inputSubscription.unsubscribe();
   }
+  handleOnPaste(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData;
+    if (clipboardData) {
+      const pastedText = clipboardData.getData('text');
+      this.controlValue = pastedText;
+      this.control.setValue(pastedText);
+      event.preventDefault();
+    }
+  }
 }
+
 
 export type InputType = 'text' | 'password' | 'email' | 'number' | 'date' | 'time';

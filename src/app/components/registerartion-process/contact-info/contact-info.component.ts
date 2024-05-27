@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { AlertType } from 'src/app/enums/alert-types';
 import { ActionValue, FormStep } from 'src/app/interfaces/form-step-item';
 import { AlertService } from 'src/app/services/alert/alert.service';
@@ -7,6 +7,7 @@ import { CustomerRegistrationService } from 'src/app/services/customer-registrat
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
 import { Router } from '@angular/router';
+import { dropdownValidator } from 'src/app/util/util';
 
 @Component({
   selector: 'contact-info',
@@ -67,9 +68,9 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       whatsUpNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       emailId: [''],
       homeAddress: ['', [Validators.required]],
-      countryId: ['', [Validators.required]],
-      stateId: ['', [Validators.required]],
-      cityId: ['', [Validators.required]],
+      countryId: ['', [Validators.required,dropdownValidator()]],
+      stateId: ['', [Validators.required,dropdownValidator()]],
+      cityId: ['', [Validators.required,dropdownValidator()]],
     })
     this.getCountryList();
 
@@ -293,5 +294,5 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
+  
 }

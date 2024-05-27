@@ -1,3 +1,4 @@
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle,faAddressBook, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { ClickEvent, MoveDirection, OutMode } from "@tsparticles/engine";
 
@@ -22,6 +23,17 @@ const availableLoaders: any = {
 }
 
 export const APP_LOADER = availableLoaders.dots;
+
+
+export const dropdownValidator = (): ValidatorFn => {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value || value === '') {
+        return { 'required': true };
+      }
+      return null;
+    };
+  }
 
 export const tabItems = {
     displayed: [

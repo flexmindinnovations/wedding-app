@@ -3,7 +3,7 @@
   </label>
   @if(isMultiline){
   <textarea [title]="label" [disabled]="control?.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()"
-    (keyup)="handleOnChange($event)" rows="3" class="p-2.5 w-full min-h-24" [value]="controlValue"
+    (keyup)="handleOnChange($event)" rows="3" class="p-2.5 w-full min-h-24" [value]="controlValue" (paste)="handleOnPaste($event)"
     [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [placeholder]="placeholder"
     [autoResize]="true"></textarea>
 
@@ -15,7 +15,7 @@
   <time-picker [disabled]="control?.disabled" class="w-full" [value]="value"
     (selectedTime)="handleOnChange($event, 'time')" />
   } @else if(type === "number"){
-  <input [type]="type" [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" pInputText
+  <input [type]="type" [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" (paste)="handleOnPaste($event)" pInputText
     pKeyFilter="int" class="w-full !text-sm" [disabled]="control?.disabled"
     [ngClass]="control.touched && control.invalid ? colorVarients + invalidControl : colorVarients + validControl"
     [value]="value" [placeholder]="placeholder" [required]="isRequired" />
@@ -32,7 +32,7 @@
   }
   } @else {
   <input [type]="type" [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
-    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    (keyup)="handleOnChange($event)" (paste)="handleOnPaste($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
     [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
     [placeholder]="placeholder" [required]="isRequired" />
   @if (control.touched && control.invalid) {
