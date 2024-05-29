@@ -229,7 +229,9 @@ export class ProfileFilterPage implements OnInit {
         this.userService.getFreeFilteredProfileList(queryParams).subscribe({
           next: (response) => {
             if (response) {
-              this.filteredProfileList = response;
+              const { customerList, totalCount } = response;
+              this.filteredProfileList = customerList;
+              this.totalCount = totalCount;
               this.isLoading = false;
             }
           },
