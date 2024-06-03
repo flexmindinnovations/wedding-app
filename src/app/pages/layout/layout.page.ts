@@ -342,7 +342,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logoutUser();
     this.showLogoutModal = true;
     setTimeout(() => {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('login');
       this.sharedService.isLoggedOutCompleted.next(true);
     })
   }

@@ -1,148 +1,80 @@
-<!-- <div class="flex items-center justify-end gap-2 my-2 py-2 border-b">
-  <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="CSV"
-    tooltipPosition="bottom"></button>
-  <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"
-    pTooltip="XLS" tooltipPosition="bottom"></button>
-  <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="mr-2"
-    label="Export PDF"></button>
-</div> -->
-
-<!-- <div class="table-container mx-h-[80vh] overflow-auto">
-  <p-table #dt id="profileDataTable" [value]="userInfo" styleClass="p-datatable-gridlines"
-    [tableStyle]="{ 'min-width': '50rem' }" [exportHeader]="'customExportHeader'">
-    <ng-template pTemplate="caption">
-      <div class="flex w-full items-center justify-center">
-        <p class="block text-center !font-bold !text-lg">Bio Data</p>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="body" let-product>
-      <tr class="py-3">
-        <td colspan="2" class="!p-2 !font-semibold">Personal Information</td>
-      </tr>
-      @for (item of product?.personalInfo; track $index) {
-      <tr *ngIf="item?.value">
-        <td class="!py-1 !px-10">{{ item?.title }}</td>
-        <td class="!py-1 !px-10">{{ item?.value }}</td>
-      </tr>
-      }
-      <tr class="py-3">
-        <td colspan="2" class="!p-2 !font-semibold ">Family Information</td>
-      </tr>
-      @for (item of product?.familyInfo; track $index) {
-      <tr *ngIf="item?.value">
-        <td class="!py-1 !px-10">{{ item?.title }}</td>
-        <td class="!py-1 !px-10">{{ item?.value }}</td>
-      </tr>
-      }
-      <tr class="py-3">
-        <td colspan="2" class="!p-2 !font-semibold ">Contact Information</td>
-      </tr>
-      @for (item of product?.contactInfo; track $index) {
-      <tr *ngIf="item?.value">
-        <td class="!py-1 !px-10">{{ item?.title }}</td>
-        <td class="!py-1 !px-10">{{ item?.value }}</td>
-      </tr>
-      }
-      <tr class="py-3">
-        <td colspan="2" class="!p-2 !font-semibold ">Other Information</td>
-      </tr>
-      @for (item of product?.otherInfo; track $index) {
-      <tr *ngIf="item?.value">
-        <td class="!py-1 !px-10">{{ item?.title }}</td>
-        <td class="!py-1 !px-10">{{ item?.value }}</td>
-      </tr>
-      }
-      <tr class="py-3">
-        <td colspan="2" class="!p-2 !font-semibold">Photos</td>
-      </tr>
-      <tr class="p-3 min-h-56">
-        <td colspan="2" class="!py-1 flex-grow !px-4">
-          <div class="flex items-center justify-center gap-4 max-h-56 w-full">
-            @for (item of product?.photos; track $index) {
-            <div class="image-container w-52 h-48">
-              <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
-            </div>
-            }
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div> -->
-
 @if (isDataLoaded && !isLoading) {
 <div class="user-info-container" id="userDataContainer">
   <div class="header">
     <h1>Bio Data</h1>
   </div>
   <div class="table">
-    <div class="wrapper">
-      <div class="personal-info">
-        <h2>Personal Information</h2>
+    <div class="left w-1/5 h-[34rem] border-r flex-grow">
+      <div class="wrapper">
+        <div class="Photos">
+          <h2 class="border-b border-gray-200">Photos</h2>
+        </div>
+        <ul class="m-0">
+          <div class="flex flex-col items-center px-5 py-5 justify-center gap-4 w-full">
+            @for (item of userInfo?.photos; track $index) {
+            <li *ngIf="item?.value" class="border-none">
+              <div class="image-container w-56 h-52">
+                <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
+              </div>
+            </li>
+            }
+          </div>
+        </ul>
       </div>
-      <ul>
-        @for (item of userInfo?.personalInfo; track $index) {
-        <li *ngIf="item?.value">
-          <p class="min-w-80">{{item?.title}}</p>
-          <p>{{item?.value}}</p>
-        </li>
-        }
-      </ul>
     </div>
-    <div class="wrapper">
-      <div class="family-info">
-        <h2>Family Information</h2>
-      </div>
-      <ul>
-        @for (item of userInfo?.familyInfo; track $index) {
-        <li *ngIf="item?.value">
-          <p class="min-w-80">{{item?.title}}</p>
-          <p>{{item?.value}}</p>
-        </li>
-        }
-      </ul>
-    </div>
-    <div class="wrapper">
-      <div class="contact-info">
-        <h2>Contact Information</h2>
-      </div>
-      <ul>
-        @for (item of userInfo?.contactInfo; track $index) {
-        <li *ngIf="item?.value">
-          <p class="min-w-80">{{item?.title}}</p>
-          <p>{{item?.value}}</p>
-        </li>
-        }
-      </ul>
-    </div>
-    <div class="wrapper">
-      <div class="other-info">
-        <h2>Other Information</h2>
-      </div>
-      <ul>
-        @for (item of userInfo?.otherInfo; track $index) {
-        <li *ngIf="item?.value">
-          <p class="min-w-80">{{item?.title}}</p>
-          <p>{{item?.value}}</p>
-        </li>
-        }
-      </ul>
-    </div>
-    <div class="wrapper">
-      <div class="Photos">
-        <h2>Photos</h2>
-      </div>
-      <ul>
-        <div class="flex items-center justify-center gap-4 max-h-56 w-full">
-          @for (item of userInfo?.photos; track $index) {
+    <div class="right flex-grow overflow-auto h-[34rem]">
+      <div class="wrapper">
+        <div class="personal-info">
+          <h2 class=" border-r border-gray-200">Personal Information</h2>
+        </div>
+        <ul class="m-0">
+          @for (item of userInfo?.personalInfo; track $index) {
           <li *ngIf="item?.value">
-            <div class="image-container w-52 h-48">
-              <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
-            </div>
+            <p class="min-w-80 border-r border-gray-200">{{item?.title}}</p>
+            <p>{{item?.value}}</p>
           </li>
           }
+        </ul>
+      </div>
+      <div class="wrapper">
+        <div class="family-info">
+          <h2 class=" border-r border-gray-200">Family Information</h2>
         </div>
-      </ul>
+        <ul class="m-0">
+          @for (item of userInfo?.familyInfo; track $index) {
+          <li *ngIf="item?.value">
+            <p class="min-w-80 border-r border-gray-200">{{item?.title}}</p>
+            <p>{{item?.value}}</p>
+          </li>
+          }
+        </ul>
+      </div>
+      <div class="wrapper">
+        <div class="contact-info">
+          <h2 class=" border-r border-gray-200">Contact Information</h2>
+        </div>
+        <ul class="m-0">
+          @for (item of userInfo?.contactInfo; track $index) {
+          <li *ngIf="item?.value">
+            <p class="min-w-80 border-r border-gray-200">{{item?.title}}</p>
+            <p>{{item?.value}}</p>
+          </li>
+          }
+        </ul>
+      </div>
+      <div class="wrapper">
+        <div class="other-info">
+          <h2 class=" border-r border-gray-200">Other Information</h2>
+        </div>
+        <ul class="m-0">
+          @for (item of userInfo?.otherInfo; track $index) {
+          <li *ngIf="item?.value">
+            <p class="min-w-80 border-r border-gray-200">{{item?.title}}</p>
+            <p>{{item?.value}}</p>
+          </li>
+          }
+        </ul>
+      </div>
     </div>
   </div>
 </div>

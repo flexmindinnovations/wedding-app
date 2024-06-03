@@ -1,9 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, isDevMode } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IBranch } from '../interfaces/IBranch';
 import { HttpConfigService } from './http-config.service';
 import { HttpClient } from '@angular/common/http';
+import { MERCHANT_KEY_TEST, SALT_KEY_TEST, generateTxnId } from '../util/util';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class SharedService {
   http = inject(HttpConfigService);
   httpAssests = inject(HttpClient);
   customerData = new Map<string, any>();
+  envPath: PathVariable = isDevMode() ? 'local' : 'prod';
 
   nextButtonClick: any = new Subject();
   isFormValid = new Subject<boolean>();
@@ -41,6 +44,11 @@ export class SharedService {
   footerItemClickEvent = new Subject();
 
   setFavouriteProfiles = new Subject();
+
+  getLoggedInCustomerInfo() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user ?? user;
+  }
 
   getFavouriteProfiles(): Observable<any> {
     return this.setFavouriteProfiles.asObservable();
@@ -145,5 +153,73 @@ export class SharedService {
     return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
   }
 
+  getPaymentObj(appEnv: string): Observable<any> {
+    const origin = window.location.href;
+    const endpoint = `http://localhost:3000/api/v1/payment/${this.envPath}`;
+    return this.http.get(endpoint);
+  }
+
+  generateHash(value: string) {
+    const hash = CryptoJS.SHA512(value);
+    return hash.toString(CryptoJS.enc.Hex);
+  }
+
+  verifyPayment(payload: any): Observable<any> {
+    const endpoint = this.envPath === 'local' ? `http://localhost:3000/api/v1/verify_payment/${this.envPath}` : `http://susangam.com/api/v1/verify_payment.${this.envPath}`;
+
+    return this.http.post(endpoint, payload);
+  }
+
+
+  makePayment(): Observable<any> {
+    var apiKey = MERCHANT_KEY_TEST;
+    var salt = SALT_KEY_TEST;
+    var txnId = generateTxnId();
+    var amount = "100.00";
+    var productInfo = "Test Product";
+    var firstName = "John";
+    var email = "john@example.com";
+    var phone = "9999999999";
+    var surl = "http://localhost:4200/payment";
+    var furl = "http://localhost:4200/payment";
+    var hashString = apiKey + "|" + txnId + "|" + amount + "|" + productInfo + "|" + firstName + "|" + email + "|||||||||||" + salt;
+    var hash = this.sha512(hashString);
+
+    // return new Promise((resolve, reject) => {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.open("POST", "https://test.payu.in/_payment", true);
+    //   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    //   xhr.onreadystatechange = function () {
+    //     if (xhr.readyState === 4 && xhr.status === 200) {
+    //       console.log(xhr.responseText);
+    //       resolve(xhr.responseText);
+    //     }
+    //   };
+
+      var formData = new FormData();
+      formData.append("key", apiKey);
+      formData.append("txnid", txnId);
+      formData.append("amount", amount);
+      formData.append("productinfo", productInfo);
+      formData.append("firstname", firstName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("surl", surl);
+      formData.append("furl", furl);
+      formData.append("hash", hash);
+
+    //   xhr.send(formData);
+    // })
+
+    return this.http.post('/api/https://test.payu.in', formData);
+  }
+
+  sha512(value: any) {
+    var hash = CryptoJS.SHA512(value);
+    return hash.toString(CryptoJS.enc.Hex);
+  }
 
 }
+
+type PathVariable = 'local' | 'prod';

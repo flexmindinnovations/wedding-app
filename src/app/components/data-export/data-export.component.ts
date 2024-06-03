@@ -122,11 +122,13 @@ export class DataExportComponent implements OnInit {
   }
 
   parseTimeString(timeString: any) {
-    const d = new Date();
-    if (timeString) {
+    let d: any = new Date();
+    if (timeString && timeString !== 'Invalid date') {
       const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
       d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
       d.setMinutes(parseInt(time[2]) || 0);
+    } else {
+      d = '';
     }
     return d;
   }

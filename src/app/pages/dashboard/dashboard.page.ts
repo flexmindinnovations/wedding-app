@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, inject, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Observer, share } from 'rxjs';
@@ -14,7 +14,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { HASH_STRING, MERCHANT_KEY_TEST, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
+import { HASH_STRING, MERCHANT_KEY_TEST, PAYMENT_OBJECT, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload, setPaymentObject } from 'src/app/util/util';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -208,49 +208,5 @@ export class DashboardPage implements OnInit {
     } else {
       return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
-  }
-
-  handlePayment() {
-
-    const uniqueId = generateTxnId();
-    // const successPaymentResponse = `${window.location.href}success`;
-    // const failurePaymentResponse = `${window.location.href}failed`;
-    const successPaymentResponse = `https://${this.domain}.com/success`;
-    const failurePaymentResponse = `https://${this.domain}.com/failed`;
-    const paymentObj: any = {
-      key: MERCHANT_KEY_TEST,
-      txnid: uniqueId,
-      amount: '999',
-      productinfo: 'DeluxPackage',
-      firstname: 'Shaikh',
-      // lastname: 'Shafique',
-      email: 'shafiquddin2k@gmail.com',
-      phone: '9881399773',
-      surl: successPaymentResponse,
-      furl: failurePaymentResponse,
-    };
-
-    const paymentObjMapper = new PaymentProvider(
-      MERCHANT_KEY_TEST,
-      paymentObj.txnid,
-      paymentObj.productinfo,
-      paymentObj.amount,
-      paymentObj.email,
-      paymentObj.firstname,
-      paymentObj.phone,
-    );
-    const htmlPaymentString = paymentHtmlPayload(paymentObjMapper);
-    paymentObj['hash'] = HASH_STRING;
-    const encodedParams = new URLSearchParams(paymentObj).toString();
-    const url = environment.paymentTestingUrl + "?" + encodedParams;
-
-    const anchorTag = document.createElement('a');
-    anchorTag.href = url;
-    anchorTag.target = '_blank';
-    anchorTag.click();
-    const container = document.getElementById('contentWrapper');
-    container?.appendChild(anchorTag);
-    console.log('anchorTag: ', anchorTag);
-
   }
 }

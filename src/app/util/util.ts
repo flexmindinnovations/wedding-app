@@ -19,6 +19,7 @@ export const MERCHANT_KEY_TEST = 'B15aom';
 export const MERCHANT_KEY_LIVE = 'WA6Kpg';
 export let SALT_KEY_TEST = 'XDbX0tFwbufYsXjSrVWjxTgaB64RVnB3';
 export let SALT_KEY_LIVE = 'X4Y3GsJwPYB8OM34PrgIah1n0K8zYI2P';
+export let PAYMENT_OBJECT: any = {};
 
 const availableLoaders: any = {
     dots: 'dots',
@@ -221,27 +222,44 @@ export const particlesOptions = {
     detectRetina: true,
 };
 
+export function setPaymentObject(payment: Payment) {
+    const paymentResponse = `${window.location.href}response`;
+    const { txnid, amount, productinfo, email, firstname, lastname, phone } = payment;
+    genertateHash({ txnid, amount, productinfo, firstname, email, phone });
+    PAYMENT_OBJECT = payment;
+    PAYMENT_OBJECT['hash'] = HASH_STRING;
+}
+
 
 export const paymentHtmlPayload = (payment: Payment) => {
-    const paymentResponse = `${window.location.href}response`;
-    const { txnId, amount, productinfo, email, firstname, lastname, phone } = payment;
-    HASH_STRING = genertateHash({ txnId, amount, productinfo, firstname, email, phone });
+    const paymentResponse = `http://localhost:4200/payment`;
+    // const paymentResponse = `https://8d45-106-51-37-15.ngrok-free.app/payment/payu-confirm/RMAXZ4/`;
+    const { txnid, amount, productinfo, email, firstname, phone, surl, furl, hash } = payment;
+    // key, txnid, amount, productinfo, firstname, email, phone, surl, furl, hash
     const htmlBody = `
     <html>
     <body>
-    <form action='${environment.paymentTestingUrl}' method='post'>
+    <form action='${environment.paymentTestingUrl}' method="POST" id="payu_form">
     <input type="hidden" name="key" value="${MERCHANT_KEY_TEST}" />
-    <input type="hidden" name="txnid" value="${txnId}" />
-    <input type="hidden" name="productinfo" value="${productinfo}" />
+    <input type="hidden" name="txnid" value="${txnid}" />
     <input type="hidden" name="amount" value="${amount}" />
-    <input type="hidden" name="email" value="${email}" />
+    <input type="hidden" name="productinfo" value="${productinfo}" />
     <input type="hidden" name="firstname" value="${firstname}" />
-    <input type="hidden" name="lastname" value="${lastname}" />
-    <input type="hidden" name="surl" value="${paymentResponse}" />
-    <input type="hidden" name="furl" value="${paymentResponse}" />
+    <input type="hidden" name="email" value="${email}" />
     <input type="hidden" name="phone" value="${phone}” />
-    <input type="hidden" name="hash" value="${HASH_STRING}" />
-    <input type="submit" value="submit"> </form>
+    <input type="hidden" name="furl" value="${furl}" />
+    <input type="hidden" name="surl" value="${surl}" />
+    <input type="hidden" name="udf1" value="data1" />
+    <input type="hidden" name="udf2" value="data2" />
+    <input type="hidden" name="udf3" value="data3" />
+    <input type="hidden" name="udf4" value="data4" />
+    <input type="hidden" name="udf5" value="data5" />
+    <input type="hidden" name="hash" value="${hash}" />
+    </form>
+    <p>Redirecting....</p>
+    <script type="text/javascript">
+            document.getElementById("payu_form").submit();
+    </script>
     </body>
     </html>
     `;
@@ -249,37 +267,28 @@ export const paymentHtmlPayload = (payment: Payment) => {
     return htmlBody;
 }
 
-const genertateHash = ({ txnId, amount, productinfo, firstname, email, phone }: { txnId: string, amount: string, productinfo: string, firstname: string, email: string, phone: string }) => {
-    const hashInput = `${MERCHANT_KEY_TEST}|${txnId}|${amount.toString()}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
-    console.log('hashInput: ', hashInput);
-    const hashString = CryptoJs.SHA512(hashInput);
+const genertateHash = ({ txnid, amount, productinfo, firstname, email, phone }: { txnid: string, amount: string, productinfo: string, firstname: string, email: string, phone: string }) => {
+    // const hashInput = `${MERCHANT_KEY_TEST}|${txnId}|${amount.toString()}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
 
-    const encoder = new TextEncoder();
-    const data = encoder.encode(hashInput);
-    console.log('data: ', data);
-    
-    const hashBuffer =  CryptoJs.SHA512(hashInput).toString();
-    console.log('hashBuffer: ', hashBuffer);
-    
-    // const hashBuffer =  sha512.digest(hashInput);
-    // console.log('hashBuffer: ', hashBuffer);
-    // const hashArray = Array.from(new Uint8Array(hashBuffer));
-    // const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    // console.log('hashHex: ', hashHex);
-    // return hashHex.toString();
-    return hashBuffer;
+    const hashInput = `${MERCHANT_KEY_TEST}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
+    console.log('hashInput: ', hashInput);
+    HASH_STRING = CryptoJs.SHA512(hashInput).toString();
+}
+
+export function verifyPaymentHash({ command, txnid }: { command: string, txnid: string }): string {
+    const hashInput = MERCHANT_KEY_TEST + "|" + command + "|" + txnid + "|" + SALT_KEY_TEST;
+
+    const hashStringHex = CryptoJs.SHA512(hashInput).toString(CryptoJs.enc.Hex);
+
+    return hashStringHex;
 }
 
 export const generateTxnId = (firstName?: string, email?: string) => {
     const timestamp = Date.now();
     const combinedString = `${generateSecureRandomString(16)}${generateRandomEmailWithUUID()}${timestamp}`;
     const hashString = CryptoJs.SHA512(combinedString).toString();
-    console.log('hashString: ', hashString);
-
     // const uniqueId = hashString ? hashString.substring(0, 15) : '';
-    const uniqueId = hashString ? 'T' + hashString.replace(/\D/g, '').substring(0, 20) : '';
-    console.log('uniqueId: ', uniqueId); 
-
+    const uniqueId = hashString ? 'TXN' + hashString.replace(/\D/g, '').substring(0, 16) : '';
     return uniqueId;
 }
 
@@ -301,13 +310,16 @@ function generateRandomEmailWithUUID() {
 
 
 export interface Payment {
-    txnId: string;
+    txnid: string;
     productinfo: string;
     amount: string;
     email: string;
     firstname: string;
     lastname?: string;
     phone: string;
+    surl: string;
+    furl: string;
+    hash: string;
 }
 
 export class PaymentProvider {
@@ -318,6 +330,7 @@ export class PaymentProvider {
     email: string;
     firstname: string;
     phone: string;
+    hash: string;
 
     constructor(
         key: string = MERCHANT_KEY_TEST,
@@ -327,13 +340,15 @@ export class PaymentProvider {
         email: string,
         firstname: string,
         phone: string,
+        hash: string = HASH_STRING
     ) {
         this.key = key;
-        this.txnId = txnId
-        this.productinfo = productinfo
-        this.amount = amount
-        this.email = email
-        this.firstname = firstname
-        this.phone = phone
+        this.txnId = txnId;
+        this.productinfo = productinfo;
+        this.amount = amount;
+        this.email = email;
+        this.firstname = firstname;
+        this.phone = phone;
+        this.hash = hash;
     }
 }
