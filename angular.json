@@ -84,6 +84,10 @@
             "development": {
               "buildTarget": "app:build:development"
             },
+            "options": {
+              "browserTarget": "wedding-app:build",
+              "proxyConfig": "src/proxy.conf.json"
+            },
             "ci": {
               "progress": false
             }

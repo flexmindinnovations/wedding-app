@@ -342,7 +342,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     this.authService.logoutUser();
     this.showLogoutModal = true;
     setTimeout(() => {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('login');
       this.sharedService.isLoggedOutCompleted.next(true);
     })
   }
@@ -410,6 +410,5 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     } else {
       return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
-
   }
 }

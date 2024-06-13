@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, inject, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, Observer, share } from 'rxjs';
@@ -14,6 +14,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { HASH_STRING, MERCHANT_KEY_TEST, PAYMENT_OBJECT, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload, setPaymentObject } from 'src/app/util/util';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -202,6 +203,5 @@ export class DashboardPage implements OnInit {
     } else {
       return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
-
   }
 }

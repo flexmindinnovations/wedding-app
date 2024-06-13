@@ -55,9 +55,9 @@ export class CarouselItemComponent implements OnInit {
   contactInfoModel: any;
   otherInfoModel: any;
   imageInfoModel: any;
-  customerId :any;
+  customerId: any;
   public screenWidth: any;
-  
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -65,7 +65,7 @@ export class CarouselItemComponent implements OnInit {
     private alertService: AlertService,
     public dialogService: DialogService,
     private sharedService: SharedService
-  ) { 
+  ) {
     this.onResize();
   }
 
@@ -120,11 +120,12 @@ export class CarouselItemComponent implements OnInit {
   handleProfileClick() {
     if (this.authService.isLoggedIn()) {
       const hasName = this.data?.fullName.replace(/\s/g, '').trim().length > 0 ? true : false;
-      const fullName = hasName ? + ' - ' + this.data?.fullName : '';
+      const fullName = hasName ? `${this.data?.fullName}` : 'Profile Information';
       this.dialogRef = this.dialogService.open(
         DataExportComponent, {
-        header: `View Profile Info ${fullName}`,
+        header: `${fullName}`,
         width: '80%',
+        height: '90%',
         data: {
           ...this.data
         },
@@ -133,7 +134,8 @@ export class CarouselItemComponent implements OnInit {
           '960px': '75vw',
           '640px': '90vw'
         },
-        maximizable: true
+        maximizable: true,
+        styleClass: 'data-export-popup'
       })
     } else {
       const { customerId } = this.data;
@@ -194,10 +196,10 @@ export class CarouselItemComponent implements OnInit {
           const otherInfo = this.userInfo?.otherInfo;
           const imageModel = this.userInfo?.photos;
           const images: any[] = [];
-            imageModel.forEach((item: any) => {
-              const imageUrl = environment.endpoint + `/${item?.value}`;
-              images.push(imageUrl);
-            });
+          imageModel.forEach((item: any) => {
+            const imageUrl = environment.endpoint + `/${item?.value}`;
+            images.push(imageUrl);
+          });
           const pageWidth = pdf.internal.pageSize.getWidth();
           let personalInfoData = this.buildTableBody(personalInfo);
           const familyInfoData = this.buildTableBody(familyInfo);
@@ -217,7 +219,7 @@ export class CarouselItemComponent implements OnInit {
             ]
           ];
           personalInfoData = [...profileAudit, ...personalInfoData];
-      
+
           contactInfoData.forEach((item: any) => {
             if (item[0] == 'WhatsApp Number') {
               item[0] = {
@@ -230,8 +232,8 @@ export class CarouselItemComponent implements OnInit {
                 }
             }
           })
-         await this.generatePdf(pageWidth, personalInfoData, familyInfoData, contactInfoData, otherInfoInfoData, images);
-         this.isLoading = false;
+          await this.generatePdf(pageWidth, personalInfoData, familyInfoData, contactInfoData, otherInfoInfoData, images);
+          this.isLoading = false;
         }
       },
       error: (error: any) => {
@@ -243,13 +245,13 @@ export class CarouselItemComponent implements OnInit {
     })
   }
 
-  exportPdf(data:any,customerId:any){
+  exportPdf(data: any, customerId: any) {
     this.customerId = customerId;
-    if(data?.imagePath1 && data.imagePath2){
+    if (data?.imagePath1 && data.imagePath2) {
       this.getUserDetails(customerId);
-    }else{
+    } else {
       this.alertService.setAlertMessage('Profile is not updated', AlertType.error);
-    }    
+    }
   }
 
  
@@ -649,13 +651,13 @@ export class CarouselItemComponent implements OnInit {
   buildTableBody(data: any) {
     var body: any = [];
     const columns = ['Title', 'Value'];
-      data.forEach((row: any) => {
-        const dataRow: any = [];
-        columns.forEach((col) => {
-          if (row?.value) dataRow.push(row[col.toLowerCase()].toString())
-        })
-        if (dataRow.length) body.push(dataRow);
-      });
+    data.forEach((row: any) => {
+      const dataRow: any = [];
+      columns.forEach((col) => {
+        if (row?.value) dataRow.push(row[col.toLowerCase()].toString())
+      })
+      if (dataRow.length) body.push(dataRow);
+    });
     return body;
   }
 
@@ -692,6 +694,8 @@ export class CarouselItemComponent implements OnInit {
   }
 
   parseTimeString(timeString: any) {
+    console.log('timeString: ', timeString);
+    
     const d = new Date();
     if (timeString) {
       const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);

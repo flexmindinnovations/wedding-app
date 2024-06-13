@@ -7,29 +7,31 @@
 .user-info-container {
     width: 80%;
     margin: 0 auto;
+    @apply flex flex-col w-full;
 
     .header {
-        @apply bg-gray-50 py-2 flex items-center justify-center;
+        @apply bg-gray-50 border border-gray-200 py-2 flex items-center justify-center;
         h1 {
             @apply block w-full text-center m-0 p-2;
         }
     }
 
     .table {
-        @apply w-full;
+        @apply w-full flex border border-x-gray-200 border-t-0 items-start justify-center flex-row max-h-[34rem] overflow-hidden;
         .wrapper {
 
-            :not(:first-child) {
-                @apply my-3;
-            }
+            // :not(:first-child) {
+            //     @apply my-3;
+            // }
 
             h2 {
-                @apply font-semibold text-base p-2 m-0;
+                @apply font-semibold text-base p-2 m-0 bg-gray-50;
             }
 
             ul {
+                @apply m-0;
                 li {
-                    @apply w-full flex items-center justify-start gap-4  last:border-none m-0;
+                    @apply w-full flex items-center justify-start gap-4 m-0 border-b border-r border-gray-200 first:border-t;
 
                     p {
                         @apply px-10 py-1 m-0 text-sm;
@@ -42,4 +44,11 @@
 
 ::ng-deep .p-dialog-header-icons {
     @apply flex items-center justify-end gap-1;
+}
+
+::ng-deep .data-export-popup {
+
+    .p-dialog-content {
+        @apply overflow-hidden;
+    }
 }

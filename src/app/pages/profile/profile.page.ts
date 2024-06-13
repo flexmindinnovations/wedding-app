@@ -30,7 +30,8 @@ export class ProfilePage implements OnInit {
     { name: 'Family Information', route: 'family', code: 'FI' },
     { name: 'Contact Information', route: 'contact', code: 'CI' },
     { name: 'Other Information', route: 'other', code: 'OI' },
-    { name: 'Photos Upload', route: 'photos', code: 'PH' }
+    { name: 'Photos Upload', route: 'photos', code: 'PH' },
+    { name: 'Payment', route: 'payment', code: 'PYMNT' }
   ];
 
   dialogRef: DynamicDialogRef | undefined;
@@ -74,7 +75,7 @@ export class ProfilePage implements OnInit {
   }
 
   handleListItemChange(event: any) {
-    if(event?.route){
+    if (event?.route) {
       this.router.navigateByUrl('profile/' + event?.route);
       this.selectedStep = event;
     }

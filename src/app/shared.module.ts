@@ -68,6 +68,7 @@ import { ProfileViewPage } from './pages/profile-view/profile-view.page';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { LikedProfilesComponent } from './modals/liked-profiles/liked-profiles.component';
 import { CardModule } from 'primeng/card';
+import { PaymentInfoComponent } from './components/registerartion-process/payment-info/payment-info.component';
 
 const components = [
   FormStepperComponent,
@@ -92,6 +93,7 @@ const components = [
   DataExportComponent,
   VideoPlayerComponent,
   PricingComponent,
+  PaymentInfoComponent,
   LikedProfilesComponent,
 ]
 

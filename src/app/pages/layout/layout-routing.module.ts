@@ -61,6 +61,10 @@ const routes: Routes = [
         loadChildren: () => import('../profile-filter/profile-filter.module').then(m => m.ProfileFilterPageModule)
       },
       {
+        path: 'payment-status',
+        loadChildren: () => import('../payment/payment.module').then(m => m.PaymentPageModule)
+      },
+      {
         path: 'logout',
         loadChildren: () => import('../logout/logout.module').then(m => m.LogoutPageModule)
       },
