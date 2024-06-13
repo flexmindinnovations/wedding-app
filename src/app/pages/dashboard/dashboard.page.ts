@@ -81,7 +81,6 @@ export class DashboardPage implements OnInit {
 
     this.getRandomProfiles();
   }
-
   ngAfterViewInit(): void {
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
@@ -91,16 +90,12 @@ export class DashboardPage implements OnInit {
 
     window.addEventListener('load', () => {
       const pendingInquery: any = sessionStorage.getItem('inquiry');
-      const planInquery: any = JSON.parse(sessionStorage.getItem('plan') || '{}');
-      const customerData: any = JSON.parse(sessionStorage.getItem('customerData') || '{}');
       if (pendingInquery && pendingInquery > 0) {
         this.router.navigateByUrl(`profiles/view/${pendingInquery}`);
         setTimeout(() => {
           sessionStorage.removeItem('inquiry');
           sessionStorage.removeItem('isLoggedInCompleted');
         }, 1000);
-      } else if (planInquery && typeof planInquery === 'object' && Object.keys(planInquery).length > 0) {
-
       } else {
         const isLoggedInCompleted: any = sessionStorage.getItem('isLoggedInCompleted');
         if (isLoggedInCompleted) {

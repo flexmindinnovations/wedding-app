@@ -8,6 +8,7 @@ import { CustomerRegistrationService } from 'src/app/services/customer-registrat
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
 import { Router } from '@angular/router';
+import { dropdownValidator } from 'src/app/util/util';
 
 @Component({
   selector: 'family-info',
@@ -68,7 +69,7 @@ export class FamilyInfoComponent implements OnInit {
       noOfMarriedBrothers: ['', [Validators.required]],
       noOfSisters: ['', [Validators.required]],
       noOfMarriedSisters: ['', [Validators.required]],
-      religionId: ['', [Validators.required]],
+      religionId: ['', [Validators.required,dropdownValidator()]],
       castId: [null],
       subCastId: [null]
     })

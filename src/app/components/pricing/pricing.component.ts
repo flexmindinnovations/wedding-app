@@ -1,5 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
@@ -14,18 +13,11 @@ export class PricingComponent implements OnInit {
 
   cardItems: CardItem[] = [];
   dialogRef: DynamicDialogRef | undefined;
-  showLoginDialog = false;
-  public screenWidth: any;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: any) {
-    this.screenWidth = window.innerWidth;
-  }
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService,
-    private router: Router
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -67,46 +59,23 @@ export class PricingComponent implements OnInit {
 
   handlePlanCardClick(plan: any) {
     const isLoggedIn = this.authService.isLoggedIn();
-    console.log('plan: ', plan);
-
     if (!isLoggedIn) {
-      // this.dialogRef = this.dialogService.open(RegisterUserComponent, {
-      //   header: 'Sign up',
-      //   width: '25%',
-      //   baseZIndex: 10000,
-      //   breakpoints: {
-      //     '960px': '75vw',
-      //     '640px': '90vw'
-      //   },
-      //   maximizable: false
-      // })
+      this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+        header: 'Sign up',
+        width: '25%',
+        baseZIndex: 10000,
+        breakpoints: {
+          '960px': '75vw',
+          '640px': '90vw'
+        },
+        maximizable: false
+      })
 
-      // this.dialogRef.onClose.subscribe((afterClose: any) => {
-      //   if (afterClose) { }
-      // });
-      sessionStorage.setItem('plan', JSON.stringify(plan));
-      this.showLoginDialog = true;
+      this.dialogRef.onClose.subscribe((afterClose: any) => {
+        if (afterClose) { }
+      });
     } else {
 
-    }
-
-  }
-  handleButtonClick(src?: string) {
-    this.showLoginDialog = false;
-    setTimeout(() => {
-      if (src == 'login') {
-        this.router.navigateByUrl('login');
-      } else {
-        sessionStorage.removeItem('inquiry');
-      }
-    }, 300);
-  }
-
-  getDialogStyle() {
-    if (this.screenWidth < 640) {  // Example breakpoint for small devices
-      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
-    } else {
-      return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
 
   }

@@ -11,7 +11,7 @@
   
     </div>
     <div class="p-toolbar-group-end">
-      <mt-button title="Export Data" icon="pi pi-file-export" (action)="handleExportAction()"></mt-button>
+      <mt-button title="Bio Data" icon="pi pi-download" (action)="handleExportAction()"></mt-button>
     </div>
   </p-toolbar>
 </ion-header>
@@ -28,8 +28,13 @@
           </div>
         </ng-template>
         <ng-template pTemplate>
-          <div class="w-full p-4 h-full overflow-auto">
-            <router-outlet></router-outlet>
+          <div class="flex flex-col w-full h-full">
+            <div class="flex w-full items-center justify-start bg-cb-50 px-4 py-2">
+              <p class="text-cb-600">Please note that fields marked with an asterisk (<span class="text-red-600">*</span>) are mandatory and must be provided.</p>
+            </div>
+            <div class="w-full flex-grow p-4 h-full overflow-auto">
+              <router-outlet></router-outlet>
+            </div>
           </div>
         </ng-template>
       </p-splitter>

@@ -21,6 +21,7 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
   @Input() isMultiline: boolean = false;
   @Input() showClear: boolean = false;
   @Input('required') isRequired: true | false = false;
+  @Input() mandatory : boolean = true;
   @Input() placeholder: string = '';
   @Input() controlValue: string = '';
   @Input() presentaion: 'date' | 'time' | 'date-time' | undefined;
@@ -122,6 +123,16 @@ export class InputComponent implements OnInit, AfterViewInit, OnDestroy, Control
     this.controlValue = '';
     this.inputSubscription.unsubscribe();
   }
+  handleOnPaste(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData;
+    if (clipboardData) {
+      const pastedText = clipboardData.getData('text');
+      this.controlValue = pastedText;
+      this.control.setValue(pastedText);
+      event.preventDefault();
+    }
+  }
 }
+
 
 export type InputType = 'text' | 'password' | 'email' | 'number' | 'date' | 'time';

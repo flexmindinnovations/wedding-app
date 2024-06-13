@@ -17,7 +17,7 @@
         <app-input label="Date Of Birth" presentaion="date" type="date" [control]="formGroupControl['dateOfBirth']"
           formControlName="dateOfBirth" [controlValue]="formGroup.get('dateOfBirth')?.value || ''" />
 
-        <app-input label="Time Of Birth" presentaion="time" type="date" [control]="formGroupControl['timeOfBirth']"
+        <app-input label="Time Of Birth" [mandatory]="false" presentaion="time" type="date" [control]="formGroupControl['timeOfBirth']"
           formControlName="timeOfBirth" (inputValue)="handleInputValue($event)" />
         <!-- 
         <app-input label="Occupation" type="text" [control]="formGroupControl['occupation']"
@@ -119,14 +119,14 @@
           formControlName="foodPreferencesId" (onSelectionChange)="onSelectionChange($event, 'foodPreferencesId')"
           [controlValue]="formGroup.get('foodPreferencesId')?.value" [options]="foodPreferencesListOptions" />
 
-        <app-dropdown label="Blood Group" [control]="formGroupControl['bloodGroupId']" formControlName="bloodGroupId"
+        <app-dropdown label="Blood Group" [mandatory]="false" [control]="formGroupControl['bloodGroupId']" formControlName="bloodGroupId"
           (onSelectionChange)="onSelectionChange($event, 'bloodGroupId')"
           [controlValue]="formGroup.get('bloodGroupId')?.value" [options]="bloodGroupListOptions" />
 
         <app-input label="Location Of Birth" type="text" [control]="formGroupControl['locationOfBirth']"
           formControlName="locationOfBirth" [controlValue]="formGroup.get('locationOfBirth')?.value || ''" />
 
-        <app-input label="Shake Date" presentaion="date" type="date" [control]="formGroupControl['shakeDate']"
+        <app-input label="Shake Date" [mandatory]="false" presentaion="date" type="date" [control]="formGroupControl['shakeDate']"
           formControlName="shakeDate" [controlValue]="formGroup.get('shakeDate')?.value || ''" />
       </div>
     </form>

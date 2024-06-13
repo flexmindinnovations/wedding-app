@@ -554,8 +554,8 @@ export class ProfileViewPage implements OnInit {
     const timestamp = +new Date();
     let fileName = timestamp.toString() + '_' + `${DOMAIN}_Profile.pdf`;
     if (fullName) {
-      fullName = this.personalInfoModel?.fullName?.replace(/\s/g, '_') + '.pdf';
-      fileName = fullName ? fullName + '_' + timestamp.toString() : `${DOMAIN}_Profile.pdf`;
+      fullName = this.personalInfoModel?.fullName?.replace(/\s/g, '_');
+      fileName = fullName ? fullName + '_' + timestamp.toString()+ '.pdf' : `${DOMAIN}_Profile.pdf`;
     }
     // pdfMake.createPdf(doc).open();
     pdfMake.createPdf(doc).download(fileName);

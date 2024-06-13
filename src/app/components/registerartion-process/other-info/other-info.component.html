@@ -9,7 +9,7 @@
           formControlName="motherTongueId" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
           [controlValue]="formGroup.get('motherTongueId')?.value" [options]="motherTongueListOptions" />
         }
-        <app-input label="Expectations" class="flex-grow col-span-4" type="text"
+        <app-input label="My Dream Partner should be like this" class="flex-grow col-span-4" type="text"
           [controlValue]="formGroup.get('expectations')?.value" [control]="formGroupControl['expectations']"
           formControlName="expectations" [isMultiline]=true />
 

@@ -7,6 +7,7 @@ import { CustomerRegistrationService } from 'src/app/services/customer-registrat
 import { SharedService } from 'src/app/services/shared.service';
 import { findInvalidControlsRecursive } from 'src/app/util/theme';
 import { Router } from '@angular/router';
+import { dropdownValidator } from 'src/app/util/util';
 
 @Component({
   selector: 'other-info',
@@ -54,7 +55,7 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
     this.formGroup = this.fb.group({
       expectations: ['', [Validators.required]],
       extraInformation: ['', [Validators.required]],
-      motherTongueId: ['', [Validators.required]],
+      motherTongueId: ['', [Validators.required,dropdownValidator()]],
     })
   }
 
