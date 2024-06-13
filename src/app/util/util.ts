@@ -1,9 +1,10 @@
 import { faHome, faBlog, faCalendarDays, faEllipsis, faExclamationCircle, faAddressBook, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { ClickEvent, MoveDirection, OutMode } from "@tsparticles/engine";
 import * as CryptoJs from 'crypto-js';
-import { sha512 } from 'js-sha512';
+// import { sha512 } from 'js-sha512';
 import { DOMAIN } from './theme';
 import { environment } from 'src/environments/environment';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 const homeIcon = faHome;
 const blogIcon = faBlog;
@@ -34,6 +35,17 @@ const availableLoaders: any = {
 }
 
 export const APP_LOADER = availableLoaders.dots;
+
+
+export const dropdownValidator = (): ValidatorFn => {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+        const value = control.value;
+        if (!value || value === '') {
+            return { 'required': true };
+        }
+        return null;
+    };
+}
 
 export const tabItems = {
     displayed: [
