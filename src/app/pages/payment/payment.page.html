@@ -1,13 +1,95 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Payment Status</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <div class="content-wrapper h-full w-full ion-padding">
-    <p>
-      Payment wrapper page
-    </p>
+    @if (isLoading()) {
+    <div class="flex h-full w-full items-center justify-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem;"></i>
+    </div>
+    } @else {
+    @if (isTxSuccess()) {
+    <div class="flex items-center justify-center w-full h-full">
+      <div class="success-container">
+        <div class="header flex items-center justify-center flex-col gap-3">
+          <div class="check-icon h-14 w-14 bg-green-400 rounded-full shadow-md flex items-center justify-center">
+            <i class="pi pi-check text-green-800" style="font-size: 24px;"></i>
+          </div>
+          <h2 class="text-green-800">{{paymentDetails().field9}}</h2>
+        </div>
+        <div class="tx-details my-5">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <b>
+                    Payment Type
+                  </b>
+                </td>
+                <td>
+                  {{paymentDetails().mode}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>
+                    Payment Source
+                  </b>
+                </td>
+                <td>
+                  {{paymentDetails().payment_source}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>
+                    Email
+                  </b>
+                </td>
+                <td>
+                  {{paymentDetails().email}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>
+                    Amount Paid
+                  </b>
+                </td>
+                <td>
+                  {{paymentDetails().amt}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>
+                    Transaction Id
+                  </b>
+                </td>
+                <td>
+                  {{paymentDetails().txnid}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <mt-button title="Go To Home" (action)="handleRedirect()"></mt-button>
+      </div>
+    </div>
+    } @else {
+    <div class="failure-container">
+      <div class="header flex items-center justify-center flex-col my-4">
+        <div class="check-icon h-14 w-14 bg-red-400 rounded-full shadow-md flex items-center justify-center">
+          <i class="pi pi-times text-red-800" style="font-size: 24px;"></i>
+        </div>
+        <!-- <h2 class="text-red-800">{{paymentDetails().field9}}</h2> -->
+        <h2 class="m-0">
+          Transaction failed
+        </h2>
+        <p>
+          Please again later after sometime
+        </p>
+      </div>
+      <mt-button title="Go To Home" (action)="handleRedirect()"></mt-button>
+    </div>
+    }
+    }
   </div>
 </ion-content>

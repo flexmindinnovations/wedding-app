@@ -1,0 +1,16 @@
+table {
+    @apply block min-w-96;
+
+    tr {
+        @apply block py-2 min-w-96;
+
+        :first-child {
+            @apply w-full text-left;
+        }
+
+        :last-child {
+            @apply w-full text-right;
+        }
+
+    }
+}

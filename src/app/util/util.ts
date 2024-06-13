@@ -268,8 +268,6 @@ export const paymentHtmlPayload = (payment: Payment) => {
 }
 
 const genertateHash = ({ txnid, amount, productinfo, firstname, email, phone }: { txnid: string, amount: string, productinfo: string, firstname: string, email: string, phone: string }) => {
-    // const hashInput = `${MERCHANT_KEY_TEST}|${txnId}|${amount.toString()}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
-
     const hashInput = `${MERCHANT_KEY_TEST}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
     console.log('hashInput: ', hashInput);
     HASH_STRING = CryptoJs.SHA512(hashInput).toString();

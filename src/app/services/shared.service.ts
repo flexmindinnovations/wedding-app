@@ -153,10 +153,12 @@ export class SharedService {
     return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
   }
 
-  getPaymentObj(appEnv: string): Observable<any> {
+  getPaymentObj(appEnv: string, payload: any): Observable<any> {
     const origin = window.location.href;
+    const prodUrl = `https://susangam.faiznikah.com/api/v1/payment/${this.envPath}`;
     const endpoint = `http://localhost:3000/api/v1/payment/${this.envPath}`;
-    return this.http.get(endpoint);
+
+    return this.http.post(prodUrl, payload);
   }
 
   generateHash(value: string) {
@@ -165,9 +167,15 @@ export class SharedService {
   }
 
   verifyPayment(payload: any): Observable<any> {
-    const endpoint = this.envPath === 'local' ? `http://localhost:3000/api/v1/verify_payment/${this.envPath}` : `http://susangam.com/api/v1/verify_payment.${this.envPath}`;
+    const prodUrl = `https://susangam.faiznikah.com/api/v1/verify_payment/${this.envPath}`;
+    const endpoint = this.envPath === 'local' ? `http://localhost:3000/api/v1/verify_payment/${this.envPath}` : `https://susangam.com/api/v1/verify_payment/${this.envPath}`;
 
-    return this.http.post(endpoint, payload);
+    return this.http.post(prodUrl, payload);
+  }
+
+  saveCustomerPayment(payload: any): Observable<any> {
+    const url = `${this.endpoint}/CustomerPayment/saveCustomerPayment`;
+    return this.http.post(url, payload);
   }
 
 
@@ -197,17 +205,17 @@ export class SharedService {
     //     }
     //   };
 
-      var formData = new FormData();
-      formData.append("key", apiKey);
-      formData.append("txnid", txnId);
-      formData.append("amount", amount);
-      formData.append("productinfo", productInfo);
-      formData.append("firstname", firstName);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("surl", surl);
-      formData.append("furl", furl);
-      formData.append("hash", hash);
+    var formData = new FormData();
+    formData.append("key", apiKey);
+    formData.append("txnid", txnId);
+    formData.append("amount", amount);
+    formData.append("productinfo", productInfo);
+    formData.append("firstname", firstName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("surl", surl);
+    formData.append("furl", furl);
+    formData.append("hash", hash);
 
     //   xhr.send(formData);
     // })

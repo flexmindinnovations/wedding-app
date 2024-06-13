@@ -1,5 +1,6 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit, isDevMode, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { tsParticles } from '@tsparticles/engine';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { MERCHANT_KEY_LIVE, MERCHANT_KEY_TEST, verifyPaymentHash } from 'src/app/util/util';
@@ -10,7 +11,11 @@ import { MERCHANT_KEY_LIVE, MERCHANT_KEY_TEST, verifyPaymentHash } from 'src/app
   styleUrls: ['./payment.page.scss'],
 })
 export class PaymentPage implements OnInit {
-
+  isLoading = signal(false);
+  isTxSuccess = signal(false);
+  queryParams = signal<any>({})
+  paymentDetails = signal<any>({});
+  paymentDbResponse = signal<any>({});
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -19,11 +24,13 @@ export class PaymentPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this.isLoading.set(true);
     const user = this.sharedService.getLoggedInCustomerInfo();
     this.activatedRoute.queryParams.subscribe((params) => {
       console.log('params: ', params);
       if (params && params['status'] === 'success') {
+        this.queryParams.set(params);
+        this.paymentDetails.update((val) => { return { ...val, email: params['email'] } })
         const paymentDate = new Date(params['addedon']);
         const paymentObj = new Payment(
           0,
@@ -37,26 +44,45 @@ export class PaymentPage implements OnInit {
           params['bank_ref_num'],
           paymentDate.toISOString(),
           params['status'],
-          'online'
+          params['mode']
         );
-
-        console.log('paymentObj: ', paymentObj);
         const hash = verifyPaymentHash({ command: 'verify_payment', txnid: params['txnid'] });
-        console.log('hash: ', hash);
         const payload = {
-          key: isDevMode() ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE,
           command: 'verify_payment',
           var1: params['txnid'],
           hash
         }
-        console.log('payload: ', payload);
-        
         this.sharedService.verifyPayment(payload).subscribe((res: any) => {
-          console.log('res: ', res);
-          
+          if (res) {
+            const txData = res.transaction_details[payload['var1']];
+            if (txData.status === TransactionStatus.SUCCESS) {
+              this.isTxSuccess.set(true);
+              this.paymentDetails.update((val) => { return { ...val, ...txData } });
+
+              this.sharedService.saveCustomerPayment(paymentObj).subscribe({
+                next: (data: any) => {
+                  if (data) {
+                    this.isLoading.set(false);
+                    this.paymentDbResponse.set(data);
+                  }
+                },
+                error: (error) => {
+                  console.log('error: ', error);
+                  this.isLoading.set(false);
+                }
+              })
+
+            } else {
+              this.isTxSuccess.set(false);
+            }
+          }
         })
       }
     })
+  }
+
+  handleRedirect() {
+    this.router.navigateByUrl('');
   }
 
 }
@@ -102,4 +128,9 @@ export class Payment {
     this.paymentStatus = paymentStatus
     this.paymentMode = paymentMode
   }
+}
+
+export enum TransactionStatus {
+  FAILED = 'failed',
+  SUCCESS = 'success'
 }
