@@ -249,11 +249,12 @@ export const paymentHtmlPayload = (payment: Payment, appEnv: string) => {
     // const paymentResponse = `https://8d45-106-51-37-15.ngrok-free.app/payment/payu-confirm/RMAXZ4/`;
     const { txnid, amount, productinfo, email, firstname, phone, surl, furl, hash } = payment;
     const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
+    const actionUrl  = appEnv === 'local' ? environment.paymentTestingUrl : environment.paymentProdingUrl;
     // key, txnid, amount, productinfo, firstname, email, phone, surl, furl, hash
     const htmlBody = `
     <html>
     <body>
-    <form action='${environment.paymentTestingUrl}' method="POST" id="payu_form">
+    <form action='${actionUrl}' method="POST" id="payu_form">
     <input type="hidden" name="key" value="${merchantKey}" />
     <input type="hidden" name="txnid" value="${txnid}" />
     <input type="hidden" name="amount" value="${amount}" />
