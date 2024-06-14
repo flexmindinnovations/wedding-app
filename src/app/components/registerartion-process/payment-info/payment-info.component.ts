@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, isDevMode, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
@@ -31,11 +31,11 @@ export class PaymentInfoComponent implements OnInit {
   ngOnInit() {
 
     this.formGroup = this.fb.group({
-      firstName: ['',],
-      lastName: [''],
+      firstName: ['',[Validators.required]],
+      lastName: ['',[Validators.required]],
       mobile: [''],
-      email: [''],
-      amount: ['499']
+      email: ['',[Validators.required,Validators.email]],
+      amount: ['249',[Validators.required]]
     })
 
     this.getCustomerDetails();
@@ -69,28 +69,30 @@ export class PaymentInfoComponent implements OnInit {
   }
 
   handlePayment() {
-    const formVal = this.formGroup.getRawValue();
-    const payload: any = {};
-    for (let key in formVal) {
-      if (formVal[key]) payload[key] = formVal[key]
-    }
-    const appEnv = isDevMode() ? 'local' : 'prod';
-    this.sharedService.getPaymentObj(appEnv, payload).subscribe({
-      next: (res: any) => {
-        if (res) {
-          console.clear();
-          const data = res?.info;
-          const htmlPaymentString = paymentHtmlPayload(data);
-          const winUrl = URL.createObjectURL(
-            new Blob([htmlPaymentString], { type: "text/html" })
-          );
-          window.location.href = winUrl;
-        }
-      },
-      error: (error: any) => {
-        console.log('error: ', error);
+    if(this.formGroup.valid){
+      const formVal = this.formGroup.getRawValue();
+      const payload: any = {};
+      for (let key in formVal) {
+        if (formVal[key]) payload[key] = formVal[key]
       }
-    })
+      const appEnv = isDevMode() ? 'local' : 'prod';
+      this.sharedService.getPaymentObj(appEnv, payload).subscribe({
+        next: (res: any) => {
+          if (res) {
+            console.clear();
+            const data = res?.info;
+            const htmlPaymentString = paymentHtmlPayload(data);
+            const winUrl = URL.createObjectURL(
+              new Blob([htmlPaymentString], { type: "text/html" })
+            );
+            window.location.href = winUrl;
+          }
+        },
+        error: (error: any) => {
+          console.log('error: ', error);
+        }
+      })
+    }
   }
 
   showPopup() {

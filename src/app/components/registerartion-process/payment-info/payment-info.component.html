@@ -16,14 +16,14 @@
           [controlValue]="formGroup.get('firstName')?.value" />
         <app-input label="Email" type="text" [control]="formGroupControl['email']" formControlName="email"
           [controlValue]="formGroup.get('email')?.value" />
-        <app-input label="Mobile Number" type="text" [control]="formGroupControl['mobile']" formControlName="mobile"
+        <app-input label="Mobile Number" [mandatory]="false" type="text" [control]="formGroupControl['mobile']" formControlName="mobile"
           [controlValue]="formGroup.get('mobile')?.value" />
         <app-input label="Amout" type="text" [control]="formGroupControl['amount']" formControlName="amount"
           [controlValue]="formGroup.get('amount')?.value" />
       </form>
 
       <div class="action w-full flex items-center justify-end">
-        <mt-button title="Proceed to payment page" (action)="handlePayment()" />
+        <mt-button [disabled]="formGroup.invalid"  title="Proceed to payment page" (action)="handlePayment()" />
       </div>
     </div>
   </p-dialog>
