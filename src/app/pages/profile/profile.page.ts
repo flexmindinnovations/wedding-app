@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Sidebar } from 'primeng/sidebar';
@@ -21,6 +21,8 @@ export class ProfilePage implements OnInit {
   sharedService = inject(SharedService);
 
   isReadOnly: boolean = false;
+  isPaymentPage = signal(false);
+  isPhotosPage = signal(false);
 
   sidebarVisible: boolean = false;
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
@@ -52,8 +54,14 @@ export class ProfilePage implements OnInit {
     observer.observe(this.host.nativeElement);
 
     this.router.events.subscribe((events: any) => {
-      const currentUrl = this.router.url;
+      const currentUrl = this.router.url;      
       const activeRoute = this.router.url.substring(currentUrl.lastIndexOf('/') + 1, this.router.url.length);
+      if(activeRoute === 'payment') this.isPaymentPage.set(true);
+      else if(activeRoute === 'photos') this.isPhotosPage.set(true);
+      else {
+        this.isPhotosPage.set(false);
+        this.isPaymentPage.set(false);
+      }
       if (activeRoute) {
         const activeItem = this.profileSteps.filter((item: any) => item.route === activeRoute);
         if (activeItem?.length) this.selectedStep = activeItem[0];

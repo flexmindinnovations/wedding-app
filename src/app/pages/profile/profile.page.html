@@ -1,14 +1,14 @@
 <ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
   <p-toolbar styleClass="tBar">
     <div class="p-toolbar-group-start">
-      <p-button  styleClass="navButton" *ngIf="isMobile" (click)="sidebarVisible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
-        class="flex md:lg:xl:hidden"></p-button>
-        <h3 class="m-0">
-          Profile Information
-        </h3>
+      <p-button styleClass="navButton" *ngIf="isMobile" (click)="sidebarVisible = true" icon="pi pi-bars"
+        [rounded]="true" [text]="true" class="flex md:lg:xl:hidden"></p-button>
+      <h3 class="m-0">
+        Profile Information
+      </h3>
     </div>
     <div class="p-toolbar-group-center">
-  
+
     </div>
     <div class="p-toolbar-group-end">
       <mt-button title="Bio Data" icon="pi pi-download" (action)="handleExportAction()"></mt-button>
@@ -19,8 +19,8 @@
 <ion-content [fullscreen]="true">
   <div class="content profile-page overflow-hidden w-full h-full max-h-full flex flex-col items-start justify-center">
     <div class="form-container max-h-full flex-grow w-full">
-      <p-splitter styleClass="profile-splitter" [panelSizes]="getSplitterDimensions()" [minSizes]="getMinSplitterDimensions()"
-        class="flex-grow w-full h-full">
+      <p-splitter styleClass="profile-splitter" [panelSizes]="getSplitterDimensions()"
+        [minSizes]="getMinSplitterDimensions()" class="flex-grow w-full h-full">
         <ng-template pTemplate>
           <div class="w-full h-full">
             <p-listbox (ngModelChange)="handleListItemChange($event)" class="h-full shadow-none"
@@ -29,9 +29,12 @@
         </ng-template>
         <ng-template pTemplate>
           <div class="flex flex-col w-full h-full">
+            @if(!isPaymentPage() && !isPhotosPage()){
             <div class="flex w-full items-center justify-start bg-cb-50 px-4 py-2">
-              <p class="text-cb-600">Please note that fields marked with an asterisk (<span class="text-red-600">*</span>) are mandatory and must be provided.</p>
+              <p class="text-cb-600">Please note that fields marked with an asterisk (<span
+                  class="text-red-600">*</span>) are mandatory and must be provided.</p>
             </div>
+            }
             <div class="w-full flex-grow p-4 h-full overflow-auto">
               <router-outlet></router-outlet>
             </div>

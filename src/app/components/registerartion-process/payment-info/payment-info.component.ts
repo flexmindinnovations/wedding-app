@@ -81,7 +81,7 @@ export class PaymentInfoComponent implements OnInit {
           if (res) {
             console.clear();
             const data = res?.info;
-            const htmlPaymentString = paymentHtmlPayload(data);
+            const htmlPaymentString = paymentHtmlPayload(data, appEnv);
             const winUrl = URL.createObjectURL(
               new Blob([htmlPaymentString], { type: "text/html" })
             );

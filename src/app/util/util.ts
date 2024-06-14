@@ -5,6 +5,7 @@ import * as CryptoJs from 'crypto-js';
 import { DOMAIN } from './theme';
 import { environment } from 'src/environments/environment';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { isDevMode } from '@angular/core';
 
 const homeIcon = faHome;
 const blogIcon = faBlog;
@@ -243,16 +244,17 @@ export function setPaymentObject(payment: Payment) {
 }
 
 
-export const paymentHtmlPayload = (payment: Payment) => {
+export const paymentHtmlPayload = (payment: Payment, appEnv: string) => {
     const paymentResponse = `http://localhost:4200/payment`;
     // const paymentResponse = `https://8d45-106-51-37-15.ngrok-free.app/payment/payu-confirm/RMAXZ4/`;
     const { txnid, amount, productinfo, email, firstname, phone, surl, furl, hash } = payment;
+    const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
     // key, txnid, amount, productinfo, firstname, email, phone, surl, furl, hash
     const htmlBody = `
     <html>
     <body>
     <form action='${environment.paymentTestingUrl}' method="POST" id="payu_form">
-    <input type="hidden" name="key" value="${MERCHANT_KEY_TEST}" />
+    <input type="hidden" name="key" value="${merchantKey}" />
     <input type="hidden" name="txnid" value="${txnid}" />
     <input type="hidden" name="amount" value="${amount}" />
     <input type="hidden" name="productinfo" value="${productinfo}" />
@@ -280,13 +282,19 @@ export const paymentHtmlPayload = (payment: Payment) => {
 }
 
 const genertateHash = ({ txnid, amount, productinfo, firstname, email, phone }: { txnid: string, amount: string, productinfo: string, firstname: string, email: string, phone: string }) => {
-    const hashInput = `${MERCHANT_KEY_TEST}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${SALT_KEY_TEST}`;
+    const appEnv = isDevMode() ? 'local' : 'prod';
+    const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
+    const saltKey = appEnv === 'local' ? SALT_KEY_TEST : SALT_KEY_LIVE;
+    const hashInput = `${merchantKey}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${saltKey}`;
     console.log('hashInput: ', hashInput);
     HASH_STRING = CryptoJs.SHA512(hashInput).toString();
 }
 
 export function verifyPaymentHash({ command, txnid }: { command: string, txnid: string }): string {
-    const hashInput = MERCHANT_KEY_TEST + "|" + command + "|" + txnid + "|" + SALT_KEY_TEST;
+    const appEnv = isDevMode() ? 'local' : 'prod';
+    const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
+    const saltKey = appEnv === 'local' ? SALT_KEY_TEST : SALT_KEY_LIVE;
+    const hashInput = merchantKey + "|" + command + "|" + txnid + "|" + saltKey;
 
     const hashStringHex = CryptoJs.SHA512(hashInput).toString(CryptoJs.enc.Hex);
 
