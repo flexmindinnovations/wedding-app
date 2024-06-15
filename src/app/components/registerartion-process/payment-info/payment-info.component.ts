@@ -12,21 +12,17 @@ import { generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
 export class PaymentInfoComponent implements OnInit {
   showPaymentConfirmationDialog = false;
   public screenWidth: any;
-
   formGroup!: FormGroup;
-
   userData = signal<any>({});
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: any) {
-    this.screenWidth = window.innerWidth;
-  }
 
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
     private customerRegistrationService: CustomerRegistrationService
-  ) { }
+  ) {
+    this.onResize();
+   }
 
   ngOnInit() {
 
@@ -98,6 +94,12 @@ export class PaymentInfoComponent implements OnInit {
   showPopup() {
     this.showPaymentConfirmationDialog = true;
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
 
   getDialogStyle() {
     if (this.screenWidth < 640) {  // Example breakpoint for small devices
