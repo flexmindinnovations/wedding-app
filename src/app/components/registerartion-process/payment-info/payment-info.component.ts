@@ -14,6 +14,10 @@ export class PaymentInfoComponent implements OnInit {
   public screenWidth: any;
   formGroup!: FormGroup;
   userData = signal<any>({});
+  isPaymentCompleted = signal<any>(false);
+  currentPaymentDetails: any;
+  paymentHistory: any;
+  isLoading = false;
 
 
   constructor(
@@ -27,11 +31,11 @@ export class PaymentInfoComponent implements OnInit {
   ngOnInit() {
 
     this.formGroup = this.fb.group({
-      firstName: ['',[Validators.required]],
-      lastName: ['',[Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
       mobile: [''],
-      email: ['',[Validators.required,Validators.email]],
-      amount: ['249',[Validators.required]]
+      email: ['', [Validators.required, Validators.email]],
+      amount: ['249', [Validators.required]]
     })
 
     this.getCustomerDetails();
@@ -42,11 +46,18 @@ export class PaymentInfoComponent implements OnInit {
   }
 
   getCustomerDetails(): void {
+    this.isLoading = true;
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {
-          const { customerUserName, contactInfoModel, personalInfoModel } = data;
+          const { customerUserName, contactInfoModel, personalInfoModel, currentCustomerPayment, paymentHistoryList } = data;
+          if (currentCustomerPayment?.paymentStatus === 'success') {
+            this.isPaymentCompleted.set(true);
+            this.currentPaymentDetails = currentCustomerPayment;
+            this.paymentHistory = paymentHistoryList;
+          }
+          this.sharedService.userDetails.set(data);
           const userFormObject = {
             mobile: customerUserName,
             firstName: personalInfoModel?.firstName,
@@ -58,6 +69,7 @@ export class PaymentInfoComponent implements OnInit {
           this.formGroup.disable();
           this.formGroupControl['email'].enable();
           this.formGroupControl['mobile'].enable();
+          this.isLoading = false;
         }
       },
       error: (error) => { }
@@ -65,7 +77,7 @@ export class PaymentInfoComponent implements OnInit {
   }
 
   handlePayment() {
-    if(this.formGroup.valid){
+    if (this.formGroup.valid) {
       const formVal = this.formGroup.getRawValue();
       const payload: any = {};
       for (let key in formVal) {
@@ -93,6 +105,29 @@ export class PaymentInfoComponent implements OnInit {
 
   showPopup() {
     this.showPaymentConfirmationDialog = true;
+  }
+
+  getPaymentMode(mode: string) {
+    let paymentMode: string = '';
+    switch(mode) {
+      case 'CC':
+        paymentMode = 'Credit Card';
+        break;
+      case 'DC':
+        paymentMode = 'Debit Card';
+        break;
+      case 'NB':
+        paymentMode = 'Net Banking';
+        break;
+      case 'CASH':
+        paymentMode = 'Cash Payment';
+        break;
+      case 'UPI':
+        paymentMode = 'UPI';
+        break;
+    }
+
+    return paymentMode;
   }
 
   @HostListener('window:resize', ['$event'])

@@ -1,4 +1,4 @@
-import { Injectable, inject, isDevMode } from '@angular/core';
+import { Injectable, inject, isDevMode, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IBranch } from '../interfaces/IBranch';
@@ -18,6 +18,7 @@ export class SharedService {
   http = inject(HttpConfigService);
   httpAssests = inject(HttpClient);
   customerData = new Map<string, any>();
+  userDetails = signal<any>({});
   envPath: PathVariable = isDevMode() ? 'local' : 'prod';
 
   nextButtonClick: any = new Subject();

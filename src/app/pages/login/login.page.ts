@@ -87,7 +87,7 @@ export class LoginPage implements OnInit {
           const { token, customerId, profileStatus, isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } = data;
           localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
           localStorage.setItem('token', token);
-          this.sharedService.customerData.set('profileStatusData', data);
+          this.sharedService.userDetails.set(data);
           this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
           of(true)
             .pipe(
