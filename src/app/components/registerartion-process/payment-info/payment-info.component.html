@@ -23,7 +23,8 @@
       </form>
 
       <div class="action w-full flex items-center justify-end">
-        <mt-button [disabled]="formGroup.invalid"  title="Proceed to payment page" (action)="handlePayment()" />
+        <mt-button title="Close" (action)="showPaymentConfirmationDialog = false" [isCancel] = "true" />
+        <mt-button [disabled]="formGroup.invalid" class="ml-5" title="Proceed to payment page" (action)="handlePayment()" />
       </div>
     </div>
   </p-dialog>
