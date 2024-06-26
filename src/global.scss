@@ -68,7 +68,7 @@ p {
 .p-dialog {
   .p-dialog-header {
     .p-dialog-title {
-      @apply text-lg font-semibold;
+      @apply text-lg font-semibold flex items-center gap-2;
     }
   }
 }

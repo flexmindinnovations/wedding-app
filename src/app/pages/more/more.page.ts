@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DOMAIN } from 'src/app/util/theme';
+import { title } from 'process';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-more',
@@ -18,6 +22,12 @@ export class MorePage implements OnInit, AfterViewInit {
   authService = inject(AuthService);
   isLoggedIn: boolean = false;
   userId: any;
+  dialogService = inject(DialogService);
+  dialogRef: DynamicDialogRef | undefined;
+  isDesktopMode: boolean = false;
+  favouriteProfiles = [];
+
+
   listItems = [
     // {
     //   title: 'About',
@@ -31,11 +41,14 @@ export class MorePage implements OnInit, AfterViewInit {
     }
   ]
 
-  constructor() { }
+  constructor(
+    private sharedService: SharedService
+  ) { }
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '');
     this.userId = user?.user;
+    this.addHamburgerToDialogHeader();
   }
 
   ngAfterViewInit(): void {
@@ -44,13 +57,60 @@ export class MorePage implements OnInit, AfterViewInit {
 
   handleItemClick(item: { title: string; icon: string; route: string; }) {
     // this.router.navigateByUrl(item?.route);
-    if(item.route == 'profiles/view/') item.route = `profiles/view/${this.userId}`;
-    
-    this.router.navigateForward(item?.route);
+    if (item.route) {
+      if (item.route == 'profiles/view/') item.route = `profiles/view/${this.userId}`;
+
+      this.router.navigateForward(item?.route);
+    } else {
+      if (item?.title === 'Manage Profile') {
+        console.log('here manage profile')
+        this.OpenLikedProfileModal();
+      }
+    }
+
   }
 
   getCurrentYear() {
     return new Date().getFullYear();
+  }
+
+  OpenLikedProfileModal() {
+    this.dialogRef = this.dialogService.open(LikedProfilesComponent, {
+      header: 'Manage Favourite Profiles',
+      styleClass: 'liked-profiles-modal',
+      closable: true,
+      width: '100%',
+      height: '100%',
+      style: {'max-height': '100%'},
+      maximizable: false,
+      baseZIndex: 10000,
+      data: this.favouriteProfiles,
+    })
+
+    setTimeout(() => {
+      this.addHamburgerToDialogHeader();
+    }, 300)
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      if (afterClose) { }
+    });
+  }
+
+  addHamburgerToDialogHeader() {
+    const modalHederTitleEl = document.getElementsByClassName('p-dialog-title')[0];    
+    if (modalHederTitleEl) {
+      modalHederTitleEl.classList.add('hamburgerButtonStyle')
+      const hamburgerButton = document.createElement('button');
+      hamburgerButton.type = 'button';
+      hamburgerButton.classList.add('pButton');
+      hamburgerButton.classList.add('pRipple');
+      hamburgerButton.classList.add('p-dialog-header-icon');
+      hamburgerButton.innerHTML = '<i class="pi pi-bars"></i>';
+      hamburgerButton.title = 'Toggle Menu';
+      hamburgerButton.addEventListener('click', () => {
+        this.sharedService.isSidebarOpen.update(val => !val);
+      });
+      modalHederTitleEl.insertBefore(hamburgerButton, modalHederTitleEl.firstChild);
+    }
   }
 
 }

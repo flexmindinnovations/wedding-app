@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, effect, inject, signal } from '@angular/core';
 import * as moment from 'moment';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -23,7 +23,7 @@ export class LikedProfilesComponent implements OnInit {
   isLoggedIn = false;
   isDataLoaded: boolean = false;
   imageUrlPrefix = environment.endpoint;
-
+  sidebarVisible = signal<boolean>(false);
   userInfo: any;
   personalInfoModel: any;
   familyInfoModel: any;
@@ -31,6 +31,7 @@ export class LikedProfilesComponent implements OnInit {
   otherInfoModel: any;
   imageInfoModel: any;
   profileList: any[] = [];
+  isSidebarOpen = signal<boolean>(false);
   constructor(
     private deviceService: DeviceDetectorService,
     private dialogRef: DynamicDialogRef,
@@ -39,7 +40,13 @@ export class LikedProfilesComponent implements OnInit {
     private alertService: AlertService,
     private userService: UserService,
     private sharedService: SharedService
-  ) { }
+  ) {
+
+    effect(() => {
+      this.isSidebarOpen.set(this.sharedService.isSidebarOpen());
+      this.sidebarVisible.set(this.isSidebarOpen());
+    }, { allowSignalWrites: true });
+  }
 
   ngOnInit() {
     const observer = new ResizeObserver((rect) => {
@@ -55,6 +62,11 @@ export class LikedProfilesComponent implements OnInit {
       return item;
     })
     this.isLoggedIn = this.authService.isLoggedIn();
+  }
+
+  handleSidebarClose() {
+    this.sidebarVisible.set(false);
+    this.sharedService.isSidebarOpen.update(val => !val);
   }
 
   handleProfileClick(item: any) {

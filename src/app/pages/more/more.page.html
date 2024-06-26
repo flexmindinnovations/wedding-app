@@ -36,6 +36,15 @@
     </ion-item>
 
     <ion-item lines="full" (click)="handleItemClick({
+      title: 'Manage Profile',
+      icon: 'heart-outline',
+      route: ''
+    })">
+    <ion-icon slot="start" name="heart-outline"></ion-icon>
+    <ion-label>Manage Profile</ion-label>
+  </ion-item>
+
+    <ion-item lines="full" (click)="handleItemClick({
         title: 'Profile',
         icon: 'person-outline',
         route: 'profile/personal'

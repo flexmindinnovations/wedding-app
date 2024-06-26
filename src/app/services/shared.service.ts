@@ -46,6 +46,8 @@ export class SharedService {
 
   setFavouriteProfiles = new Subject();
 
+  isSidebarOpen = signal<boolean>(false);
+
   getLoggedInCustomerInfo() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user ?? user;
