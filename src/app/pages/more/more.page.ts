@@ -62,8 +62,7 @@ export class MorePage implements OnInit, AfterViewInit {
 
       this.router.navigateForward(item?.route);
     } else {
-      if (item?.title === 'Manage Profile') {
-        console.log('here manage profile')
+      if (item?.title === 'Manage Favorite Profile') {
         this.OpenLikedProfileModal();
       }
     }

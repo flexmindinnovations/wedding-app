@@ -26,6 +26,10 @@ const routes: Routes = [
     path: 'profile-view',
     loadChildren: () => import('./pages/profile-view/profile-view.module').then( m => m.ProfileViewPageModule)
   },
+  {
+    path: 'profile-history',
+    loadChildren: () => import('./pages/profile-history/profile-history.module').then( m => m.ProfileHistoryPageModule)
+  },
 
   // {
   //   path: '**',
