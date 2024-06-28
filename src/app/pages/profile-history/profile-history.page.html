@@ -1,13 +1,44 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile-history</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile-history</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="personal-info-container h-full flex flex-col gap-5 items-center justify-center md:lg:ion-padding">
+    <div class="form-wrapper w-full flex-auto flex items-center justify-center h-full overflow-auto">
+      <ng-container *ngIf="isLoading; else content">
+        <div class="flex h-full w-full items-center justify-center">
+          <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem;"></i>
+        </div>
+      </ng-container>
+      <ng-template #content>
+        <div class="payment-info w-full h-full">
+          <div class="personal-info w-full h-auto py-3">
+            <h5 class="block border-b">Profile History</h5>
+            <div class="flex flex-col gap-3">
+              <div *ngFor="let profile of profileHistory" class="grid grid-cols-1 sm:grid-cols-5 gap-4 p-4 border rounded-lg shadow-md">
+                <div class="flex flex-col gap-2 items-center">
+                  <p class="title text-dark ">Photo</p>
+                  <p class="value font-thin"><img [src]="endpoint + '/' + profile.imagePath1"  alt="Profile Photo" class="avatar rounded-full w-20 h-20"></p>
+                </div>
+                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                  <p class="title text-dark">Full Name</p>
+                  <p class="value font-normal">{{ profile.fullName }}</p>
+                </div>
+                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                  <p class="title text-dark">Mobile No</p>
+                  <p class="value font-thin">{{ profile.mobileNo }}</p>
+                </div>
+                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                  <p class="title text-dark ">Email</p>
+                  <p class="value font-thin">{{ profile.emailId }}</p>
+                </div>
+                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                  <p class="title text-dark">Status</p>
+                  <p class="value font-thin px-3 py-1 rounded-md m-0 status-width {{ profile.customerStatus ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800' }}">
+                    {{ profile.customerStatus ? 'Active' : 'Inactive' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
 </ion-content>

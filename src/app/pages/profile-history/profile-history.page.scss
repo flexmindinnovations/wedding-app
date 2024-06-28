@@ -1,0 +1,23 @@
+::ng-deep .text-dark {
+    color: #333;
+    font-weight: 600 !important;
+  }
+
+  ::ng-deep .status-width {
+    max-width: fit-content;
+  }
+
+  @media screen and (max-width: 640px) {
+    .itemContent{
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 6px;
+    }
+    .itemContent > p:first-child::after {
+        content: ":";
+    }
+    .itemImage{
+        flex-direction: column;
+        justify-content: unset;
+    }
+}

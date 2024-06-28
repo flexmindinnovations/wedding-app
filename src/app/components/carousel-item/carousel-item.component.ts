@@ -121,6 +121,23 @@ export class CarouselItemComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       const hasName = this.data?.fullName.replace(/\s/g, '').trim().length > 0 ? true : false;
       const fullName = hasName ? `${this.data?.fullName}` : 'Profile Information';
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const { customerId } = this.data;
+      const HistoryData = {
+        viewHistoryId: 0,
+        viewerId: user.user,
+        viewedProfileId: customerId
+      }
+      this.sharedService.addProfileViewHistory(HistoryData).subscribe({
+        next: (response: any) => {
+          if (response) {
+            console.log(response)
+          }
+        },
+        error: (error) => {
+          this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+        }
+      });
       this.dialogRef = this.dialogService.open(
         DataExportComponent, {
         header: `${fullName}`,
@@ -254,7 +271,7 @@ export class CarouselItemComponent implements OnInit {
     }
   }
 
- 
+
   async generatePdf(pageWidth: any, personalInfoData: any, familyInfoData: any, contactInfoData: any, otherInfoInfoData: any, images: any) {
     const logoImageSrc = `${window.location.origin}/assets/icon/logo.png`;
     const doc: TDocumentDefinitions = {
@@ -640,7 +657,7 @@ export class CarouselItemComponent implements OnInit {
     let fileName = timestamp.toString() + '_' + `${DOMAIN}_Profile.pdf`;
     if (fullName) {
       fullName = this.personalInfoModel?.fullName?.replace(/\s/g, '_');
-      fileName = fullName ? fullName + '_' + timestamp.toString()+ '.pdf' : `${DOMAIN}_Profile.pdf`;
+      fileName = fullName ? fullName + '_' + timestamp.toString() + '.pdf' : `${DOMAIN}_Profile.pdf`;
     }
     // pdfMake.createPdf(doc).open();
     pdfMake.createPdf(doc).download(fileName);
@@ -695,7 +712,7 @@ export class CarouselItemComponent implements OnInit {
 
   parseTimeString(timeString: any) {
     console.log('timeString: ', timeString);
-    
+
     const d = new Date();
     if (timeString) {
       const time = timeString.match(/(\d+)(?::(\d\d))?\s*(p?)/);
