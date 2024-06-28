@@ -1,0 +1,145 @@
+<div class="personal-info-container h-full flex flex-col gap-5 items-center justify-center md:lg:ion-padding">
+  <div class="form-wrapper w-full flex-auto overflow-auto">
+    @if (isDataAvailable) {
+    <form [formGroup]="formGroup" class="form-container w-full flex-auto overflow-auto md:lg:p-4"
+      [ngClass]="isDataAvailable ? 'transition-opacity delay-200 opacity-100' : 'opacity-0'">
+      <div
+        class="flex flex-col lg:grid gap-3 md:gap-4 lg:gap-5 grid-cols-1 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4">
+        <app-input class="col-span-1" label="First Name" type="text" [control]="formGroupControl['firstName']"
+          formControlName="firstName" [controlValue]="formGroup.get('firstName')?.value" [required]="true" />
+
+        <app-input label="Father Name" type="text" [control]="formGroupControl['middleName']"
+          formControlName="middleName" [controlValue]="formGroup.get('middleName')?.value" />
+
+        <app-input label="Last Name" type="text" [control]="formGroupControl['lastName']" formControlName="lastName"
+          [controlValue]="formGroup.get('lastName')?.value" />
+
+        <app-input label="Date Of Birth" presentaion="date" type="date" [control]="formGroupControl['dateOfBirth']"
+          formControlName="dateOfBirth" [controlValue]="formGroup.get('dateOfBirth')?.value || ''" />
+
+        <app-input label="Time Of Birth" [mandatory]="false" presentaion="time" type="date" [control]="formGroupControl['timeOfBirth']"
+          formControlName="timeOfBirth" (inputValue)="handleInputValue($event)" />
+        <!-- 
+        <app-input label="Occupation" type="text" [control]="formGroupControl['occupation']"
+          formControlName="occupation" [controlValue]="formGroup.get('occupation')?.value" /> -->
+
+        <app-dropdown *ngIf="occupationListOptions.length" label="Occupation" [dropdownId]="'myDropdownId'"
+          [control]="formGroupControl['occupationId']" formControlName="occupationId"
+          (onSelectionChange)="onSelectionChange($event, 'occupationId')"
+          [controlValue]="formGroup.get('occupationId')?.value" [options]="occupationListOptions" />
+
+        @if (hasChild && isOccupationDetailsDataAvailable) {
+        <app-dropdown *ngIf="occupationDetailList.length" label="Occupation Details"
+          [control]="formGroupControl['occupationDetailId']" [controlValue]="formGroup.get('occupationDetailId')?.value"
+          formControlName="occupationDetailId" (onSelectionChange)="onSelectionChange($event, 'occupationDetailId')"
+          [options]="occupationDetailList" />
+        }
+
+
+        <app-dropdown label="Gender" [control]="formGroupControl['gender']" formControlName="gender"
+          (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
+          [options]="genderOptions" />
+
+        <app-dropdown label="Marital Status" [control]="formGroupControl['maritalStatus']"
+          formControlName="maritalStatus" [options]="maritalStatusOptions"
+          [controlValue]="formGroup.get('maritalStatus')?.value"
+          (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" />
+
+        <app-dropdown label="Height" [control]="formGroupControl['heightId']" formControlName="heightId"
+          [controlValue]="formGroup.get('heightId')?.value" (onSelectionChange)="onSelectionChange($event, 'heightId')"
+          [options]="heightListOptions" />
+
+        <app-dropdown *ngIf="educationListOptions.length" label="Education" [control]="formGroupControl['educationId']"
+          formControlName="educationId" [controlValue]="formGroup.get('educationId')?.value"
+          (onSelectionChange)="onSelectionChange($event, 'educationId')" [options]="educationListOptions" />
+
+        @if (hasSpecialization && isSpecializationDataAvailable) {
+        <app-dropdown *ngIf="specializationListOptions.length" label="Specialization"
+          [control]="formGroupControl['specializationId']" [controlValue]="formGroup.get('specializationId')?.value"
+          formControlName="specializationId" (onSelectionChange)="onSelectionChange($event, 'specializationId')"
+          [options]="specializationListOptions" />
+        }
+
+        <!--Optional-->
+        <app-input label="Hobbies" class="col-span-3 lg:col-span-4" type="text" [control]="formGroupControl['hobbies']"
+          formControlName="hobbies" [controlValue]="formGroup.get('hobbies')?.value" [isMultiline]=true />
+
+        <p class="flex items-center justify-start gap-3 p-1"
+          [ngClass]="isReadOnly ? 'cursor-not-allowed pointer-events-none opacity-50' : ''">
+          <input #hasSpectaclesSelector type="checkbox" id="hasSpectaclesSelector" [checked]="spectacles"
+            (change)="handleSpectacleStateChange($event)"
+            class="w-4 h-4 text-blue-600 bg-gray-100 checked:bg-blue-500  border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+          <span (click)="hasSpectaclesSelector.click()" class="text-sm mt-[2px] cursor-pointer select-none">
+            Do you have Spectacles?</span>
+        </p>
+
+        <div class="col-span-3 lg:col-span-4 flex flex-col gap-3 p-1"
+          [ngClass]="isReadOnly ? 'cursor-not-allowed pointer-events-none opacity-50' : ''">
+          <p class="flex items-center justify-start gap-3">
+            <input #showPatrikaSelector type="checkbox" id="react-option" [checked]="showPatrika"
+              (change)="handlePatrikaStateChange($event)"
+              class="w-4 h-4 text-blue-600 bg-gray-100 checked:bg-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+            <span (click)="showPatrikaSelector.click()" class="text-sm mt-[2px] cursor-pointer select-none">Show
+              Patrika</span>
+          </p>
+          @if (showPatrika) {
+          <ul>
+            @for (item of tithiList; track $index) {
+            <li class="flex items-center justify-start gap-4 ml-5" [ngClass]="$index > 0 ? 'my-2' : '0'">
+              <label [for]="$index" class="min-w-28 select-none">{{item?.title}}</label>
+              <input pInputText type="text" [placeholder]="item?.title" [ngClass]="colorVarients" [value]="item?.value"
+                [name]="item?.title" [id]="$index" (change)="handleOnTithiChange($event, item)"
+                class="p-2.5 w-full md:lg:!w-2/6">
+            </li>
+            }
+          </ul>
+          }
+        </div>
+
+        <p class="flex items-center justify-start col-span-3 lg:col-span-4 gap-3 p-1"
+          [ngClass]="isReadOnly ? 'cursor-not-allowed pointer-events-none opacity-50' : ''">
+          <input #isPhysicallyAbledSelector type="checkbox" id="react-option" [checked]="isPhysicallyAbled"
+            (change)="isPhysicallyAbledStateChange($event)"
+            class="w-4 h-4 text-blue-600 bg-gray-100 checked:bg-blue-500  border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+          <span (click)="isPhysicallyAbledSelector.click()" class="text-sm mt-[2px] cursor-pointer select-none">
+            Is Physically Abled?</span>
+        </p>
+
+        @if (isPhysicallyAbled) {
+        <app-dropdown label="Physical Status" [control]="formGroupControl['handycapId']"
+          [controlValue]="formGroup.get('handycapId')?.value" formControlName="handycapId"
+          (onSelectionChange)="onSelectionChange($event, 'handycapId')" [options]="physicalStatusListOptions" />
+        @if (isOtherPhyicalCondition) {
+        <app-input label="Physical Condition" type="text" [control]="formGroupControl['otherPhysicalText']"
+          formControlName="otherPhysicalText" [controlValue]="formGroup.get('otherPhysicalText')?.value" />
+        }
+        }
+
+        <app-dropdown label="Food Preferences" [control]="formGroupControl['foodPreferencesId']"
+          formControlName="foodPreferencesId" (onSelectionChange)="onSelectionChange($event, 'foodPreferencesId')"
+          [controlValue]="formGroup.get('foodPreferencesId')?.value" [options]="foodPreferencesListOptions" />
+
+        <app-dropdown label="Blood Group" [mandatory]="false" [control]="formGroupControl['bloodGroupId']" formControlName="bloodGroupId"
+          (onSelectionChange)="onSelectionChange($event, 'bloodGroupId')"
+          [controlValue]="formGroup.get('bloodGroupId')?.value" [options]="bloodGroupListOptions" />
+
+        <app-input label="Location Of Birth" type="text" [control]="formGroupControl['locationOfBirth']"
+          formControlName="locationOfBirth" [controlValue]="formGroup.get('locationOfBirth')?.value || ''" />
+
+        <app-input label="Shake Date" [mandatory]="false" presentaion="date" type="date" [control]="formGroupControl['shakeDate']"
+          formControlName="shakeDate" [controlValue]="formGroup.get('shakeDate')?.value || ''" />
+      </div>
+    </form>
+    } @else {
+    <div class="h-28 w-full p-3 flex items-center justify-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
+    </div>
+    }
+  </div>
+
+  <div class="action w-full h-full flex items-center justify-center sm:justify-end gap-5 py-2 px-7">
+    <!-- <mt-button title="Cancel" [disabled]="formGroup.invalid" [isCancel]="true" (action)="handleCancelAction()" /> -->
+    <mt-button [disabled]="formGroup.invalid" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+  </div>
+
+</div>

@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  endpoint: 'https://webapi.susangam.com',
+  paymentTestingUrl: 'https://test.payu.in/_payment',
+  paymentProdingUrl: 'https://secure.payu.in/_payment'
 };
 
 /*

@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
+import { SharedModule } from 'src/app/shared.module';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    IonicModule,
+    SharedModule,
     LoginPageRoutingModule
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
+  providers: [MessageService]
 })
 export class LoginPageModule {}

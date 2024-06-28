@@ -1,9 +1,9 @@
 <div class="mobile-layout md:hidden lg:hidden xl:hidden 2xl:hidden">
+  <p-messages></p-messages>
   <ion-tabs>
     <ion-tab-bar slot="bottom">
       @for (item of tabs; track item.id) {
-      <ion-tab-button [tab]="item.route" (click)="navigateToPage(item)"
-        [ngClass]="item.isActive ? 'tab-selected' : ''">
+      <ion-tab-button [tab]="item.route" (click)="navigateToPage(item)" [ngClass]="item.isActive ? 'tab-selected' : ''">
         <fa-icon class="text-2xl" [icon]="item.icon"></fa-icon>
         <ion-label>{{item.title}}</ion-label>
       </ion-tab-button>
@@ -12,31 +12,112 @@
   </ion-tabs>
 </div>
 
-<div class="desktop-layout hidden md:flex lg:flex flex-col min-h-screen">
-  <ion-header [translucent]="true" class="max-h-14 ion-no-border" conte>
-    <ion-toolbar>
-      <ion-title slot="start" class="cursor-pointer" (click)="redirectToHome()">Wedding App</ion-title>
-      <ion-buttons slot="end" class="gap-3">
-        @for (item of menuItems; track item.id) {
-        <ion-button [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
-          <p class="m-0 flex items-center justify-start gap-3">
-            <fa-icon [icon]="item.icon" />
-            <span>{{item.title}}</span>
-          </p>
-        </ion-button>
+<div *ngIf="isDesktopMode" class="desktop-layout hidden md:flex lg:flex flex-col min-h-screen">
+  <p-menubar>
+    <ng-template pTemplate="start">
+      <img (click)="redirectToHome()" src="/assets/icon/logo.png" class="h-full w-full object-fill cursor-pointer"
+        alt="Logo" (error)="handleLogoLoadError($event)" />
+    </ng-template>
+    <ng-template pTemplate="end">
+      @for (item of menuItems; track item.id) {
+      <ion-button class="mx-1" [ngClass]="item.isActive ? 'active' : ''" (click)="navigateToPage(item)">
+        <p class="m-0 flex items-center justify-start gap-2 !font-semibold">
+          <fa-icon [icon]="item.icon" />
+          <span>{{item.title}}</span>
+        </p>
+      </ion-button>
+      }
+      @if (!isLoggedIn) {
+      <ion-button (click)="navigateToLogin()">
+        <p class="m-0 flex items-center justify-start gap-2">
+          <fa-icon [icon]="loginIcon" />
+          <span>Login</span>
+        </p>
+      </ion-button>
+      <ion-button (click)="handleRegister()">
+        <p class="m-0 flex items-center justify-start gap-2">
+          <fa-icon [icon]="registerIcon" />
+          <span>Register</span>
+        </p>
+      </ion-button>
+      } @else {
+      <div class="protected-content flex items-center justify-start gap-3 ml-3">
+        @if (profileInterestList.length) {
+        <i [pTooltip]="'Profile interest list'" class="badge pi pi-heart-fill cursor-pointer"
+          (click)="profileInterestListPanel.toggle($event)" pBadge [value]="profileInterestList.length.toString()"></i>
         }
-        <ion-button (click)="navigateToLogin()">
-          <p class="m-0 flex items-center justify-start gap-3">
-            <fa-icon [icon]="loginIcon" />
-            <span>Login</span>
-          </p>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+        @if (notificationItems.length > 0) {
+        <i class="badge pi pi-bell cursor-pointer" (click)="notificationPanel.toggle($event)" pBadge
+          [value]="notificationItems.length.toString()"></i>
+        }
+        <p-menu #menu styleClass="profile-menu" [model]="profileItems" [popup]="true" appendTo="body"
+          [autofocus]="false"></p-menu>
+        <p-avatar styleClass="user-avatar" (click)="menu.toggle($event)" class="flex items-end cursor-pointer"
+          image="/assets/image/image-placeholder.png" styleClass="mr-2" shape="circle"></p-avatar>
+      </div>
+      }
+    </ng-template>
+  </p-menubar>
   <ion-content class="flex-grow bg-slate-300">
-    @if(isDesktopMode) {
     <ion-router-outlet class="h-full" id="desktop-content"></ion-router-outlet>
-    }
   </ion-content>
 </div>
+
+<ng-container>
+  <p-dialog [(visible)]="showLogoutModal" appendTo="body" [modal]="true" [closable]="false" [style]="getDialogStyle()"
+    [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-3">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>
+        Logging out, please waite...
+      </p>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<ng-container>
+  <p-dialog #sessionExpired [header]="'Session Expired'" [(visible)]="showSessionExpiredDialog" appendTo="body"
+    [modal]="true" [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-4">
+      <p class="select-none">
+        Your session is expired, please sign in again to continue.
+      </p>
+      <div class="action w-full flex items-center justify-end">
+        <mt-button title="Sign In" (action)="handleSignIn()" />
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<p-overlayPanel #notificationPanel appendTo="body">
+  <ng-template pTemplate="content">
+    <ul class="flex flex-col m-0">
+      @for (item of notificationItems; track $index) {
+      <li (click)="handleNotificationItemClick(item); notificationPanel.toggle($event)">
+        <p class="flex flex-row items-center justify-start gap-3">
+          <i [ngClass]="item?.icon"></i>
+          {{item?.text}}
+        </p>
+      </li>
+      }
+    </ul>
+  </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel #profileInterestListPanel appendTo="body">
+  <ng-template pTemplate="content">
+    <ul class="flex flex-col m-0">
+      @for (item of profileInterestList; track $index) {
+      <li (click)="handleIntrestItemClick(item); profileInterestListPanel.toggle($event)">
+        <p class="flex font-semibold flex-row items-center justify-start gap-3">
+          <p-avatar styleClass="mr-2" [image]="item?.image" shape="circle"></p-avatar>
+          <b>{{item?.fullName}}</b>
+        </p>
+        <p class="text-xs">
+          Have recently shown interest in your profile.
+        </p>
+      </li>
+      }
+    </ul>
+  </ng-template>
+</p-overlayPanel>

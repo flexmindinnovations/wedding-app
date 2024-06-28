@@ -1,0 +1,79 @@
+.profile-page {
+
+    .profile-info-container {
+        @apply border-b border-b-gray-200 w-full mx-auto py-4 pl-40 pr-5 flex items-center justify-between;
+
+        h1 {
+            @apply m-0 font-light;
+        }
+    }
+
+    ::ng-deep .p-splitter.p-splitter-horizontal {
+        @apply h-full w-full border-none;
+    }
+
+    ::ng-deep .p-listbox {
+        @apply h-full border-none outline-none shadow-none;
+
+        .p-listbox-list-wrapper {
+            @apply h-full outline-none shadow-none;
+            max-height: 100% !important;
+        }
+    }
+}
+
+::ng-deep .p-togglebutton {
+    @apply max-w-48;
+}
+
+::ng-deep .p-toolbar {
+    @apply py-2 px-5;
+}
+
+::ng-deep .tBar {
+    @apply flex items-center justify-between;
+  }
+  
+  ::ng-deep .p-toolbar-group-start {
+    @apply flex items-center justify-start gap-3 w-full lg:xl:w-auto min-w-[50vw]  lg:xl:min-w-16;
+  
+    p-button {
+      @apply w-8 p-0;
+    }
+  }
+  ::ng-deep .p-toolbar-group-center {
+    @apply flex items-center justify-center w-full lg:xl:w-auto;
+  }
+  ::ng-deep .p-toolbar-group-end {
+    @apply flex items-center justify-end w-full lg:xl:w-auto min-w-[40vw];
+    p {
+      @apply text-xs lg:xl:text-base;
+    }
+  }
+
+::ng-deep .navButton {
+    @apply bg-none flex items-center justify-start p-0 w-full;
+  
+    .pi-bars {
+      @apply text-xl;
+    }
+  }
+
+@media screen and (max-width: 768px) {
+    ::ng-deep .p-splitter.p-splitter-horizontal > div:first-child {
+        display: none;
+    }
+
+    ::ng-deep .p-toolbar {
+        @apply py-1 px-3;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    ::ng-deep .p-toolbar {
+        @apply flex-nowrap gap-0;
+         h3 {
+            font-size: 17px;
+        }
+    }
+}

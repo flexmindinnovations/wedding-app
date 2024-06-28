@@ -1,0 +1,14 @@
+.wrapper{
+    @apply w-[95%] md:w-full mx-auto;
+}
+.card {
+    transition: 0.3s ease-in-out all;
+
+    a {
+        h5 {
+            font-family: "Overpass", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+        }
+    }
+}

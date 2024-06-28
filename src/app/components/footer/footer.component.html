@@ -1,0 +1,78 @@
+<footer class="bg-gray-700 mt-5 w-full min-h-60">
+  <div class="footer-container py-5 w-full md:lg:xl:w-80% mx-auto flex flex-col gap-4">
+    <div class="logo w-full flex items-center justify-center p-2 md:lg:p-5">
+      <img src="/assets/icon/logo_white.png" class="h-16 w-24 md:lg:h-24 md:lg:w-32 object-fill" alt="brand" />
+    </div>
+    <div class="brand-links w-full py-1 px-2">
+      <ul>
+        <li (click)="handleFooterLinkClick('home')">
+          <p>
+            Home
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('about')">
+          <p>
+            About
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('contact')">
+            <p>
+              Contact
+            </p>
+          </li>
+        <li (click)="handleFooterLinkClick('blogs')">
+          <p>
+            Blogs
+          </p>
+        </li>
+        <!-- <li (click)="handleFooterLinkClick('events')">
+          <p>
+            Events
+          </p>
+        </li> -->
+      </ul>
+    </div>
+    <div class="_social_media_links">
+      <ul>
+        <li>
+          <a href="https://www.facebook.com/profile.php?id=61558388064249&mibextid=ZbWKwL" target="_blank"
+            title="Facebook">
+            <fa-icon [icon]="fbIcon"></fa-icon>
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/Susangam_India" title="X" target="_blank">
+            <fa-icon [icon]="twitterIcon"></fa-icon>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="_terms w-full py-1 px-1">
+      <ul>
+        <li (click)="handleFooterLinkClick('termsAndConditions')">
+          <p>
+            Terms & Conditions
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('privacyPolicy')">
+          <p>
+            Privacy Policy
+          </p>
+        </li>
+        <li (click)="handleFooterLinkClick('refundPolicy')">
+          <p>
+            Refund Policy
+          </p>
+        </li>
+      </ul>
+    </div>
+    <div class="_copyright w-full px-2 flex flex-col items-center justify-center">
+      <p class="!text-xs block text-center my-2">
+        This website is strictly for matrimonial purpose only and not a dating website.
+      </p>
+      <p class="!text-xs block text-center">
+        Copyright © 2024. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

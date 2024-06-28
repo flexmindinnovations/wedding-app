@@ -1,0 +1,107 @@
+.container {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: none;
+        margin: 0 auto;
+    }
+}
+section._register {
+
+    p.about {
+        @apply text-left font-normal text-base leading-5;
+    }
+
+    p {
+        letter-spacing: 1px;
+        font-size: 14px;
+        color: black;
+    }
+
+    ol {
+        @apply ml-5;
+
+        li {
+            @apply text-sm my-2;
+            position: relative;
+            list-style-type: none;
+            text-align: justify;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: -2;
+                left: -24px;
+                width: 18px;
+                height: 18px;
+                background-image: url('/assets/icon/check.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+    }
+
+    .content {
+        @apply -z-[1] lg:z-[1] xl:z-[1];
+
+        .bars {
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1] opacity-20 lg:xl:opacity-100;
+            will-change: auto;
+            animation: shake 45s linear infinite;
+
+            .bar1 {
+                @apply h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+
+            .bar2 {
+                @apply h-28 bg-gradient-to-r from-rose-400 to-red-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+
+            .bar3 {
+                @apply h-6 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full;
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+        }
+
+        .image-container {
+            @apply z-10 relative hidden lg:hidden border-white lg:flex xl:flex items-center justify-end h-full w-full rounded-full;
+
+            img {
+                @apply shadow-2xl;
+                border: 15px solid #fff;
+            }
+        }
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(145deg);
+    }
+
+    25% {
+        transform: rotate(150deg);
+
+    }
+
+    50% {
+        transform: rotate(155deg);
+    }
+
+    75% {
+        transform: rotate(150deg);
+    }
+
+    100% {
+        transform: rotate(145deg);
+
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "/api": {
+        "target": "https://test.payu.in",
+        "secure": true
+    }
+}

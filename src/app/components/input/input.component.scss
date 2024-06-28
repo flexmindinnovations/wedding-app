@@ -1,0 +1,50 @@
+:host(app-input) {
+    @apply bg-transparent border-none w-full p-0 dark:bg-dark-950;
+}
+
+::ng-deep label {
+    @apply dark:bg-dark-950 dark:text-white;
+}
+
+input[type=number].numberInput::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+     margin: 0; 
+}
+
+label {
+    @apply text-sm mb-2 mx-1 text-dark-700 dark:bg-dark-950 dark:text-white;
+}
+
+.p-inputtext {
+    @apply p-2.5 dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number]{
+    -moz-appearance: textfield;
+}
+
+.p-inputwrapper {
+	@apply w-full p-0 border-none;
+
+	::ng-deep .p-password {
+		@apply w-full;
+
+		.p-inputtext {
+			@apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+		}
+	}
+
+    ::ng-deep .p-calendar {
+		@apply w-full;
+
+		.p-inputtext {
+			@apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+		}
+	}
+}

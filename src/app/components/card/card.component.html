@@ -1,0 +1,23 @@
+<div class="wrapper grid grid-cols-1 md:grid-cols-3 gap-5">
+  <div class="max-w-md py-6 flex items-center justify-center">
+    <h1 class="h1-gradient text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+      Why choose {{domain}}?
+    </h1>
+  </div>
+  @for (item of cardItems; track $index) {
+  <div class="card p-4 flex bg-white border border-gray-300 shadow-lg 
+  transition ease-in-out delay-300 hover:shadow-inner cursor-pointer dark:bg-gray-800 dark:border-gray-600 min-h-40">
+    <div class="icon min-w-10">
+      <i></i>
+    </div>
+    <div>
+      <a href="#">
+        <h5 class="mb-2 text-xl font-bold tracking-tighter text-gray-900 dark:text-white">{{item?.title}}
+        </h5>
+      </a>
+      <p class="font-normal text-gray-700 dark:text-gray-300">{{item?.description}}</p>
+    </div>
+  </div>
+  }
+
+</div>

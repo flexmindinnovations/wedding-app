@@ -1,0 +1,100 @@
+<div class="hidden desktop border md:flex lg:flex xl:flex w-full relative rounded-md shadow-md min-h-96">
+  <div class="item-container flex flex-col w-full">
+    <div class="image-container relative max-h-52 flex-auto rounded-t-md">
+      <img class="w-full h-60 rounded-t-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
+      <div class="absolute inset-0 w-full rounded-t-md max-h-60 h-full
+      bg-dark-700/70 flex items-start justify-end p-4 z-10">
+        <div
+          class="user-title z-20 h-28 absolute top-2/4 left-2/4 transform -translate-x-1/2 -translate-y-1/2 inset-0 w-full flex items-center justify-center rounded-s-lg fill-current text-white ">
+          <h1 class="text-sm md:text-sm lg:!text-base xl:!text-lg">
+            {{data?.fullName}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="text-container flex-auto flex flex-col gap-2 p-2">
+      <div class="info min-h-24 flex flex-col gap-2">
+        <div class="flex flex-col items-start justify-start">
+          <p class="text-label opacity-80 select-none">Full Name</p>
+          <p class="text-data select-none">{{data?.fullName}}</p>
+        </div>
+        <div class="flex flex-col items-start justify-start">
+          <p class="text-label opacity-80 select-none">Address</p>
+          <p class="text-data select-none">{{data?.fullName}}</p>
+        </div>
+      </div>
+      <div class="link">
+        <p class="flex items-baseline text-xs text-wr-600 hover:text-wr-900 focus:text-wr-900 cursor-pointer"
+          (click)="handleProfileClick()">
+          <span>Learn more about this profile</span>
+          <span class="text-xs ml-1">&#x279c;</span>
+        </p>
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="audit-info flex items-center justify-between pt-0 pb-2 px-5 flex-none h-10 rounded-b-md">
+      <p>#{{data?.customerId}}</p>
+      <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
+        [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+        <span *ngIf="isLoggedIn" class="cursor-pointer  text-blue-600" (click)="exportPdf(data,data?.customerId)"
+        [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
+    </div>
+  </div>
+</div>
+
+<div class="mobile block md:hidden lg:hidden xl:hidden w-full h-full border shadow-md rounded-md ">
+  <div class="item-container w-full h-full flex flex-col items-start justify-start">
+    <div class="header w-full h-full flex flex-row items-start justify-start gap-2">
+
+      <div class="image-container relative flex-auto rounded-t-md">
+        <img class="rounded-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
+      </div>
+
+      <div class="text-container flex-auto flex flex-col gap-2 p-2">
+        <div class="info flex flex-col gap-2">
+          <div class="flex flex-col items-start justify-start">
+            <p class="text-label opacity-80 select-none">Full Name</p>
+            <p class="text-data select-none">{{data?.fullName}}</p>
+          </div>
+          <div class="flex flex-col items-start justify-start">
+            <p class="text-label opacity-80 select-none">Address</p>
+            <p class="text-data select-none">{{data?.fullName}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-divider class="w-full"></p-divider>
+    <div class="footer w-full h-14 px-2 flex items-center justify-between">
+      <div class="left">
+        <p class="flex items-baseline text-xs text-wr-600 hover:text-wr-900 focus:text-wr-900 cursor-pointer"
+          (click)="handleProfileClick()">
+          <span>Learn more about this profile</span>
+          <span class="text-xs ml-1">&#x279c;</span>
+        </p>
+      </div>
+      <div class="right flex items-center justify-end gap-5">
+        <span></span>
+        <p>#{{data?.customerId}}</p>
+        <span class="cursor-pointer text-red-700 !text-lg" (click)="handleIsFavourite()"
+          [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
+            <span *ngIf="isLoggedIn" class="cursor-cycle  text-blue-600" (click)="exportPdf(data,data?.customerId)"
+            [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container>
+  <p-dialog #sessionExpired [header]="'Sign in Required'" [(visible)]="showLoginDialog" appendTo="body" [modal]="true"
+    [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-4">
+      <p class="select-none">
+        To perform this action, please sign in and add this profile to your favorites. Would you like to login?
+      </p>
+      <div class="action w-full flex items-center justify-end gap-5">
+        <mt-button title="Cancel" severity="secondary" (action)="handleButtonClick()"></mt-button>
+        <mt-button title="Sign In" (action)="handleButtonClick('login')" />
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>

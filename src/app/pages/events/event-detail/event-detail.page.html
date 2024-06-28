@@ -1,0 +1,49 @@
+<div
+  class="content flex flex-col md:flex-row lg:flex-row items-start justify-between flex-grow ion-padding overflow-auto">
+  @if (eventList.length) {
+  <div
+    class="blog-content flex-grow w-full h-full overflow-auto md:border-r md:border-r-gray-100 lg:border-r lg:border-r-gray-100">
+    <router-outlet />
+  </div>
+
+  <div class="blog-list hidden md:flex lg:flex flex-col ion-padding w-[90%] md:lg:min-w-[25%] md:lg:w-[25%] md:lg:m-0">
+    <h1 class="header font-light">
+      Related Events:
+    </h1>
+    @if (filteredEventList.length) {
+    <div class="blog-list-container">
+      <ul lines="none" class="bg-inherit flex flex-col gap-2">
+        @for (item of filteredEventList; track $index) {
+        <li
+          class="bg-white cursor-pointer delay-200 transition-all hover:bg-slate-50 border-b border-b-gray-100 last:border-b-0"
+          (click)="handleEventItemClick(item)">
+          <div class="blog-brief w-full flex items-center justify-between flex-row-reverse">
+            <div class="image-conatiner h-16 w-16">
+              <img class="object-fill w-full h-full" [src]="getImagePath(item)" alt="">
+            </div>
+            <div class="blog-content w-full">
+              <div
+                class="header w-full flex flex-col md:flex-row lg:flex-row  items-start justify-between py-2 px-3 gap-2">
+                <h2 class="blog-title !text-sm">
+                  {{item?.eventName}}
+                </h2>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+    } @else {
+    <div class="h-28 w-full p-3 flex items-center justify-center">
+      <i class="pi pi-spin pi-spinner"></i>
+    </div>
+    }
+
+  </div>
+  } @else {
+  <div class="h-full w-full p-3 flex items-center justify-center">
+    <i class="pi pi-spin pi-spinner"></i>
+  </div>
+  }
+</div>

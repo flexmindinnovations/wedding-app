@@ -1,13 +1,56 @@
-<ion-header [translucent]="true">
+<!-- <ion-header *ngIf="isMobile" [translucent]="true" class="block md:lg:hidden ion-no-border">
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title></ion-title>
   </ion-toolbar>
-</ion-header>
-
+</ion-header> -->
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <p-messages class="absolute top-10 lg:right-10 xl:right-10 z-10"></p-messages>
+  <!-- <ion-header *ngIf="isMobile" [translucent]="true" collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">login</ion-title>
+      <ion-title size="large">Login</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
+  <div class="content h-full w-full flex items-center justify-center md:lg:backdrop-blur-2xl ion-padding">
+    <div
+      class="login-box bg-white shadow-lg rounded-md min-w-80 backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
+      <div class="login-container ion-padding flex-grow bg-transparent md:lg:min-w-[28%] md:lg:flex-grow-0">
+        <div class="header my-5">
+          <h1 class="h1-gradient">Welcome back,</h1>
+          <p class="p-gradient">Enter your credentials to continue</p>
+        </div>
+
+        <div class="form-container lg:h-[60%] xl:h-[60%]">
+          <div class="login-form h-full flex flex-col gap-4 items-center justify-center">
+            <form [formGroup]="formGroup" class="flex flex-col items-center justify-center gap-5 w-full"
+              (keydown.enter)="handleSignIn()">
+
+              <app-input label="Mobile Number" type="number" labelColor="text-gray-700"
+                [controlValue]="formGroup.get('customerUserName')?.value"
+                [control]="formGroupControl['customerUserName']" formControlName="customerUserName" class="flex-auto" />
+
+              <app-input label="Password" type="password" labelColor="text-gray-700"
+                [controlValue]="formGroup.get('customerPassword')?.value"
+                [control]="formGroupControl['customerPassword']" formControlName="customerPassword" class="flex-auto" />
+
+            </form>
+
+            <div class="action w-full">
+              <mt-button [disabled]="formGroup.invalid || isLoading"
+                [ngClass]="isLoggedIn ? 'cursor-not-allowed pointer-events-none' : ''"
+                [title]="isLoading ? 'Signing In...' : isLoggedIn ? 'Successfully Signed In' : 'Sign In'"
+                [severity]="getSeverity()" [icon]="getIcon()" iconPos="right" (action)="handleSignIn()"></mt-button>
+            </div>
+            <p class="text-wr-500 mt-5 cursor-pointer border-b border-b-transparent select-none hover:border-b hover:border-b-wr-500 text-xs"
+              (click)="handleRegister()">New here? Sign up here for an account.</p>
+          </div>
+        </div>
+      </div>
+      <div class="left-content hidden md:lg:flex md:lg:flex-grow rounded-r-md bg-cover bg-center"
+        style="background-image: url('/assets/image/bg.png')">
+      </div>
+    </div>
+  </div>
 </ion-content>

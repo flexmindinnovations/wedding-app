@@ -1,0 +1,142 @@
+<ion-header [translucent]="true" class="ion-no-border border-b border-b-gray-200">
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <h3 class="px-2">
+        Profile Details
+      </h3>
+    </div>
+    <div class="p-toolbar-group-center">
+      
+    </div>
+    <div class="p-toolbar-group-end">
+      <mt-button *ngIf="isDataLoaded && isLoggedIn" [size]="'small'" title="Bio Data" icon="pi pi-download"
+        (action)="exportPdf()"></mt-button>
+    </div>
+  </p-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="content profile-page w-full mx-auto h-full max-h-full flex flex-col items-center justify-center"
+    [ngClass]="isLoggedIn ? 'overflow-auto' : 'overflow-hidden'">
+    @if(isLoggedIn && isDataLoaded && !isLoading) {
+    <div class="w-[80%] mx-auto h-full" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-lg'" *ngIf="personalInfoModel?.length">
+      <div class="personal-info w-full h-auto py-3">
+        <h5 class="block border-b">Personal Information</h5>
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          @for (item of personalInfoModel; track $index) {
+          @if (item?.value) {
+          <li class="itemContent flex flex-col items-start justify-center">
+            <p class="title !font-semibold">
+              {{item.title}}
+            </p>
+            <p class="value font-thin" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'">
+              {{item.value}}
+            </p>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+
+      <div class="family-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="familyInfoModel?.length">
+        <h5 class="block border-b">Family Information</h5>
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          @for (item of familyInfoModel; track $index) {
+          @if (item?.value) {
+          <li class="itemContent flex flex-col items-start justify-center">
+            <p class="title !font-semibold">
+              {{item.title}}
+            </p>
+            <p class="value font-light">
+              {{item.value}}
+            </p>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+
+      <div class="contact-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="contactInfoModel?.length">
+        <h5 class="block border-b">Contact Information</h5>
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          @for (item of contactInfoModel; track $index) {
+          @if (item?.value) {
+          <li class="itemContent flex flex-col items-start justify-center">
+            <p class="title !font-semibold">
+              {{item.title}}
+            </p>
+            <p class="value font-light">
+              {{item.value}}
+            </p>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+
+      <div class="other-info w-full h-auto py-3" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'" *ngIf="otherInfoModel?.length">
+        <h5 class="block border-b">Other Information</h5>
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          @for (item of otherInfoModel; track $index) {
+          @if (item?.value) {
+          <li class="itemContent flex flex-col items-start justify-center">
+            <p class="title !font-semibold">
+              {{item.title}}
+            </p>
+            <p class="value font-light">
+              {{item.value}}
+            </p>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+
+      <div class="photos-info w-full h-auto py-3" *ngIf="imageInfoModel?.length">
+        <h5 class="block border-b">Photos</h5>
+        <ul>
+          <div class="itemImage flex items-center justify-center gap-4 max-h-56 w-full">
+            @for (item of imageInfoModel; track $index) {
+            <li *ngIf="item?.value">
+              <div class="image-container w-52 h-48">
+                <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
+              </div>
+            </li>
+            }
+          </div>
+        </ul>
+      </div>
+    </div>
+    } @else {
+    <div class="h-full w-full p-3 flex items-center justify-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+    </div>
+    }
+
+    @if (!isLoggedIn) {
+    <div
+      class="unauthorized-container absolute top-[18%] bottom-0 left-0 right-0 dark:bg-dark-950 backdrop-blur-md shadow-lg">
+      <div
+        class="overlay bg-gradient-to-b from-white to to-black/30 w-full h-full flex flex-col items-center justify-evenly gap-2">
+        <div class="header text-center block">
+          <h1>Create an account to read full profile details</h1>
+          <p>
+            Paid account is required to access profile details,
+            if you are new to this plateform consider creating a new account.
+          </p>
+        </div>
+
+        <div class="action">
+          <mt-button title="Sign up for new account?" (action)="handleSignup()"></mt-button>
+        </div>
+
+        <div class="footer">
+          <p class="select-none cursor-pointer ">
+            Already have an account? &nbsp; <span class="border-b hover:opacity-80" (click)="handleLoginClick()">Sign
+              In</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</ion-content>

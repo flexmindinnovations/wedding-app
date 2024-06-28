@@ -1,0 +1,21 @@
+.stepper-container {
+    margin: 0 auto;
+
+    .title {
+        position: absolute;
+        top: 2.5rem;
+        left: -50px;
+        min-width: 10rem;
+
+        &:last-child {
+            text-align: center;
+            margin-left: -20px;
+        }
+
+        p {
+            font-size: 10px;
+            letter-spacing: 1px;
+            // font-weight: bold;
+        }
+    }
+}

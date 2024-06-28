@@ -1,0 +1,65 @@
+<div class="personal-info-container h-full flex flex-col gap-5 items-center justify-center md:lg:ion-padding">
+  <div class="form-wrapper w-full flex-auto overflow-auto">
+    @if (isDataAvailable) {
+    <form [formGroup]="formGroup" class="form-container w-full h-full flex-auto overflow-auto pb-40 md:lg:p-4"
+      [ngClass]="isDataAvailable ? 'transition-opacity delay-200 opacity-100' : 'opacity-0'">
+      <div
+        class="flex flex-col lg:grid gap-3 md:gap-4 lg:gap-5 grid-cols-1 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4">
+        <app-input label="Father Name" type="text" class="flex-grow" [control]="formGroupControl['fatherName']"
+          formControlName="fatherName" [required]="true" />
+
+        <app-input label="Father Occupation" class="flex-grow" type="text"
+          [control]="formGroupControl['fatherOccupation']" formControlName="fatherOccupation" />
+
+        <app-input label="Mother Name" class="flex-grow" type="text" [control]="formGroupControl['motherName']"
+          formControlName="motherName" />
+
+        <app-input label="Mother Occupation" class="flex-grow" type="text"
+          [control]="formGroupControl['motherOccupation']" formControlName="motherOccupation" />
+
+        <app-input label="No Of Brothers" class="flex-grow" type="number" [control]="formGroupControl['noOfBrothers']"
+          formControlName="noOfBrothers" />
+
+
+        <app-input label="No Of Married Brothers" type="number" [control]="formGroupControl['noOfMarriedBrothers']"
+          formControlName="noOfMarriedBrothers" />
+
+        <app-input label="No Of Sisters" type="number" [control]="formGroupControl['noOfSisters']"
+          formControlName="noOfSisters" />
+
+        <app-input label="No Of Married Sisters" type="number" class=""
+          [control]="formGroupControl['noOfMarriedSisters']" formControlName="noOfMarriedSisters" />
+
+        @if (religionListOptions.length) {
+        <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
+          [controlValue]="formGroup.get('religionId')?.value"
+          (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
+        }
+
+        @if (castListOptions.length) {
+        <app-dropdown label="Cast" [mandatory]="false" [control]="formGroupControl['castId']" formControlName="castId"
+          [controlValue]="formGroup.get('castId')?.value" (onSelectionChange)="onSelectionChange($event, 'castId')"
+          [options]="castListOptions" class="flex-auto" />
+        }
+
+        @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+        <app-dropdown label="Sub Cast" [mandatory]="false" [control]="formGroupControl['subCastId']"
+          [controlValue]="formGroup.get('subCastId')?.value" formControlName="subCastId"
+          (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions"
+          class="flex-auto" />
+        }
+
+      </div>
+    </form>
+    } @else {
+    <div class="h-28 w-full p-3 flex items-center justify-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
+    </div>
+    }
+  </div>
+
+  <div class="action w-full h-full flex items-center justify-center sm:justify-end  gap-5 py-2 px-7 ">
+    <!-- <mt-button title="Cancel" [disabled]="formGroup.invalid" [isCancel]="true" (action)="handleCancelAction()" /> -->
+    <mt-button [disabled]="formGroup.invalid" title="Save" icon="pi pi-save" (action)="handleClickOnNext()" />
+  </div>
+</div>

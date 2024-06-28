@@ -1,0 +1,100 @@
+[
+    {
+        "id": 1,
+        "title": "Personal Information",
+        "route": "personal",
+        "isActive": false,
+        "isCompleted": false,
+        "icon": "person",
+        "next": {
+            "id": 2,
+            "title": "Family Information",
+            "route": "family",
+            "isActive": false,
+            "isCompleted": false
+        },
+        "previous": null
+    },
+    {
+        "id": 2,
+        "title": "Family Information",
+        "route": "family",
+        "isActive": false,
+        "isCompleted": false,
+        "icon": "people",
+        "next": {
+            "id": 3,
+            "title": "Contact Information",
+            "route": "contact",
+            "isActive": false,
+            "isCompleted": false
+        },
+        "previous": {
+            "id": 1,
+            "title": "Personal Information",
+            "route": "personal",
+            "isActive": false,
+            "isCompleted": false
+        }
+    },
+    {
+        "id": 3,
+        "title": "Contact Information",
+        "route": "contact",
+        "isActive": false,
+        "isCompleted": false,
+        "icon": "call",
+        "next": {
+            "id": 4,
+            "title": "Other Information",
+            "route": "other",
+            "isActive": false,
+            "isCompleted": false
+        },
+        "previous": {
+            "id": 2,
+            "title": "Family Information",
+            "route": "family",
+            "isActive": false,
+            "isCompleted": false
+        }
+    },
+    {
+        "id": 4,
+        "title": "Other Information",
+        "route": "other",
+        "isActive": false,
+        "isCompleted": false,
+        "icon": "information-circle",
+        "next": {
+            "id": 5,
+            "title": "Photos",
+            "route": "photos",
+            "isActive": false,
+            "isCompleted": false
+        },
+        "previous": {
+            "id": 3,
+            "title": "Contact Information",
+            "route": "contact",
+            "isActive": false,
+            "isCompleted": false
+        }
+    },
+    {
+        "id": 5,
+        "title": "Photos",
+        "route": "photos",
+        "isActive": false,
+        "isCompleted": false,
+        "icon": "images-outline",
+        "next": null,
+        "previous": {
+            "id": 4,
+            "title": "Other Information",
+            "route": "other",
+            "isActive": false,
+            "isCompleted": false
+        }
+    }
+]

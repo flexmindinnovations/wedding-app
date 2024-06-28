@@ -1,0 +1,18 @@
+section {
+    @apply py-1;
+
+    h3 {
+        @apply font-semibold text-base;
+    }
+
+    p {
+        @apply font-normal text-xs;
+    }
+
+    ul {
+        @apply my-1 w-[95%] ml-auto;
+        li {
+            @apply font-light text-xs;
+        }
+    }
+}

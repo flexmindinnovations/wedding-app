@@ -1,13 +1,74 @@
-<ion-header [translucent]="true" class="ion-no-border">
+<ion-header *ngIf="isMobile" [translucent]="true" class="md:lg:2xl:hidden ion-no-border">
   <ion-toolbar>
-    <ion-title>about</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title>About</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">about</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="content flex flex-col relative w-screen">
+    <section class="_register flex-grow">
+      <div class="container relative col-span-2 py-10 flex flex-row gap-4 w-full px-10 mx-auto">
+        <div class="cta_register flex flex-col items-start justify-between gap-4 max-w-2xl md:max-w-2xl mx-auto">
+          <p class="about tracking-widest uppercase">
+            About Us
+          </p>
+          <h1 class="h1-gradient">
+            Welcome to {{domain}} Matrimonial Services
+          </h1>
+          <p class="md:z-20">
+            <!-- About Vasundhara Social Foundation For an extensive period, the Vasundhara Social Foundation has been at the
+            forefront of environmental, literary, and social endeavors. However, the very fabric of Mother nature faces
+            threats from human greed. These adversaries, driven by insatiable desires, encroach upon nature, presenting
+            an imposing facade of development to society. This peril grows more pronounced each day. Preserving Our
+            Natural Heritage The existing systems, entrenched in their pursuit of short-term gains and development, fail
+            to safeguard our environment. To address this, we must engage in serious introspection. How can we avert
+            these dangers? It is imperative that we reimagine our approach. Only by constructing a new framework—one
+            that prioritizes sustainability and harmonizes with nature—can we secure the longevity of human life. Let us
+            invoke divine blessings as we continue this vital work, ensuring a safer and more resilient future for all. -->
+            Susangam.com is the website designed especially for serving the community through {{domain}} Matrimonial Services. It is made with the purpose of easing the match making process at a nominal cost. Susangam is one of the initiatives by the reputed Kazi family and a part of Haji A.M.Kazi Social Foundation. Susangam initiative is driven by visionary Mr.Basheer Kazi, an Engineer by Qualification but a Social change enthusiast. A renowned corporate Trainer and Motivational Speaker. Other initiatives include Educational Support for deserving students, Training Programs to enhance Employability skills of rural students so that they acquire gainful employment.
+          </p>
+          <p>
+            Here’s what our platform offers:
+          </p>
+          <ol>
+            <li>
+              <p>Profiles with all the details, from age to education. </p>
+            </li>
+            <li>
+              <p>Easy navigation to explore effortlessly.</p>
+            </li>
+            <li>
+              <p>Smart profile matching with the help of advace algorithm.</p>
+            </li>
+            <li>
+              <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
+            </li>
+          </ol>
+          <div
+          class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
+          @if (isLoggedIn) {
+            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+            } @else {
+            <mt-button title="Register Now" (action)="handleRegister()" />
+            }
+          </div>
+        </div>
+        <div class="content -z-[10] flex-grow md:w-full h-[inherit]">
+          <div class="bars">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+          </div>
+          <div class="image-container">
+            <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="footer">
+      <app-footer></app-footer>
+    </div>
+  </div>
 </ion-content>

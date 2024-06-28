@@ -1,0 +1,12 @@
+.p-inputwrapper {
+	@apply w-full p-0 border-none;
+
+
+    ::ng-deep .p-calendar {
+		@apply w-full;
+
+		.p-inputtext {
+			@apply w-full p-2.5 dark:border dark:border-[#d1d5db] dark:bg-dark-950 dark:text-white text-sm;
+		}
+	}
+}

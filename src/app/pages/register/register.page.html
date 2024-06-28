@@ -1,13 +1,144 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>register</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Register</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header [translucent]="true" collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">register</ion-title>
+      <ion-title size="large">Register</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-refresher *ngIf="isDataAvailable" class="z-50 bg-white dark:bg-gray-700 pb-5" slot="fixed"
+    (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="content md:lg:flex flex-col items-start max-h-screen justify-start pt-4 px-4 h-full"
+    [ngClass]="isConfirmed ? 'flex' : 'hidden'">
+    <div class="stepper w-full border-b border-b-gray-100">
+      <form-stepper [isDataAvailable]="isDataAvailable" [completedStepInfo]="completedStep"
+        class="w-full"></form-stepper>
+    </div>
+    <div class="formInfo flex items-start justify-start border-b border-b-gray-100 w-full max-h-[calc(100vh-250px)]">
+      <div *ngIf="isDesktop"
+        class="info-container p-2 md:lg:xl:2xl:flex md:lg:xl:2xl:items-start min-w-[15%] max-w-[25%] md:lg:xl:2xl:justify-center">
+        
+      </div>
+      <div class="forms-container py-2 flex-grow h-full overflow-auto w-full">
+        @switch (currentForm) {
+        @case (1) {
+        <personal-info [customerData]="customerDetails" (nextFormStep)="setNextFormStep($event)"
+          (isDataAvailableEvent)="handleOnDataAvailable($event)"
+          (personalInfoData)="handleClickOnNext($event)"></personal-info>
+        }
+        @case (2) {
+        <family-info class="delay-300" [customerData]="customerDetails" [completedStep]="completedStep"
+          (nextFormStep)="setNextFormStep($event)" (familyInfoData)="handleClickOnNext($event)"></family-info>
+        }
+        @case (3) {
+        <contact-info [customerData]="customerDetails" [completedStep]="completedStep"
+          (nextFormStep)="setNextFormStep($event)" (contactInfoData)="handleClickOnNext($event)"></contact-info>
+        }
+        @case (4) {
+        <other-info [customerData]="customerDetails" [completedStep]="completedStep"
+          (nextFormStep)="setNextFormStep($event)" (otherInfoData)="handleClickOnNext($event)"></other-info>
+        }
+        @case (5) {
+        <photos [customerData]="customerDetails" [completedStep]="completedStep"
+          (nextFormStep)="setNextFormStep($event)" (photosData)="handleClickOnNext($event)">
+        </photos>
+        }
+        }
+      </div>
+    </div>
+    <div class="action-buttons min-h-16 w-full flex items-center justify-end gap-5 px-1">
+      @if(currentFormName !== 'personal'){
+      <!-- <mt-button [size]="'md'" title="Previous" [icon]="'arrow-back'" [iconSlot]="'start'" /> -->
+      }
+      <mt-button (click)="handleNextClick()" [title]="isLastStep ? 'Finish' : 'Next'"
+        [disabled]="!isDataAvailable || !isFormValid" [icon]="'arrow-forward'" [textOnly]="isLastStep ? true : false"
+        [iconSlot]="'end'" />
+    </div>
+  </div>
+
+  @if (isMobileDevice) {
+  <div class="confirmation-page w-screen h-screen items-start justify-start"
+    [ngClass]="isConfirmed ? 'hidden' : 'flex'">
+    <div class="static ion-padding">
+      <h1 class="font-bold text-base border-b border-gray-100 py-1">
+        Thanks for choosing <b>{{domainName}}</b>. And Welcome to Our Matrimonial Services Community!
+      </h1>
+      <!-- Let’s Begin Your Journey 💕. -->
+      <p class="font-normal text-sm pt-1">The registration is a five steps process</p>
+      <section>
+        <h3 class="font-semibold text-base">Step 1: Personal Information</h3>
+        <p>We’re delighted to have you here! This step is all about <b>you</b>. Please
+          share essential details:
+        </p>
+        <ul>
+          <li><b>Name:</b>&nbsp;Let us know what you’d like to be called.</li>
+          <li><b>Age:</b>&nbsp;Age is just a number, but it helps us find the right matches.</li>
+          <li><b>Date of Birth:</b>&nbsp;Let us know what you’d like to be called.</li>
+          <li><b>Education & Occupation:</b>&nbsp;Tell us about your educational background and what you do
+            professionally.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Step 2: Family Information</h3>
+        <p>
+          Family is where love begins and never ends. Share a glimpse of your family:
+        </p>
+        <ul>
+          <li><b>Parents’ Names:</b>&nbsp;Introduce us to the pillars of your family.</li>
+          <li><b>Siblings:</b>&nbsp;Brothers and sisters make life more colorful.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>
+          Step 3: Contact Information
+        </h3>
+        <p>
+          Stay connected! These details are essential for communication:
+        </p>
+
+        <ul>
+          <li><b>Phone Number:</b>&nbsp;How can potential matches reach out to you?</li>
+          <li><b>Email Address:</b>&nbsp;Let’s keep the conversation going online too.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>
+          Step 4: Other Info & Expectations
+        </h3>
+        <p>
+          This step is exciting! Tell us about your dreams, aspirations, and what you’re looking for in a partner:
+        </p>
+        <ul>
+          <li><b>Expectations:</b>&nbsp;What qualities do you value most?</li>
+        </ul>
+      </section>
+      <section>
+        <h3>
+          Step 5: Photos Upload
+        </h3>
+        <p>
+          A picture is worth a thousand words! Show us your best side:
+        </p>
+        <ul>
+          <li><b>Smile:</b>&nbsp;Capture your happiness.</li>
+          <li><b>Adventures:</b>&nbsp;Share travel pics or moments that define you.</li>
+          <li><b>Your Beautiful Self:</b>&nbsp;Because you’re amazing just as you are.</li>
+        </ul>
+      </section>
+      <div class="actions flex items-center justify-end py-3">
+        <mt-button (click)="handleContinueClick()" [title]="'Continue'" [textOnly]="true" />
+      </div>
+    </div>
+  </div>
+  }
 </ion-content>

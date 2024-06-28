@@ -3,18 +3,33 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutPage } from './layout.page';
 
+const isLoggedIn = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const hasUserObj = user && typeof user === 'object' && Object.keys(user).length > 0;
+  return hasUserObj && !!localStorage.getItem('token');
+}
+
 const routes: Routes = [
   {
     path: '',
     component: LayoutPage,
     children: [
       {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
+        matcher: url => {
+          if (isLoggedIn()) {
+            return url.length ? { consumed: [] } : { consumed: url };
+          }
+          return null
+        },
+        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
       {
-        path: 'home',
+        matcher: url => {
+          if (!isLoggedIn()) {
+            return url.length ? { consumed: [] } : { consumed: url };
+          }
+          return null
+        },
         loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
       },
       {
@@ -30,12 +45,44 @@ const routes: Routes = [
         loadChildren: () => import('../about/about.module').then(m => m.AboutPageModule)
       },
       {
+        path: 'contact',
+        loadChildren: () => import('../contact/contact.module').then(m => m.ContactPageModule)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'profiles/view/:id',
+        loadChildren: () => import('../profile-view/profile-view.module').then(m => m.ProfileViewPageModule)
+      },
+      {
+        path: 'filter-profile',
+        loadChildren: () => import('../profile-filter/profile-filter.module').then(m => m.ProfileFilterPageModule)
+      },
+      {
+        path: 'payment-status',
+        loadChildren: () => import('../payment/payment.module').then(m => m.PaymentPageModule)
+      },
+      {
+        path: 'logout',
+        loadChildren: () => import('../logout/logout.module').then(m => m.LogoutPageModule)
+      },
+      {
         path: 'more',
         loadChildren: () => import('../more/more.module').then(m => m.MorePageModule)
+      },
+      {
+        path: 'privacy-policy',
+        loadChildren: () => import('../privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyPageModule)
+      },
+      {
+        path: 'refund-policy',
+        loadChildren: () => import('../refund-policy/refund-policy.module').then(m => m.RefundPolicyPageModule)
+      },
+      {
+        path: 'terms-condition',
+        loadChildren: () => import('../terms-condition/terms-condition.module').then(m => m.TermsConditionPageModule)
       },
       {
         path: '**',

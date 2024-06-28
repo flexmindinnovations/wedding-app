@@ -1,0 +1,211 @@
+[
+    {
+        "id": 1,
+        "module": "Customers",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "module": "Branch",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "module": "Events",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "module": "Blogs",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "module": "Roles",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "module": "Height",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "module": "Education",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "module": "Specialization",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "module": "Handycap",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "module": "Cast",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "module": "Users",
+        "enabled": false,
+        "actions": [
+            {
+                "action": "Can Add",
+                "enabled": false
+            },
+            {
+                "action": "Can Edit",
+                "enabled": false
+            },
+            {
+                "action": "Can Delete",
+                "enabled": false
+            }
+        ]
+    }
+]

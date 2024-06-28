@@ -1,0 +1,119 @@
+<div class="liked-profile-container h-full max-h-full flex items-start justify-center w-full">
+  <div class="grid grid-cols-12 flex-grow h-full w-full">
+    <div class="list col-span-3 w-full bg-white">
+      <div class="w-full h-full overflow-hidden">
+        <p-listbox styleClass="profile-list" (ngModelChange)="handleProfileClick($event)" [options]="profileList"
+          [(ngModel)]="selectedProfile" optionLabel="fullName"></p-listbox>
+      </div>
+    </div>
+    <div
+      class="content col-span-9 overflow-hidden h-full w-full flex flex-col items-start justify-center flex-grow rounded-l-md bg-gray-50">
+      @if (selectedProfile && !isLoading) {
+      <div class="profile-details-view h-full p-4 w-full flex flex-col gap-2 max-h-full my-1 overflow-auto">
+        <p-card *ngIf="personalInfoModel?.length" styleClass="card" header="Personal Information"
+          class="w-full min-w-full">
+          <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+            @for (item of personalInfoModel; track $index) {
+            @if (item?.value) {
+            <li class="flex flex-col items-start justify-center">
+              <p class="title !font-semibold">
+                {{item.title}}
+              </p>
+              <p class="value font-thin" [ngClass]="isLoggedIn ? '' : 'backdrop-blur-md'">
+                {{item.value}}
+              </p>
+            </li>
+            }
+            }
+          </ul>
+        </p-card>
+        <p-card *ngIf="familyInfoModel?.length" styleClass="card" header="Family Information" class="w-full min-w-full">
+          <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+            @for (item of familyInfoModel; track $index) {
+            @if (item?.value) {
+            <li class="flex flex-col items-start justify-center">
+              <p class="title !font-semibold">
+                {{item.title}}
+              </p>
+              <p class="value font-light">
+                {{item.value}}
+              </p>
+            </li>
+            }
+            }
+          </ul>
+        </p-card>
+        <p-card *ngIf="contactInfoModel?.length" styleClass="card" header="Contact Information"
+          class="w-full min-w-full">
+          <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+            @for (item of contactInfoModel; track $index) {
+            @if (item?.value) {
+            <li class="flex flex-col items-start justify-center">
+              <p class="title !font-semibold">
+                {{item.title}}
+              </p>
+              <p class="value font-light">
+                {{item.value}}
+              </p>
+            </li>
+            }
+            }
+          </ul>
+        </p-card>
+        <p-card *ngIf="otherInfoModel?.length" styleClass="card" header="Other Information" class="w-full min-w-full">
+          <ul class="grid lg:grid-cols-4 xl:grid-cols-4 gap-5">
+            @for (item of otherInfoModel; track $index) {
+            @if (item?.value) {
+            <li class="flex flex-col items-start justify-center">
+              <p class="title !font-semibold">
+                {{item.title}}
+              </p>
+              <p class="value font-light">
+                {{item.value}}
+              </p>
+            </li>
+            }
+            }
+          </ul>
+        </p-card>
+        <p-card *ngIf="imageInfoModel?.length" styleClass="card" header="Photos" class="w-full min-w-full">
+          <ul>
+            <div class="flex items-center justify-center gap-4 max-h-56 w-full">
+              @for (item of imageInfoModel; track $index) {
+              <li *ngIf="item?.value">
+                <div class="image-container w-52 h-48">
+                  <img class="h-full w-full object-fill" [src]="getImageUrl(item)" alt="Image1" />
+                </div>
+              </li>
+              }
+            </div>
+          </ul>
+        </p-card>
+      </div>
+
+      <div class="actions mt-auto w-full py-2 max-h-16
+        flex items-center justify-end gap-3 px-4">
+        <mt-button title="Remove from favourites" (action)="removeFromFavourites()" icon="pi pi-times"></mt-button>
+        <mt-button title="connect on WhatsApp" icon="pi pi-whatsapp" (action)="connectOnWhatsApp()"></mt-button>
+      </div>
+
+      } @else if (isLoading) {
+      <div class="h-full w-full p-3 flex items-center justify-center">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
+      </div>
+
+      } @else {
+      <div class="flex items-center justify-center h-full w-full">
+        <p>
+          Please select any profile to view more details.
+        </p>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+
+<!--  -->
+
+<!--  -->

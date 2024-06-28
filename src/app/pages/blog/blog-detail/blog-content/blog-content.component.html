@@ -1,0 +1,25 @@
+<div class="blog-details-container px-5 py-0 flex flex-col items-start justify-start gap-5 h-full w-full">
+  @if (!isLoading) {
+  <div class="header border-b border-b-gray-100 w-full">
+    <h1 class="title">{{blogInfo?.blogTitle}}</h1>
+    <p class="author-info flex w-full items-center justify-between pb-1">
+      <span class="text-xs text-dark-900 font-normal select-none">
+        Created By: &nbsp;{{blogInfo?.createdByName}}
+      </span>
+      <span class="text-xs text-dark-900 font-normal select-none">
+        Created On: &nbsp;{{createdDate}}
+      </span>
+    </p>
+  </div>
+
+  <div class="image-container w-full h-full max-h-96">
+    <img [src]="blogImagePath" class="h-full w-full object-fill" [alt]="blogId" />
+  </div>
+
+  <quill-view *ngIf="blogInfo" [content]="blogInfo?.blogText" theme="snow"></quill-view>
+  } @else {
+  <div class="h-full w-full p-3 flex items-center justify-center">
+    <i class="pi pi-spin pi-spinner"></i>
+  </div>
+  }
+</div>

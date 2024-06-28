@@ -1,0 +1,57 @@
+<div class="input flex flex-col items-start backdrop-blur-md relative justify-start gap-0 dark:bg-dark-950 text-sm">
+  <label for="{{id}}">{{label}}<span *ngIf="type === 'date' && presentaion==='date'">&nbsp;(MM/DD/YYYY)</span><span *ngIf="mandatory" class="text-red-600"> *</span>
+  </label>
+  @if(isMultiline){
+  <textarea [title]="label" [disabled]="control?.disabled" pInputTextarea [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" rows="3" class="p-2.5 w-full min-h-24" [value]="controlValue" (paste)="handleOnPaste($event)"
+    [ngClass]="control.touched && control.invalid ? 'ng-invalid ng-dirty' : ''" [placeholder]="placeholder"
+    [autoResize]="true"></textarea>
+
+  } @else if(type === 'date' && presentaion==="date") {
+  <p-calendar [(ngModel)]="value" [disabled]="control?.disabled" [id]="id"
+    (ngModelChange)="handleOnChange($event, 'dt')" appendTo="body" [showButtonBar]="true" [iconDisplay]="'input'"
+    [showIcon]="true"></p-calendar>
+  } @else if(type === "date" && presentaion==="time"){
+  <time-picker [disabled]="control?.disabled" class="w-full" [value]="value"
+    (selectedTime)="handleOnChange($event, 'time')" />
+  } @else if(type === "number"){
+  <input [type]="type" [name]="label" [id]="id" (blur)="onTouched()" (keyup)="handleOnChange($event)" (paste)="handleOnPaste($event)" pInputText
+    pKeyFilter="int" class="w-full !text-sm" [disabled]="control?.disabled"
+    [ngClass]="control.touched && control.invalid ? colorVarients + invalidControl : colorVarients + validControl"
+    [value]="value" [placeholder]="placeholder" [required]="isRequired" />
+  } @else if(type === "password"){
+  <p-password [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="control.required" [toggleMask]="true" [feedback]="false"></p-password>
+  @if (control.hasError('min')) {
+  <small id="username-help" class="p-error">Please minimum length required</small>
+  }
+  @if (control.hasError('max')) {
+  <small id="username-help" class="p-error">Should not exceed maximum length required</small>
+  }
+  } @else {
+  <input [type]="type" [disabled]="control?.disabled" [name]="label" [id]="id" (blur)="onTouched()"
+    (keyup)="handleOnChange($event)" (paste)="handleOnPaste($event)" pInputText pKeyFilter="int" class="w-full !text-sm"
+    [ngClass]="control.touched && control.invalid ? 'ng-dirty ng-invalid' : ''" [value]="value"
+    [placeholder]="placeholder" [required]="isRequired" />
+  @if (control.touched && control.invalid) {
+  <div class="validation-errors block w-full px-2 bg-transparent dark:bg-dark-950 mt-[2px]">
+    @if (control.hasError('required')) {
+    <small id="username-help" class="p-error">{{label}} is
+      required</small>
+    }
+    @if (control.hasError('min')) {
+    <small id="username-help" class="p-error">Please minimum length required</small>
+    }
+    @if (control.hasError('max')) {
+    <small id="username-help" class="p-error">Should not exceed maximum length required</small>
+    }
+    @if (type === 'email' && control.hasError('email')) {
+    <small id="username-help" class="p-error">Invalid
+      email</small>
+    }
+  </div>
+  }
+  }
+</div>
