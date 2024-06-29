@@ -4,7 +4,7 @@ import {
     HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, first, last, take, takeLast, tap } from 'rxjs/operators';
 import { SharedService } from '../services/shared.service';
 import { jwtDecode } from "jwt-decode";
 import { AuthService } from '../services/auth/auth.service';
@@ -19,6 +19,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     alertService = inject(AlertService);
     router = inject(Router);
     isTokenValid = true;
+    publicRoutes = ['login', 'createToken', 'register'];
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = localStorage.getItem('token');
         if (token) {
@@ -26,7 +27,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
             this.isTokenValid = expiryDate && expiryDate > new Date() ? true : false;
         }
 
-        if (!req.url.includes('login') || !req.url.includes('createToken') || !req.url.includes('register')) {
+        if (!this.publicRoutes.includes(req.url)) {
             if (this.isTokenValid) {
                 req = req.clone({
                     setHeaders: {
@@ -40,8 +41,6 @@ export class CustomHttpInterceptor implements HttpInterceptor {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
                 const statusCode = error?.status;
-                console.log('error: ', error);
-                
                 if (statusCode === 401) {
                     this.sharedService.isUnAuthorizedRequest.next(true);
                 }
