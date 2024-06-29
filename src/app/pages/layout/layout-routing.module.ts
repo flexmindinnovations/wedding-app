@@ -85,6 +85,10 @@ const routes: Routes = [
         loadChildren: () => import('../terms-condition/terms-condition.module').then(m => m.TermsConditionPageModule)
       },
       {
+        path: 'profile-history',
+        loadChildren: () => import('../profile-history/profile-history.module').then(m => m.ProfileHistoryPageModule)
+      },
+      {
         path: '**',
         loadChildren: () => import('../not-found/not-found.module').then(m => m.NotFoundPageModule)
       },

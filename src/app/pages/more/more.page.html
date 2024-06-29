@@ -36,6 +36,24 @@
     </ion-item>
 
     <ion-item lines="full" (click)="handleItemClick({
+      title: 'Manage Favorite Profile',
+      icon: 'heart-outline',
+      route: ''
+    })">
+    <ion-icon slot="start" name="heart-outline"></ion-icon>
+    <ion-label>Manage Favorite Profile</ion-label>
+  </ion-item>
+
+  <ion-item lines="full" (click)="handleItemClick({
+    title: 'Profile History',
+    icon: 'receipt-outline',
+    route: 'profile-history'
+  })">
+  <ion-icon slot="start" name="receipt-outline"></ion-icon>
+  <ion-label>Profile History</ion-label>
+</ion-item>
+
+    <ion-item lines="full" (click)="handleItemClick({
         title: 'Profile',
         icon: 'person-outline',
         route: 'profile/personal'

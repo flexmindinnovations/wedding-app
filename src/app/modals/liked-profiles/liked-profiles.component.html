@@ -1,13 +1,13 @@
 <div class="liked-profile-container h-full max-h-full flex items-start justify-center w-full">
   <div class="grid grid-cols-12 flex-grow h-full w-full">
-    <div class="list col-span-3 w-full bg-white">
+    <div class="list col-span-3 w-full bg-white" *ngIf="!isMobile">
       <div class="w-full h-full overflow-hidden">
         <p-listbox styleClass="profile-list" (ngModelChange)="handleProfileClick($event)" [options]="profileList"
           [(ngModel)]="selectedProfile" optionLabel="fullName"></p-listbox>
       </div>
     </div>
     <div
-      class="content col-span-9 overflow-hidden h-full w-full flex flex-col items-start justify-center flex-grow rounded-l-md bg-gray-50">
+      class="content col-span-9 overflow-hidden h-full w-full flex flex-col items-start justify-center flex-grow rounded-l-md bg-gray-50" [ngClass]="{'content-mobile': isMobile}">
       @if (selectedProfile && !isLoading) {
       <div class="profile-details-view h-full p-4 w-full flex flex-col gap-2 max-h-full my-1 overflow-auto">
         <p-card *ngIf="personalInfoModel?.length" styleClass="card" header="Personal Information"
@@ -113,7 +113,11 @@
   </div>
 </div>
 
-
-<!--  -->
-
-<!--  -->
+<p-sidebar #sidebarRef [(visible)]="sidebarVisible" appendTo="body" (onHide)="handleSidebarClose()">
+  <ng-template pTemplate="headless">
+    <div class="w-full h-full overflow-hidden">
+      <p-listbox styleClass="profile-list" (ngModelChange)="handleProfileClick($event)" [options]="profileList"
+        [(ngModel)]="selectedProfile" optionLabel="fullName"></p-listbox>
+    </div>
+  </ng-template>
+</p-sidebar>

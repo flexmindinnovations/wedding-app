@@ -95,6 +95,14 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         {
+          label: 'Profile History',
+          icon: 'pi pi-history',
+          command: () => {
+            this.router.navigateByUrl('profile-history');
+            this.resetActiveClass();
+          }
+        },
+        {
           separator: true
         },
         {
@@ -411,4 +419,5 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
   }
+
 }

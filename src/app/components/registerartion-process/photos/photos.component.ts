@@ -132,7 +132,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
         if (data) {
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.customerRegistrationService.setRequestStatus(true, 'add');
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('profile/payment');
         }
       },
       error: (error: any) => {
@@ -155,7 +155,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
         if (data) {
           this.alert.setAlertMessage(data?.message, data?.status === true ? AlertType.success : AlertType.warning);
           this.customerRegistrationService.setRequestStatus(true, 'update');
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('profile/payment');
         }
       },
       error: (error: any) => {
