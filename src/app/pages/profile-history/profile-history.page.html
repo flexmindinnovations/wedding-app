@@ -10,27 +10,30 @@
         <div class="payment-info w-full h-full">
           <div class="personal-info w-full h-auto py-3">
             <h5 class="block border-b">Profile History</h5>
-            <div class="flex flex-col gap-3">
-              <div *ngFor="let profile of profileHistory" class="grid grid-cols-1 sm:grid-cols-5 gap-4 p-4 border rounded-lg shadow-md">
+            <div class="grid grid-cols-2 gap-3">
+              <div *ngFor="let profile of profileHistory"
+                class="flex gap-5 py-2 px-4 border rounded-lg shadow-md items-center hover:border hover:border-cb-200 hover:cursor-pointer" (click)="handleProfileClick(profile)">
                 <div class="flex flex-col gap-2 items-center">
-                  <p class="title text-dark ">Photo</p>
-                  <p class="value font-thin"><img [src]="endpoint + '/' + profile.imagePath1"  alt="Profile Photo" class="avatar rounded-full w-20 h-20"></p>
+                  <!-- <p class="title text-dark ">Photo</p> -->
+                  <p-avatar [image]="endpoint + '/' + profile.imagePath1" styleClass="history-avatar" size="xlarge"
+                    shape="circle" />
                 </div>
-                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                <div class="itemContent flex flex-row sm:flex-col gap-2 min-w-40 items-start justify-start">
                   <p class="title text-dark">Full Name</p>
-                  <p class="value font-normal">{{ profile.fullName }}</p>
+                  <p class="value text-xs font-normal">{{ profile.fullName }}</p>
                 </div>
-                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                <div class="itemContent flex flex-row sm:flex-col gap-2 min-w-40 items-center justify-start">
                   <p class="title text-dark">Mobile No</p>
-                  <p class="value font-thin">{{ profile.mobileNo }}</p>
+                  <p class="value text-xs font-thin">{{ profile.mobileNo }}</p>
                 </div>
-                <div class="itemContent flex flex-row sm:flex-col gap-2">
+                <div class="itemContent flex flex-row sm:flex-col gap-2 min-w-40">
                   <p class="title text-dark ">Email</p>
-                  <p class="value font-thin">{{ profile.emailId }}</p>
+                  <p class="value text-xs font-thin">{{ profile.emailId }}</p>
                 </div>
                 <div class="itemContent flex flex-row sm:flex-col gap-2">
                   <p class="title text-dark">Status</p>
-                  <p class="value font-thin px-3 py-1 rounded-md m-0 status-width {{ profile.customerStatus ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800' }}">
+                  <p
+                    class="value font-thin px-3 py-1 rounded-md m-0 status-width {{ profile.customerStatus ? 'bg-green-300 text-green-800' : 'bg-red-300 text-red-800' }}">
                     {{ profile.customerStatus ? 'Active' : 'Inactive' }}
                   </p>
                 </div>

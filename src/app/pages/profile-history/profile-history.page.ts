@@ -20,6 +20,10 @@ export class ProfileHistoryPage implements OnInit {
     this.getProfileHistory();
   }
 
+  handleProfileClick(profile: any) {
+    console.log('profile: ', profile);
+    
+  }
   
   getProfileHistory(){
     this.isLoading = true;

@@ -100,8 +100,8 @@
       }
 
       <div class="action w-full flex items-center justify-end mt-3">
-        <mt-button title="Cancel" (action)="handlePopupCancel()" [isCancel]="true" />
-        <mt-button [disabled]="formGroup.invalid" class="ml-5" [title]="getButtonTitle()"
+        <mt-button title="Cancel" size="small" (action)="handlePopupCancel()" [isCancel]="true" />
+        <mt-button [disabled]="formGroup.invalid" class="ml-5" [title]="getButtonTitle()" size="small"
           (action)="processResetPasswordForm()" />
       </div>
     </div>
