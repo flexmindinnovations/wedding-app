@@ -14,8 +14,7 @@
     </ion-toolbar>
   </ion-header> -->
   <div class="content h-full w-full flex items-center justify-center md:lg:backdrop-blur-2xl ion-padding">
-    <div
-      class="login-box bg-white shadow-lg rounded-md min-w-80 backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
+    <div class="login-box bg-white shadow-lg rounded-md min-w-80 backdrop-blur-sm w-full md:lg:w-3/4 md:lg:h-3/4 flex">
       <div class="login-container ion-padding flex-grow bg-transparent md:lg:min-w-[28%] md:lg:flex-grow-0">
         <div class="header my-5">
           <h1 class="h1-gradient">Welcome back,</h1>
@@ -43,8 +42,11 @@
                 [title]="isLoading ? 'Signing In...' : isLoggedIn ? 'Successfully Signed In' : 'Sign In'"
                 [severity]="getSeverity()" [icon]="getIcon()" iconPos="right" (action)="handleSignIn()"></mt-button>
             </div>
-            <p class="text-wr-500 mt-5 cursor-pointer border-b border-b-transparent select-none hover:border-b hover:border-b-wr-500 text-xs"
+            <p class="text-cb-500 mt-5 cursor-pointer border-b border-b-transparent select-none hover:border-b hover:border-b-cb-500 text-xs"
               (click)="handleRegister()">New here? Sign up here for an account.</p>
+
+            <p class="text-cb-500 mt-5 cursor-pointer border-b border-b-transparent select-none hover:border-b hover:border-b-cb-500 text-xs"
+              (click)="handleResetPassword()">Reset password</p>
           </div>
         </div>
       </div>
@@ -54,3 +56,55 @@
     </div>
   </div>
 </ion-content>
+
+<!-- @if (showResetPasswordPopup) { -->
+<ng-container>
+  <p-dialog #resetPassowrd [header]="'Reset Password - Step ' + getStepNumber() + ' of ' + 3" [(visible)]="showResetPasswordPopup" appendTo="body"
+    [modal]="true" [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-4 overflow-hidden" #dynamicHeightPopup [@growHeight]>
+      @if (isResetFormLoading) {
+      <div class="h-full w-full p-3 flex items-center justify-center">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
+      </div>
+      } @else {
+      <form [formGroup]="resetPasswordFormGroup" class="flex flex-col gap-5 w-full">
+        @switch (currentStep) {
+        @case (validationSteps.FIRST) {
+        <div class="email-validator mb-5" [@fadeInLeft]>
+          <app-input label="Email" type="email" [control]="resetPasswordFormGroupControl['email']"
+            formControlName="email" [controlValue]="resetPasswordFormGroup.get('email')?.value" />
+        </div>
+        }
+
+        @case (validationSteps.SECOND) {
+        <div class="otp-validator flex flex-col items-center justify-center mb-5" [@fadeInLeft]>
+          <p>
+            We have sent an email to {{resetPasswordEmail}}. If it matches our records, you will receive a One-Time
+            Password (OTP). Please enter the OTP to proceed.
+          </p>
+          <p-inputOtp formControlName="emailOtp" [integerOnly]="true" />
+        </div>
+        }
+        @case (validationSteps.THIRD) {
+        <div class="password-validator mb-5 flex flex-col items-start justify-start gap-5" [@fadeInLeft]>
+          <app-input label="Password" type="password" [control]="resetPasswordFormGroupControl['password']"
+            formControlName="password" [controlValue]="resetPasswordFormGroup.get('password')?.value" />
+
+          <app-input label="Confirm Password" type="password"
+            [control]="resetPasswordFormGroupControl['confirmPassword']" formControlName="confirmPassword"
+            [controlValue]="resetPasswordFormGroup.get('confirmPassword')?.value" />
+        </div>
+        }
+        }
+      </form>
+      }
+
+      <div class="action w-full flex items-center justify-end mt-3">
+        <mt-button title="Cancel" (action)="handlePopupCancel()" [isCancel]="true" />
+        <mt-button [disabled]="formGroup.invalid" class="ml-5" [title]="getButtonTitle()"
+          (action)="processResetPasswordForm()" />
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+<!-- } -->

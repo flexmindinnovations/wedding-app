@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, inject, HostListener, HostBinding, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NavController, Platform } from '@ionic/angular';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -13,11 +13,40 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { AlertType } from 'src/app/enums/alert-types';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { animate, group, query, style, transition, trigger } from '@angular/animations';
 
+
+export enum ValidationStep {
+  'FIRST' = 'first',
+  'SECOND' = 'second',
+  'THIRD' = 'third'
+}
+
+let presentStep = ValidationStep.FIRST;
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  animations: [
+    trigger('fadeInLeft', [
+      transition(':leave', [
+        style({ opacity: 1, transform: 'translateX(0%)' }),
+        animate('300ms ease-in-out', style({ opacity: presentStep === ValidationStep.FIRST ? 1 : 0, transform: presentStep === ValidationStep.FIRST ? 'translateX(0%)' : 'translateX(-100%)' }))
+      ]),
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(100%)' }),
+        animate('300ms 300ms ease-in-out', style({ opacity: 1, transform: 'translateX(0%)' }))
+      ])
+    ]),
+    trigger('growHeight', [
+      transition('void <=> *', []),
+      transition('* <=> *', [
+        style({ height: '{{initialHeight}}px', opacity: 0 }),
+        animate('.5s ease'),
+      ], { params: { initialHeight: 0 } }
+      )
+    ])
+  ]
 })
 export class LoginPage implements OnInit {
 
@@ -41,14 +70,36 @@ export class LoginPage implements OnInit {
   host = inject(ElementRef);
   isMobile: boolean = false;
   dialogRef: DynamicDialogRef | undefined;
+  showResetPasswordPopup: boolean = false;
+  public screenWidth: any;
+  isResetFormLoading = false;
+  validationSteps = ValidationStep;
+  currentStep = ValidationStep.FIRST;
+  isEmailAvailable: boolean = false;
+  otpValue: any;
+  resetPasswordEmail: string = '';
+  initialHeight: number = 0;
+  resetPasswordFormGroup!: FormGroup;
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.screenWidth = window.innerWidth;
+  }
+  // @ViewChild('resetPassowrd', { static: false }) dynamicHeightPopup!: ElementRef;
+  // @HostBinding('@growHeight') get growHeight() {
+  //   return { params: { initialHeight: this.initialHeight } };
+  // }
+
   constructor(
     private messageService: MessageService,
     private dialogService: DialogService,
   ) { }
 
   ngOnInit() {
+    // this.initialHeight = this.dynamicHeightPopup.nativeElement.clientHeight;
     this.setCurrentClass();
     this.initFormGroup();
+    this.initResetFormGroup();
+
 
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
@@ -72,8 +123,21 @@ export class LoginPage implements OnInit {
     })
   }
 
+  initResetFormGroup() {
+    this.resetPasswordFormGroup = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      emailOtp: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]]
+    })
+  }
+
   get formGroupControl(): { [key: string]: FormControl } {
     return this.formGroup.controls as { [key: string]: FormControl };
+  }
+
+  get resetPasswordFormGroupControl(): { [key: string]: FormControl } {
+    return this.resetPasswordFormGroup.controls as { [key: string]: FormControl };
   }
 
   handleSignIn() {
@@ -133,6 +197,79 @@ export class LoginPage implements OnInit {
     this.showPassword = event;
   }
 
+
+  handleResetPassword() {
+    // this.initResetFormGroup();
+    this.showResetPasswordPopup = true;
+  }
+
+  handlePopupCancel() {
+    this.currentStep = ValidationStep.FIRST;
+    this.showResetPasswordPopup = false;
+    this.isResetFormLoading = false;
+  }
+
+  processResetPasswordForm() {
+    this.isResetFormLoading = true;
+    switch (this.currentStep) {
+      case ValidationStep.FIRST:
+        setTimeout(() => {
+          this.currentStep = ValidationStep.SECOND;
+          this.isResetFormLoading = false;
+        }, 1500);
+        break;
+      case ValidationStep.SECOND:
+        setTimeout(() => {
+          this.currentStep = ValidationStep.THIRD;
+          this.isResetFormLoading = false;
+        }, 1500);
+
+        break;
+    }
+    presentStep = this.currentStep;
+  }
+
+  getStepNumber() {
+    let stepNumber = 1;
+    switch (this.currentStep) {
+      case ValidationStep.FIRST:
+        stepNumber = 1;
+        break;
+      case ValidationStep.SECOND:
+        stepNumber = 2;
+        break;
+      case ValidationStep.THIRD:
+        stepNumber = 3;
+        break;
+    }
+    return stepNumber;
+  }
+
+  callResetPasswordApi() {
+
+  }
+
+
+  getButtonTitle() {
+    let buttonTitle = 'Next';
+    switch (this.currentStep) {
+      case ValidationStep.FIRST:
+        buttonTitle = 'Next';
+        break;
+      case ValidationStep.SECOND:
+        buttonTitle = 'Validate OTP';
+        break;
+      case ValidationStep.THIRD:
+        buttonTitle = 'Update Password';
+        break;
+      default:
+        buttonTitle = 'Next';
+        break;
+    }
+
+    return buttonTitle;
+  }
+
   validateForm() {
     if (this.formGroup.get('userName')?.touched && this.formGroup.get('userName')?.invalid) {
       // notify("Please enter username", "warning", 500);
@@ -180,6 +317,14 @@ export class LoginPage implements OnInit {
       icon = 'pi pi-lock';
     }
     return icon;
+  }
+
+  getDialogStyle() {
+    if (this.screenWidth < 640) {  // Example breakpoint for small devices
+      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    } else {
+      return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
+    }
   }
 
 }
