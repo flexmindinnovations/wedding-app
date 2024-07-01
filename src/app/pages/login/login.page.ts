@@ -85,6 +85,8 @@ export class LoginPage implements OnInit {
   isTimerStopped = false;
   otpTimer = 60;
   isPasswordUpdated = false;
+  isOTPError = false;
+  isEmailError = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
@@ -99,7 +101,9 @@ export class LoginPage implements OnInit {
     private messageService: MessageService,
     private userService: UserService,
     private dialogService: DialogService,
-  ) { }
+  ) { 
+    this.onResize();
+  }
 
   ngOnInit() {
     // this.initialHeight = this.dynamicHeightPopup.nativeElement.clientHeight;
@@ -207,6 +211,10 @@ export class LoginPage implements OnInit {
 
   handleResetPassword() {
     // this.initResetFormGroup();
+    this.isPasswordUpdated = false;
+    this.isResetFormLoading = false;
+    this.isEmailAvailable = true;
+    this.currentStep = ValidationStep.FIRST;
     this.showResetPasswordPopup = true;
   }
 
@@ -214,11 +222,14 @@ export class LoginPage implements OnInit {
     this.currentStep = ValidationStep.FIRST;
     this.showResetPasswordPopup = false;
     this.isResetFormLoading = false;
+    this.isOTPError = false;
   }
 
   processResetPasswordForm() {
+
     switch (this.currentStep) {
       case ValidationStep.FIRST:
+        this.isPasswordUpdated = false;
         this.verifyEmail();
         break;
       case ValidationStep.SECOND:
@@ -259,6 +270,7 @@ export class LoginPage implements OnInit {
               if (!isResend) {
                 this.currentStep = ValidationStep.SECOND;
               }
+              this.isEmailError = false;
               this.isOTPSent = true;
               this.startOTPTimer(false);
               this.isResetFormLoading = false;
@@ -266,13 +278,15 @@ export class LoginPage implements OnInit {
               this.isOTPSent = false;
               this.isEmailAvailable = false;
               this.isResetFormLoading = false;
+              this.isEmailError = true;
             }
           }
         },
         error: (error) => {
           this.isOTPSent = false;
-          this.isEmailAvailable = false;
+          this.isEmailAvailable = true;
           this.isResetFormLoading = false;
+          this.isEmailError = true;
           this.showAlert('Something went wrong!', 'error');
         }
       })
@@ -280,8 +294,10 @@ export class LoginPage implements OnInit {
   }
 
   resentOTP() {
+    this.resetPasswordFormGroup.get('emailOtp')?.enable();
     this.startOTPTimer(true);
     this.verifyEmail(true);
+    this.isOTPError = false;
   }
 
   startOTPTimer(isReset: boolean) {
@@ -290,6 +306,8 @@ export class LoginPage implements OnInit {
         clearInterval(otpInterval);
         this.otpTimer = 60;
         this.isTimerStopped = true;
+        this.resetPasswordFormGroup.get('emailOtp')?.reset();
+        this.resetPasswordFormGroup.get('emailOtp')?.disable();
       } else {
         this.isTimerStopped = false;
         this.otpTimer = this.otpTimer - 1;
@@ -311,15 +329,19 @@ export class LoginPage implements OnInit {
             if (response?.status === true) {
               this.currentStep = ValidationStep.THIRD;
               this.isResetFormLoading = false;
+              this.isOTPError = false;
             } else {
+              this.isOTPError = true;
               this.isEmailAvailable = false;
               this.isResetFormLoading = false;
             }
           }
         },
         error: (error) => {
-          this.isEmailAvailable = false;
+          this.isOTPError = true;
+          this.isEmailAvailable = true;
           this.isResetFormLoading = false;
+          this.resetPasswordFormGroup.get('emailOtp')?.reset();
           this.showAlert('Something went wrong!', 'error');
         }
       })
@@ -328,25 +350,28 @@ export class LoginPage implements OnInit {
 
   resetPasswordApi() {
     const userPassword = this.resetPasswordFormGroup.get('password')?.value;
-    // if () {
-    this.isResetFormLoading = true;
-    this.userService.updateUserPassword(this.resetPasswordEmail, userPassword).subscribe({
-      next: (response) => {
-        if (response) {
-          this.isPasswordUpdated = true;
+    const confirmPassword = this.resetPasswordFormGroup.get('confirmPassword')?.value;
+    if (userPassword === confirmPassword) {
+      this.isResetFormLoading = true;
+      this.userService.updateUserPassword(this.resetPasswordEmail, userPassword).subscribe({
+        next: (response) => {
+          if (response) {
+            this.isPasswordUpdated = true;
+            this.isResetFormLoading = false;
+            this.currentStep = ValidationStep.FIRST;
+            // this.handlePopupCancel();
+          }
+        },
+        error: (error) => {
+          this.isPasswordUpdated = false;
+          this.isOTPSent = false;
+          this.isEmailAvailable = false;
+          this.isResetFormLoading = false;
           this.handlePopupCancel();
+          this.showAlert('Something went wrong!', 'error');
         }
-      },
-      error: (error) => {
-        this.isPasswordUpdated = false;
-        this.isOTPSent = false;
-        this.isEmailAvailable = false;
-        this.isResetFormLoading = false;
-        this.handlePopupCancel();
-        this.showAlert('Something went wrong!', 'error');
-      }
-    })
-    // }
+      })
+    }
   }
 
 
@@ -424,6 +449,9 @@ export class LoginPage implements OnInit {
     if (!this.isEmailAvailable) {
       title = 'Email not available!';
     }
+    //  else if(!this.isOTPError) {
+    //   title = 'Incorrect OTP';
+    // }
 
     return title;
   }
@@ -435,5 +463,4 @@ export class LoginPage implements OnInit {
       return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
   }
-
 }

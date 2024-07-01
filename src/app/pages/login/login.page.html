@@ -67,22 +67,23 @@
       <div class="h-full w-full p-3 flex items-center justify-center">
         <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem"></i>
       </div>
-      }@else if (!isEmailAvailable) {
+    } @else if (isPasswordUpdated) {
       <div class="h-full w-full p-3 flex items-center justify-center">
         <p>
-          We couldn’t find an account associated with this email. Please check your input or try a different email.
-        </p>
-      </div>
-      } @else if (isPasswordUpdated) {
-      <div class="h-full w-full p-3 flex items-center justify-center">
-        <p>
-          
+          Password Reset Successfully!
         </p>
       </div>
       } @else {
       <form [formGroup]="resetPasswordFormGroup" class="flex flex-col gap-5 w-full">
         @switch (currentStep) {
         @case (validationSteps.FIRST) {
+          @if(isEmailError){
+            <div class="h-full w-full p-3 flex items-center justify-center text-xs text-red-500">
+              <p>
+                We couldn’t find an account associated with this email. Please check your input or try a different email.
+              </p>
+            </div>
+          }
         <div class="email-validator mb-5" [@fadeInLeft]>
           <app-input label="Email" type="email" [control]="resetPasswordFormGroupControl['email']"
             formControlName="email" [controlValue]="resetPasswordFormGroup.get('email')?.value" />
@@ -92,22 +93,29 @@
         @case (validationSteps.SECOND) {
         <div class="otp-validator flex flex-col items-center justify-center mb-5" [@fadeInLeft]>
           <p>
-            We have sent the verification code to {{resetPasswordEmail}}. If it matches our records, you will receive a
+            We have sent the verification code to your email. If it matches our records, you will receive a
             One-Time
             Password (OTP). Please enter the OTP to proceed.
           </p>
           <div class="my-3 w-full flex flex-col items-center justify-center gap-4">
+
+            @if(isOTPError) {
+              <p class="text-xs text-red-600 my-2">
+                You have entered incorrect OTP. Please try again.
+              </p>
+            }
+
             <p-inputOtp formControlName="emailOtp" [integerOnly]="true" />
 
             @if (isOTPSent) {
-            <div class="w-full my-3 flex items-center justify-between px-2">
+            <div class="w-full my-4 flex flex-col lg:xl:flex-row items-center justify-between px-2">
               @if (isTimerStopped) {
               <p></p>
               } @else {
               <p>Resend OTP in {{otpTimer}}</p>
               }
               <p class="border-b-transparent select-none"
-                [ngClass]="isTimerStopped ? 'cursor-pointer text-cb-600 hover:border-b-cb-600' : 'cursor-not-allowed text-gray-400'"
+                [ngClass]="isTimerStopped ? 'cursor-pointer text-cb-600 pointer-events-auto hover:border-b-cb-600' : 'cursor-not-allowed pointer-events-none text-gray-400'"
                 (click)="resentOTP()">
                 Resend OTP</p>
             </div>
@@ -131,9 +139,16 @@
 
       <div class="action w-full flex items-center justify-end mt-3">
         <mt-button title="Close" size="small" (action)="handlePopupCancel()" [isCancel]="true" />
-        @if (isEmailAvailable) {
-        <mt-button class="ml-5" [title]="getButtonTitle()" size="small" (action)="processResetPasswordForm()" />
-        }
+        <ng-container *ngIf="isEmailAvailable && !isPasswordUpdated">
+          <ng-container [ngSwitch]="currentStep">
+            <mt-button *ngSwitchCase="validationSteps.FIRST" class="ml-5" [title]="getButtonTitle()" size="small" 
+              (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroupControl['email'].valid"></mt-button>
+            <mt-button *ngSwitchCase="validationSteps.SECOND" class="ml-5" [title]="getButtonTitle()" size="small" 
+              (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroupControl['emailOtp'].valid"></mt-button>
+              <mt-button *ngSwitchCase="validationSteps.THIRD" class="ml-5" [title]="getButtonTitle()" size="small" 
+              (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroup.valid || resetPasswordFormGroupControl['password'].value !== resetPasswordFormGroupControl['confirmPassword'].value"></mt-button>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
   </p-dialog>
