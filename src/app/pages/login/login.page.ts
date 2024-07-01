@@ -14,6 +14,7 @@ import { AlertType } from 'src/app/enums/alert-types';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
+import { UserService } from 'src/app/services/user/user.service';
 
 
 export enum ValidationStep {
@@ -75,11 +76,16 @@ export class LoginPage implements OnInit {
   isResetFormLoading = false;
   validationSteps = ValidationStep;
   currentStep = ValidationStep.FIRST;
-  isEmailAvailable: boolean = false;
+  isEmailAvailable: boolean = true;
   otpValue: any;
   resetPasswordEmail: string = '';
   initialHeight: number = 0;
   resetPasswordFormGroup!: FormGroup;
+  isOTPSent = false;
+  isTimerStopped = false;
+  otpTimer = 60;
+  isPasswordUpdated = false;
+
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
     this.screenWidth = window.innerWidth;
@@ -91,6 +97,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private messageService: MessageService,
+    private userService: UserService,
     private dialogService: DialogService,
   ) { }
 
@@ -190,7 +197,7 @@ export class LoginPage implements OnInit {
   }
 
   showAlert(message: string, type: string) {
-    this.messageService.add({ severity: type, summary: type === 'success' ? 'Success' : 'Error', detail: message });
+    this.messageService.add({ severity: type, summary: type === 'success' ? 'Success' : 'Error', detail: message, });
   }
 
   handlePasswordVisiblity(event?: any) {
@@ -210,20 +217,15 @@ export class LoginPage implements OnInit {
   }
 
   processResetPasswordForm() {
-    this.isResetFormLoading = true;
     switch (this.currentStep) {
       case ValidationStep.FIRST:
-        setTimeout(() => {
-          this.currentStep = ValidationStep.SECOND;
-          this.isResetFormLoading = false;
-        }, 1500);
+        this.verifyEmail();
         break;
       case ValidationStep.SECOND:
-        setTimeout(() => {
-          this.currentStep = ValidationStep.THIRD;
-          this.isResetFormLoading = false;
-        }, 1500);
-
+        this.verifyOTP();
+        break;
+      case ValidationStep.THIRD:
+        this.resetPasswordApi();
         break;
     }
     presentStep = this.currentStep;
@@ -245,8 +247,106 @@ export class LoginPage implements OnInit {
     return stepNumber;
   }
 
-  callResetPasswordApi() {
+  verifyEmail(isResend: boolean = false) {
+    const userEmail = this.resetPasswordFormGroup.get('email')?.value;
+    if (userEmail.replace(/\s/g, '') !== '') {
+      this.isResetFormLoading = true;
+      this.userService.verifyUserEmail(userEmail).subscribe({
+        next: (response) => {
+          if (response) {
+            if (response?.status === true) {
+              this.resetPasswordEmail = userEmail;
+              if (!isResend) {
+                this.currentStep = ValidationStep.SECOND;
+              }
+              this.isOTPSent = true;
+              this.startOTPTimer(false);
+              this.isResetFormLoading = false;
+            } else {
+              this.isOTPSent = false;
+              this.isEmailAvailable = false;
+              this.isResetFormLoading = false;
+            }
+          }
+        },
+        error: (error) => {
+          this.isOTPSent = false;
+          this.isEmailAvailable = false;
+          this.isResetFormLoading = false;
+          this.showAlert('Something went wrong!', 'error');
+        }
+      })
+    }
+  }
 
+  resentOTP() {
+    this.startOTPTimer(true);
+    this.verifyEmail(true);
+  }
+
+  startOTPTimer(isReset: boolean) {
+    const otpInterval = setInterval(() => {
+      if (this.otpTimer <= 0) {
+        clearInterval(otpInterval);
+        this.otpTimer = 60;
+        this.isTimerStopped = true;
+      } else {
+        this.isTimerStopped = false;
+        this.otpTimer = this.otpTimer - 1;
+      }
+    }, 1000);
+    if (isReset) {
+      clearInterval(otpInterval);
+      this.otpTimer = 60;
+    }
+  }
+
+  verifyOTP() {
+    const userOTP = this.resetPasswordFormGroup.get('emailOtp')?.value;
+    if (userOTP) {
+      this.isResetFormLoading = true;
+      this.userService.verifyOTP(this.resetPasswordEmail, userOTP).subscribe({
+        next: (response) => {
+          if (response) {
+            if (response?.status === true) {
+              this.currentStep = ValidationStep.THIRD;
+              this.isResetFormLoading = false;
+            } else {
+              this.isEmailAvailable = false;
+              this.isResetFormLoading = false;
+            }
+          }
+        },
+        error: (error) => {
+          this.isEmailAvailable = false;
+          this.isResetFormLoading = false;
+          this.showAlert('Something went wrong!', 'error');
+        }
+      })
+    }
+  }
+
+  resetPasswordApi() {
+    const userPassword = this.resetPasswordFormGroup.get('password')?.value;
+    // if () {
+    this.isResetFormLoading = true;
+    this.userService.updateUserPassword(this.resetPasswordEmail, userPassword).subscribe({
+      next: (response) => {
+        if (response) {
+          this.isPasswordUpdated = true;
+          this.handlePopupCancel();
+        }
+      },
+      error: (error) => {
+        this.isPasswordUpdated = false;
+        this.isOTPSent = false;
+        this.isEmailAvailable = false;
+        this.isResetFormLoading = false;
+        this.handlePopupCancel();
+        this.showAlert('Something went wrong!', 'error');
+      }
+    })
+    // }
   }
 
 
@@ -257,7 +357,7 @@ export class LoginPage implements OnInit {
         buttonTitle = 'Next';
         break;
       case ValidationStep.SECOND:
-        buttonTitle = 'Validate OTP';
+        buttonTitle = 'Confirm';
         break;
       case ValidationStep.THIRD:
         buttonTitle = 'Update Password';
@@ -317,6 +417,15 @@ export class LoginPage implements OnInit {
       icon = 'pi pi-lock';
     }
     return icon;
+  }
+
+  getPopupTitle() {
+    let title = `Reset Password - Step ${this.getStepNumber()} of 3`;
+    if (!this.isEmailAvailable) {
+      title = 'Email not available!';
+    }
+
+    return title;
   }
 
   getDialogStyle() {
