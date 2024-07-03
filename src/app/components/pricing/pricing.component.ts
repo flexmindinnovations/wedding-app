@@ -33,8 +33,8 @@ export class PricingComponent implements OnInit {
         planFeature: [
           { id: 1, text: 'Access upto 50 profiles per week' }
         ],
-        originalAmount: 1499,
-        discountAmount: 499,
+        originalAmount: 2499,
+        discountAmount: 1499,
         actualAmount: '',
         planStartDate: moment(new Date()),
         actionName: 'Get Amazing Plan',
@@ -47,8 +47,8 @@ export class PricingComponent implements OnInit {
           { id: 1, text: 'Access to unlimited profiles' }
         ],
         styleClass: 'pricing',
-        originalAmount: 2499,
-        discountAmount: 1499,
+        originalAmount: 5000,
+        discountAmount: 2499,
         actualAmount: '',
         planStartDate: moment(new Date()),
         actionName: 'Get Delux',
