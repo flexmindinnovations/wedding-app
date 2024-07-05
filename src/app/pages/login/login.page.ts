@@ -138,7 +138,7 @@ export class LoginPage implements OnInit {
     this.resetPasswordFormGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       emailOtp: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required,Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]]
     })
   }
@@ -294,6 +294,7 @@ export class LoginPage implements OnInit {
   }
 
   resentOTP() {
+    this.resetPasswordFormGroup.get('emailOtp')?.reset();
     this.resetPasswordFormGroup.get('emailOtp')?.enable();
     this.startOTPTimer(true);
     this.verifyEmail(true);

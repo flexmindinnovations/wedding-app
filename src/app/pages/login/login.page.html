@@ -144,7 +144,7 @@
             <mt-button *ngSwitchCase="validationSteps.FIRST" class="ml-5" [title]="getButtonTitle()" size="small" 
               (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroupControl['email'].valid"></mt-button>
             <mt-button *ngSwitchCase="validationSteps.SECOND" class="ml-5" [title]="getButtonTitle()" size="small" 
-              (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroupControl['emailOtp'].valid"></mt-button>
+              (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroupControl['emailOtp'].valid || resetPasswordFormGroupControl['emailOtp'].value.length !== 4"></mt-button>
               <mt-button *ngSwitchCase="validationSteps.THIRD" class="ml-5" [title]="getButtonTitle()" size="small" 
               (action)="processResetPasswordForm()" [disabled]="!resetPasswordFormGroup.valid || resetPasswordFormGroupControl['password'].value !== resetPasswordFormGroupControl['confirmPassword'].value"></mt-button>
           </ng-container>
