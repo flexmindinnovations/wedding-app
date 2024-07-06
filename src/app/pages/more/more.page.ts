@@ -9,6 +9,7 @@ import { title } from 'process';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
 import { SharedService } from 'src/app/services/shared.service';
+import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 
 @Component({
   selector: 'app-more',
@@ -46,7 +47,7 @@ export class MorePage implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user') || '');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.userId = user?.user;
     this.addHamburgerToDialogHeader();
   }
@@ -64,6 +65,9 @@ export class MorePage implements OnInit, AfterViewInit {
     } else {
       if (item?.title === 'Manage Favorite Profile') {
         this.OpenLikedProfileModal();
+      }
+      if (item?.title === 'Register') {
+        this.handleRegister();
       }
     }
 
@@ -110,6 +114,22 @@ export class MorePage implements OnInit, AfterViewInit {
       });
       modalHederTitleEl.insertBefore(hamburgerButton, modalHederTitleEl.firstChild);
     }
+  }
+  handleRegister() {
+    this.dialogRef = this.dialogService.open(RegisterUserComponent, {
+      header: 'Sign up',
+      width: '25%',
+      baseZIndex: 10000,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+      maximizable: false
+    })
+
+    this.dialogRef.onClose.subscribe((afterClose: any) => {
+      if (afterClose) { }
+    });
   }
 
 }
