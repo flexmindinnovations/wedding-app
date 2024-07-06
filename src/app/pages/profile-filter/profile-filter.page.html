@@ -41,20 +41,20 @@
                   (onSelectionChange)="onSelectionChange($event, 'gender')"
                   [controlValue]="formGroup.get('gender')?.value" [options]="genderOptions" class="w-full" />
 
-                <app-input label="Age From" type="number" labelColor="text-gray-700"
+                <app-input *ngIf="isPaidUser" label="Age From" type="number" labelColor="text-gray-700"
                   [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
                   formControlName="fromAge" class="w-full" />
 
-                <app-input label="Age To" type="number" labelColor="text-gray-700"
+                <app-input *ngIf="isPaidUser" label="Age To" type="number" labelColor="text-gray-700"
                   [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']"
                   formControlName="toAge" class="w-full" />
 
-                <app-dropdown label="Marital Status" [control]="formGroupControl['maritalStatus']"
+                <app-dropdown *ngIf="isPaidUser" label="Marital Status" [control]="formGroupControl['maritalStatus']"
                   formControlName="maritalStatus" [options]="maritalStatusOptions"
                   (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
                 @if (countryList.length) {
-                <app-dropdown label="Country" class="w-full" [control]="formGroupControl['countryId']"
+                <app-dropdown *ngIf="isPaidUser" label="Country" class="w-full" [control]="formGroupControl['countryId']"
                   [controlValue]="formGroup.get('countryId')?.value"
                   (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
                   [options]="countryList" />
@@ -153,21 +153,21 @@
             (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
             [options]="genderOptions" class="w-full" />
 
-          <app-input label="Age From" type="number" labelColor="text-gray-700"
+          <app-input *ngIf="isPaidUser" label="Age From" type="number" labelColor="text-gray-700"
             [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
             formControlName="fromAge" class="w-full" />
 
-          <app-input label="Age To" type="number" labelColor="text-gray-700"
+          <app-input *ngIf="isPaidUser" label="Age To" type="number" labelColor="text-gray-700"
             [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']" formControlName="toAge"
             class="w-full" />
 
-          <app-dropdown label="Marital Status" [control]="formGroupControl['maritalStatus']"
+          <app-dropdown *ngIf="isPaidUser" label="Marital Status" [control]="formGroupControl['maritalStatus']"
             formControlName="maritalStatus" [options]="maritalStatusOptions"
             [controlValue]="formGroup.get('maritalStatus')?.value"
             (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
           @if (countryList.length) {
-          <app-dropdown label="Country" class="w-full" [control]="formGroupControl['countryId']"
+          <app-dropdown *ngIf="isPaidUser" label="Country" class="w-full" [control]="formGroupControl['countryId']"
             [controlValue]="formGroup.get('countryId')?.value"
             (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
             [options]="countryList" />
@@ -191,8 +191,8 @@
             }
     
             @if (castListOptions.length) {
-            <app-dropdown label="Cast" [control]="formGroupControl['castId']" formControlName="castId" class="w-full"
-               (onSelectionChange)="onSelectionChange($event, 'castId')"
+            <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="castId" class="w-full"
+               (onSelectionChange)="onSelectionChange($event, 'cast')"
               [options]="castListOptions" />
             }
     

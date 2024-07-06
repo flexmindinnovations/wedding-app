@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CastService } from 'src/app/services/cast/cast.service';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   castService = inject(CastService);
   sharedService = inject(SharedService);
+  customerService = inject(CustomerRegistrationService);
 
   religionList: any[] = [];
   motherToungeList: any[] = [];
@@ -42,6 +44,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   religionId: any;
   isSubCastDataAvailable: boolean = false;
   religionListOptions: any[] = [];
+  isPaidUser:boolean = false;
 
   constructor(
     private router: Router,
@@ -60,6 +63,10 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       { id: 'divorced', title: 'Divorced' },
       { id: 'widowed', title: 'Widowed' }
     ]
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if(user.user){
+      this.getCustomerDetails(user.user);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -268,4 +275,17 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       })
     }
   }
+  getCustomerDetails(customerId:any): void {
+    this.customerService.getCustomerDetailsById(customerId).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.isPaidUser = data.isPaymentInfoFill;
+        }
+      },
+      error: (error: any) => {
+        console.log('error: ', error);
+        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+}
 }
