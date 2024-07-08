@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { CastService } from 'src/app/services/cast/cast.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
@@ -20,8 +21,6 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   castService = inject(CastService);
   sharedService = inject(SharedService);
-  customerService = inject(CustomerRegistrationService);
-
   religionList: any[] = [];
   motherToungeList: any[] = [];
   castList: any[] = [];
@@ -44,11 +43,12 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   religionId: any;
   isSubCastDataAvailable: boolean = false;
   religionListOptions: any[] = [];
-  isPaidUser:boolean = false;
+  isLoggedIn = false;
 
   constructor(
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -63,13 +63,11 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       { id: 'divorced', title: 'Divorced' },
       { id: 'widowed', title: 'Widowed' }
     ]
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if(user.user){
-      this.getCustomerDetails(user.user);
-    }
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
   }
 
   ngAfterViewInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.formGroup.reset();
     this.getMasterData();
     
@@ -127,7 +125,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   handleOnSearch() {
     const formVal = this.formGroup.value;
-    if (this.formGroup.invalid) {
+    if (!this.isLoggedIn && this.formGroup.invalid) {
       this.alertService.setAlertMessage('Please provide filter criteria', AlertType.warning);
       return;
     }
@@ -275,17 +273,4 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       })
     }
   }
-  getCustomerDetails(customerId:any): void {
-    this.customerService.getCustomerDetailsById(customerId).subscribe({
-      next: (data: any) => {
-        if (data) {
-          this.isPaidUser = data.isPaymentInfoFill;
-        }
-      },
-      error: (error: any) => {
-        console.log('error: ', error);
-        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
-      }
-    })
-}
 }

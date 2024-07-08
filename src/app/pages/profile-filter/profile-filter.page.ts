@@ -62,7 +62,7 @@ export class ProfileFilterPage implements OnInit {
 
   filteredProfileList: any[] = [];
   filteredQueryParams: any;
-  isPaidUser:boolean = false;
+  isLoggedIn:boolean = false;
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -94,7 +94,6 @@ export class ProfileFilterPage implements OnInit {
       next: (data: any) => {
         if (data) {
           this.customerData = data;
-          this.isPaidUser = data.isPaymentInfoFill;
           const { personalInfoModel } = this.customerData;
           const oppGender = this.getFilterGender(personalInfoModel['gender']);
           this.searchCriteria = {
@@ -131,6 +130,7 @@ export class ProfileFilterPage implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.isLoading = true;
     this.getMasterData();
     this.activatedRoute.queryParams.subscribe((query: any) => {

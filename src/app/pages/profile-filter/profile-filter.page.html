@@ -37,24 +37,24 @@
             <div class="form-container py-4 px-3 overflow-auto h-[calc(100%-50px)]">
               @if (isDataAvailable) {
               <form [formGroup]="formGroup" class="flex flex-col items-start justify-center gap-4">
-                <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+                <app-dropdown *ngIf="!isLoggedIn" label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
                   (onSelectionChange)="onSelectionChange($event, 'gender')"
                   [controlValue]="formGroup.get('gender')?.value" [options]="genderOptions" class="w-full" />
 
-                <app-input *ngIf="isPaidUser" label="Age From" type="number" labelColor="text-gray-700"
+                <app-input label="Age From" type="number" labelColor="text-gray-700"
                   [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
                   formControlName="fromAge" class="w-full" />
 
-                <app-input *ngIf="isPaidUser" label="Age To" type="number" labelColor="text-gray-700"
+                <app-input label="Age To" type="number" labelColor="text-gray-700"
                   [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']"
                   formControlName="toAge" class="w-full" />
 
-                <app-dropdown *ngIf="isPaidUser" label="Marital Status" [control]="formGroupControl['maritalStatus']"
+                <app-dropdown *ngIf="isLoggedIn" label="Marital Status" [control]="formGroupControl['maritalStatus']"
                   formControlName="maritalStatus" [options]="maritalStatusOptions"
                   (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
                 @if (countryList.length) {
-                <app-dropdown *ngIf="isPaidUser" label="Country" class="w-full" [control]="formGroupControl['countryId']"
+                <app-dropdown *ngIf="isLoggedIn" label="Country" class="w-full" [control]="formGroupControl['countryId']"
                   [controlValue]="formGroup.get('countryId')?.value"
                   (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
                   [options]="countryList" />
@@ -89,7 +89,7 @@
                     (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
                     class="w-full" />
                 }
-                <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
+                <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
                   formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
                   [options]="motherToungeList" class="w-full" />
 
@@ -149,25 +149,25 @@
       <div class="form-container py-4 px-3 overflow-auto h-[calc(100%-50px)]">
         @if (isDataAvailable) {
         <form [formGroup]="formGroup" class="flex flex-col items-start justify-center gap-4">
-          <app-dropdown label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
+          <app-dropdown *ngIf="!isLoggedIn" label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
             (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
             [options]="genderOptions" class="w-full" />
 
-          <app-input *ngIf="isPaidUser" label="Age From" type="number" labelColor="text-gray-700"
+          <app-input label="Age From" type="number" labelColor="text-gray-700"
             [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
             formControlName="fromAge" class="w-full" />
 
-          <app-input *ngIf="isPaidUser" label="Age To" type="number" labelColor="text-gray-700"
+          <app-input label="Age To" type="number" labelColor="text-gray-700"
             [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']" formControlName="toAge"
             class="w-full" />
 
-          <app-dropdown *ngIf="isPaidUser" label="Marital Status" [control]="formGroupControl['maritalStatus']"
+          <app-dropdown *ngIf="isLoggedIn" label="Marital Status" [control]="formGroupControl['maritalStatus']"
             formControlName="maritalStatus" [options]="maritalStatusOptions"
             [controlValue]="formGroup.get('maritalStatus')?.value"
             (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
           @if (countryList.length) {
-          <app-dropdown *ngIf="isPaidUser" label="Country" class="w-full" [control]="formGroupControl['countryId']"
+          <app-dropdown *ngIf="isLoggedIn" label="Country" class="w-full" [control]="formGroupControl['countryId']"
             [controlValue]="formGroup.get('countryId')?.value"
             (onSelectionChange)="onSelectionChange($event, 'countryId')" formControlName="countryId"
             [options]="countryList" />
@@ -191,7 +191,7 @@
             }
     
             @if (castListOptions.length) {
-            <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="castId" class="w-full"
+            <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast" class="w-full"
                (onSelectionChange)="onSelectionChange($event, 'cast')"
               [options]="castListOptions" />
             }
@@ -203,7 +203,7 @@
               class="w-full" />
           }
 
-          <app-dropdown label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
+          <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true" [control]="formGroupControl['motherTongue']"
             formControlName="motherTongue" (onSelectionChange)="onSelectionChange($event, 'motherTongueId')"
             [options]="motherToungeList" class="w-full" />
 
