@@ -32,7 +32,7 @@ import { DialogModule } from 'primeng/dialog';
 import { PasswordModule } from 'primeng/password';
 import { SplitterModule } from 'primeng/splitter';
 import { ListboxModule } from 'primeng/listbox';
-import { CustomHttpInterceptor } from './interceptors/http.interceptor';
+import { customInterceptor } from './interceptors/http.interceptor';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -165,11 +165,6 @@ const modules: any = [
     MessageService,
     DialogService,
     DynamicDialogRef,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CustomHttpInterceptor,
-      multi: true
-    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

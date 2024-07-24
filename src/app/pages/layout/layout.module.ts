@@ -11,7 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouteReuseStrategy } from '@angular/router';
 import { SharedModule } from 'src/app/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CustomHttpInterceptor } from 'src/app/interceptors/http.interceptor';
+import { customInterceptor } from 'src/app/interceptors/http.interceptor';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import { CustomHttpInterceptor } from 'src/app/interceptors/http.interceptor';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
-      useFactory: CustomHttpInterceptor,
+      useFactory: customInterceptor,
       multi: true
     }
   ]
