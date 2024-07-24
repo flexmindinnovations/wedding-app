@@ -5,7 +5,7 @@ import * as CryptoJs from 'crypto-js';
 import { DOMAIN } from './theme';
 import { environment } from 'src/environments/environment';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
-import { isDevMode } from '@angular/core';
+import { isDevMode, signal } from '@angular/core';
 
 const homeIcon = faHome;
 const blogIcon = faBlog;
@@ -22,6 +22,22 @@ export const MERCHANT_KEY_LIVE = 'WA6Kpg';
 export let SALT_KEY_TEST = 'XDbX0tFwbufYsXjSrVWjxTgaB64RVnB3';
 export let SALT_KEY_LIVE = 'X4Y3GsJwPYB8OM34PrgIah1n0K8zYI2P';
 export let PAYMENT_OBJECT: any = {};
+export const utils = {
+    profileIntrestList: signal<any>([]),
+    setProfileInterestList(interestList: any): any[] {
+        const profileInterests = interestList.map((item: any) => {
+          const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
+          const fullPath = `${environment.endpoint}/${imagePath}`;
+          const obj = {
+            customerId: item?.customerId,
+            fullName: item?.fullName,
+            image: fullPath
+          }
+          return obj;
+        });
+        return profileInterests;
+      }
+}
 
 const availableLoaders: any = {
     dots: 'dots',

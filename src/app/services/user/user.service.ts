@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpConfigService } from '../http-config.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { HttpConfigService } from '../http-config.service';
 export class UserService {
 
   endpoint = environment.endpoint + '/api/User';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
   getUserList(): Observable<any> {
     return this.http.get(`${this.endpoint}/getUserList`);
@@ -27,15 +28,25 @@ export class UserService {
     return this.http.delete(`${this.endpoint}/deleteUser/${id}`)
   }
 
-  setFavourite(payload: any) {
+  setFavourite(payload: any): Observable<any> {
     return this.http.post(`${environment.endpoint}/api/CustomerLike/AddLike`, payload);
   }
 
-  getFavouriteProfileList(customerId: any) {
+  setInterest(payload:any): Observable<any>{
+    return this.http.post(`${environment.endpoint}/api/CustomerLike/AddInterest`, payload);
+  }
+
+  // for customer showed interest
+  getInterest(customerInterestId:any): Observable<any> {
+    return this.http.get(`${environment.endpoint}/api/CustomerLike/getInterestCustomerListByInterestedCustomerId?InterestedCustomerId=${customerInterestId}`);
+  }
+
+  getFavouriteProfileList(customerId: any): Observable<any> {
     return this.http.get(`${environment.endpoint}/api/CustomerLike/getLikedCustomerListByCustomerId?CustomerId=${customerId}`);
   }
 
-  getCustomerInterestList(customerId: any) {
+ // for profile history
+  getCustomerInterestList(customerId: any): Observable<any> {
     return this.http.get(`${environment.endpoint}/api/CustomerLike/getInterestCustomerListByCustomerId?CustomerId=${customerId}`);
   }
 

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, effect, HostListener, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { fadeIn, fadeOut, scaleIn, scaleOut, slideLeft, slideRight } from 'src/app/animations/carousel.animation';
@@ -24,6 +24,7 @@ interface ObjectType {
   value: any;
 }
 import { SharedService } from 'src/app/services/shared.service';
+import { utils } from 'src/app/util/util';
 
 @Component({
   selector: 'carousel-item',
@@ -41,6 +42,7 @@ export class CarouselItemComponent implements OnInit {
   @Input() isDisplayed: boolean = false;
   @Input() data: any;
   isFavourite: boolean = false;
+  isInterested: boolean = false;
   imagePath: any = '';
   headerColor: string = '#ff646b';
   showLoginDialog = false;
@@ -57,6 +59,7 @@ export class CarouselItemComponent implements OnInit {
   imageInfoModel: any;
   customerId: any;
   public screenWidth: any;
+  profileInterests: any;
 
   constructor(
     private router: Router,
@@ -67,6 +70,17 @@ export class CarouselItemComponent implements OnInit {
     private sharedService: SharedService
   ) {
     this.onResize();
+
+    effect(() => {
+      this.profileInterests = utils.profileIntrestList();
+      console.log('profileInterests: ', this.profileInterests);
+      
+      if(this.profileInterests?.length) {
+        this.profileInterests.forEach((item: any) => {
+          this.isInterested = item?.customerId === this.data?.customerId;
+        })
+      }
+    })
   }
 
   ngOnInit() {
@@ -94,6 +108,33 @@ export class CarouselItemComponent implements OnInit {
         },
         error: (error: any) => {
           this.alertService.setAlertMessage('Failed to add profile to favourites', AlertType.error);
+        }
+      })
+    } else {
+      const { customerId } = this.data;
+      sessionStorage.setItem('inquiry', customerId);
+      this.showLoginDialog = true;
+    }
+  }
+
+  handleIsInterested(){
+    if (this.isLoggedIn) {
+      this.isInterested = !this.isInterested;
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const payload = {
+        customerInterestId: 0,
+        inerestedCustomerId: user?.user,
+        customerId: this.data?.customerId,
+        isInterest: this.isInterested
+      };
+      this.userService.setInterest(payload).subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.alertService.setAlertMessage(response?.message, AlertType.success);
+          }
+        },
+        error: (error: any) => {
+          this.alertService.setAlertMessage('Failed to add profile to interest', AlertType.error);
         }
       })
     } else {
@@ -131,6 +172,7 @@ export class CarouselItemComponent implements OnInit {
       this.sharedService.addProfileViewHistory(HistoryData).subscribe({
         next: (response: any) => {
           if (response) {
+            this.sharedService.isUserDetailUpdated.next(true);
             console.log(response)
           }
         },

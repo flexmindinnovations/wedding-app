@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { MENU_ITEMS, tabItems } from 'src/app/util/util';
+import { MENU_ITEMS, tabItems, utils } from 'src/app/util/util';
 import { faGem, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { NavController } from '@ionic/angular';
@@ -184,20 +184,23 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       const profileDetails = this.authService.getCustomerProfileById(user?.user);
       const favoriteList = this.userService.getFavouriteProfileList(user?.user);
       const interestList = this.userService.getCustomerInterestList(user?.user);
+      // when user clicks on thumb button this api will call
+      const userInterestList = this.userService.getInterest(user?.user);
 
-      forkJoin({ profileDetails, favoriteList, interestList }).subscribe({
-        next: (response) => {
-          if (response) {
-            const { profileDetails, favoriteList, interestList } = response;
-            if (profileDetails) this.setProfileDetails(profileDetails);
-            if (favoriteList?.length) this.sharedService.setFavouriteProfiles.next(favoriteList);
-            if (interestList?.length) this.setProfileInterestList(interestList);
-          }
-        },
-        error: (error) => {
-          this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
-        }
-      })
+      // forkJoin({ profileDetails, favoriteList, interestList,userInterestList }).subscribe({
+      //   next: (response) => {
+      //     if (response) {
+      //       const { profileDetails, favoriteList, interestList,userInterestList } = response;
+      //       if (profileDetails) this.setProfileDetails(profileDetails);
+      //       if (favoriteList?.length) this.sharedService.setFavouriteProfiles.next(favoriteList);
+      //       if (interestList?.length) this.profileInterestList = utils.setProfileInterestList(interestList);
+      //       if (userInterestList?.length) utils.profileIntrestList.set(userInterestList);
+      //     }
+      //   },
+      //   error: (error) => {
+      //     this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+      //   }
+      // })
     }
   }
 
@@ -263,20 +266,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       }
     })
 
-  }
-
-  setProfileInterestList(interestList: any[]) {
-    const profileInterests = interestList.map((item: any) => {
-      const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
-      const fullPath = `${environment.endpoint}/${imagePath}`;
-      const obj = {
-        customerId: item?.customerId,
-        fullName: item?.fullName,
-        image: fullPath
-      }
-      return obj;
-    });
-    this.profileInterestList = profileInterests;
   }
 
   ngAfterViewInit(): void {
