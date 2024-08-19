@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from './http-config.service';
+import { HttpClient } from '@angular/common/http';
 import { IBranch } from '../interfaces/IBranch';
 
 @Injectable({
@@ -9,9 +9,9 @@ import { IBranch } from '../interfaces/IBranch';
 })
 export class BranchService {
   endpoint = environment.endpoint + '/api/Branch';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
-  getBranchList(): Observable<IBranch[]> {
+  getBranchList(): Observable<any> {
     return this.http.get(`${this.endpoint}/GetBranchList`);
   }
 

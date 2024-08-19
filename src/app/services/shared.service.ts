@@ -2,7 +2,6 @@ import { Injectable, inject, isDevMode, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IBranch } from '../interfaces/IBranch';
-import { HttpConfigService } from './http-config.service';
 import { HttpClient } from '@angular/common/http';
 import { MERCHANT_KEY_TEST, SALT_KEY_TEST, generateTxnId } from '../util/util';
 import * as CryptoJS from 'crypto-js';
@@ -15,7 +14,7 @@ export class SharedService {
   endpoint = environment.endpoint + '/api';
   permissionListMap = new Map<string, any>();
   userPermissions = new Subject();
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
   httpAssests = inject(HttpClient);
   customerData = new Map<string, any>();
   userDetails = signal<any>({});
@@ -116,7 +115,7 @@ export class SharedService {
     return this.httpAssests.get('../../assets/data/dashboard-items.json')
   }
 
-  getCountryList(): Observable<IBranch[]> {
+  getCountryList(): Observable<any> {
     return this.http.get(`${this.endpoint}/Country/GetCountries`);
   }
   getStatByCountry(countryId: any): Observable<any> {

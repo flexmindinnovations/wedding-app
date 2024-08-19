@@ -72,9 +72,7 @@ export class CarouselItemComponent implements OnInit {
     this.onResize();
 
     effect(() => {
-      this.profileInterests = utils.profileIntrestList();
-      console.log('profileInterests: ', this.profileInterests);
-      
+      this.profileInterests = utils.profileIntrestList();      
       if(this.profileInterests?.length) {
         this.profileInterests.forEach((item: any) => {
           this.isInterested = item?.customerId === this.data?.customerId;

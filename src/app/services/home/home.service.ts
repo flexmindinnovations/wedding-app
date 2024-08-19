@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class HomeService {
 
   endpoint = environment.endpoint + '/api';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
   constructor() { }
 
   getRandomProfiles(): Observable<any> {

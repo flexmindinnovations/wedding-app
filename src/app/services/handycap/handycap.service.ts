@@ -1,14 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HandycapService {
   endpoint = environment.endpoint + '/api/Handycap';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
   getHandycapList(): Observable<any> {
     return this.http.get(`${this.endpoint}/getHandycapList`);

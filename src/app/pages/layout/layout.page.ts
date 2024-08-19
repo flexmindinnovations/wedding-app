@@ -124,6 +124,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('called LayoutPage');
+    
     this.setActivePageOnRefresh();
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
@@ -138,21 +140,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
         this.favouriteProfiles = favouriteProfiles;
       }
     });
-
-    this.sharedService.getIsLoggedInEvent().subscribe((completed: any) => {
-      if (completed) {
-        setTimeout(() => {
-          window.location.reload();
-        })
-      }
-    })
-    this.sharedService.getIsLoggedOutEvent().subscribe((completed: any) => {
-      if (completed) {
-        setTimeout(() => {
-          window.location.reload();
-        })
-      }
-    })
     window.onload = (event: any) => {
       AOS.refresh();
       // if (this.authService.isLoggedIn()) this.getUserDetails();

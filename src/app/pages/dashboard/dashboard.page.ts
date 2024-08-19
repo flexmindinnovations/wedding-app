@@ -70,6 +70,8 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log('called Dashboard');
+
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
         this.isMobile = this.deviceService.isMobile();

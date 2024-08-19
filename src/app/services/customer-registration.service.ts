@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from './http-config.service';
+import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class CustomerRegistrationService {
   isRequestCompleted = new Subject();
 
   endpoint = environment.endpoint + '/api';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
 
   getCustomerList(): Observable<any> {

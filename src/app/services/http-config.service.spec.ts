@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpConfigService } from './http-config.service';
 
 describe('HttpConfigService', () => {
-  let service: HttpConfigService;
+  let service: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

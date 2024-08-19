@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -32,12 +31,12 @@ export class UserService {
     return this.http.post(`${environment.endpoint}/api/CustomerLike/AddLike`, payload);
   }
 
-  setInterest(payload:any): Observable<any>{
+  setInterest(payload: any): Observable<any> {
     return this.http.post(`${environment.endpoint}/api/CustomerLike/AddInterest`, payload);
   }
 
   // for customer showed interest
-  getInterest(customerInterestId:any): Observable<any> {
+  getInterest(customerInterestId: any): Observable<any> {
     return this.http.get(`${environment.endpoint}/api/CustomerLike/getInterestCustomerListByInterestedCustomerId?InterestedCustomerId=${customerInterestId}`);
   }
 
@@ -45,7 +44,7 @@ export class UserService {
     return this.http.get(`${environment.endpoint}/api/CustomerLike/getLikedCustomerListByCustomerId?CustomerId=${customerId}`);
   }
 
- // for profile history
+  // for profile history
   getCustomerInterestList(customerId: any): Observable<any> {
     return this.http.get(`${environment.endpoint}/api/CustomerLike/getInterestCustomerListByCustomerId?CustomerId=${customerId}`);
   }

@@ -1,15 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
 import { Observable, Subject } from 'rxjs';
 import { IBranch } from 'src/app/interfaces/IBranch';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BranchService {
   endpoint = environment.endpoint + '/api/Branch';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
   isRequest = new Subject<any>();
 

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { HttpConfigService } from '../http-config.service';
 export class RolesService {
 
   endpoint = environment.endpoint + '/api/Role';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
   getRoleList(): Observable<any> {
     return this.http.get(`${this.endpoint}/GetRoleList`);

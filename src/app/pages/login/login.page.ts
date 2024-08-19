@@ -15,6 +15,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
 import { UserService } from 'src/app/services/user/user.service';
+import { Severity } from 'src/app/util/util';
 
 
 export enum ValidationStep {
@@ -101,7 +102,7 @@ export class LoginPage implements OnInit {
     private messageService: MessageService,
     private userService: UserService,
     private dialogService: DialogService,
-  ) { 
+  ) {
     this.onResize();
   }
 
@@ -138,7 +139,7 @@ export class LoginPage implements OnInit {
     this.resetPasswordFormGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       emailOtp: ['', [Validators.required]],
-      password: ['', [Validators.required,Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]]
     })
   }
@@ -422,13 +423,13 @@ export class LoginPage implements OnInit {
   }
 
   getSeverity() {
-    let severity = '';
+    let severity: Severity = 'primary';
     if (this.isLoading) {
       severity = 'secondary';
     } else if (this.isLoggedIn) {
       severity = 'success';
     } else {
-      severity = '';
+      severity = undefined;
     }
     return severity;
   }

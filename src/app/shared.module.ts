@@ -56,7 +56,6 @@ import { RegisterUserComponent } from './modals/register-user/register-user.comp
 import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CardComponent } from './components/card/card.component';
-import { NgxParticlesModule } from "@tsparticles/angular";
 import { DataExportComponent } from './components/data-export/data-export.component';
 import { TableModule } from 'primeng/table';
 import { VideoPlayerComponent } from './components/video-player/video-player.component';
@@ -69,6 +68,7 @@ import { PricingComponent } from './components/pricing/pricing.component';
 import { LikedProfilesComponent } from './modals/liked-profiles/liked-profiles.component';
 import { CardModule } from 'primeng/card';
 import { PaymentInfoComponent } from './components/registerartion-process/payment-info/payment-info.component';
+import { HomePageWrapperComponent } from './components/home-page-wrapper/home-page-wrapper.component';
 
 const components = [
   FormStepperComponent,
@@ -95,6 +95,7 @@ const components = [
   PricingComponent,
   PaymentInfoComponent,
   LikedProfilesComponent,
+  HomePageWrapperComponent
 ]
 
 const modules: any = [
@@ -135,7 +136,6 @@ const modules: any = [
   LoadingBarRouterModule,
   // for Core use:
   LoadingBarModule,
-  NgxParticlesModule,
   NgxDocViewerModule,
   CardModule
 ];

@@ -7,11 +7,7 @@ import { RegisterUserComponent } from 'src/app/modals/register-user/register-use
 import { HomeService } from 'src/app/services/home/home.service';
 import { DOMAIN } from 'src/app/util/theme';
 import { environment } from 'src/environments/environment';
-import { NgParticlesService } from "@tsparticles/angular";
-import { particlesOptions } from 'src/app/util/util';
 import { v4 as uuidv4 } from 'uuid';
-import { Container } from '@tsparticles/engine';
-import { loadSlim } from "@tsparticles/slim";
 import * as moment from 'moment';
 
 import { Router } from '@angular/router';
@@ -37,8 +33,6 @@ export class HomePage implements OnInit, AfterViewInit {
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
   public screenWidth: any;
   domain = DOMAIN;
-  particlesOptions: any = particlesOptions;
-  particleId: any = uuidv4();
   sharedService = inject(SharedService);
   isLoggedIn: boolean = false;
   isVideoLoaded = false;
@@ -69,7 +63,6 @@ export class HomePage implements OnInit, AfterViewInit {
   id = uuidv4();
   constructor(
     private dialogService: DialogService,
-    private readonly ngParticlesService: NgParticlesService,
     private dialogRefService: DynamicDialogRef
   ) {
     this.observable = new Observable<boolean>((observer: any) => this.observer = observer).pipe(share());
@@ -79,6 +72,8 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    console.log('called HomePage');
+    
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
         this.isMobile = this.deviceService.isMobile();
@@ -89,10 +84,6 @@ export class HomePage implements OnInit, AfterViewInit {
     observer.observe(this.host.nativeElement);
 
     this.getRandomProfiles();
-
-    this.ngParticlesService.init(async (engine) => {
-      await loadSlim(engine);
-    });
   }
 
   ngAfterViewInit(): void {
@@ -112,9 +103,6 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   handleOnScroll(event: any) {
-  }
-
-  particlesLoaded(container: Container): void {
   }
 
   handleRegister() {

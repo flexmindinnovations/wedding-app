@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutPage } from './layout.page';
+import { HomePageWrapperComponent } from 'src/app/components/home-page-wrapper/home-page-wrapper.component';
+import { AuthGuard } from 'src/app/guards/auth-guard/auth.guard';
 
 const isLoggedIn = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -15,22 +17,13 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        matcher: url => {
-          if (isLoggedIn()) {
-            return url.length ? { consumed: [] } : { consumed: url };
-          }
-          return null
-        },
-        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
+        path: '',
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
       },
       {
-        matcher: url => {
-          if (!isLoggedIn()) {
-            return url.length ? { consumed: [] } : { consumed: url };
-          }
-          return null
-        },
-        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+        path: 'app',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
       {
         path: 'blog',

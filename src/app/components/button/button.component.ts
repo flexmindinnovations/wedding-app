@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { COLOR_SCHEME, buttonThemeVariables, iconSize, themeVariables } from 'src/app/util/theme';
+import { Severity } from 'src/app/util/util';
 
 @Component({
   selector: 'mt-button',
@@ -9,8 +10,8 @@ import { COLOR_SCHEME, buttonThemeVariables, iconSize, themeVariables } from 'sr
 
 export class ButtonComponent implements OnInit {
   @Input() title: string = '';
-  @Input() icon: string = '';
-  @Input() severity: string = '';
+  @Input() icon: string = 'primary';
+  @Input() severity: Severity = 'primary'
   @Input() iconPos: ButtonIconPosition = 'left';
   @Input() textOnly = false;
   @Input() iconOnly = false;

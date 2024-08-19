@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpConfigService } from '../http-config.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { HttpConfigService } from '../http-config.service';
 export class BlogService {
 
   endpoint = environment.endpoint + '/api/Blog';
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
   isRequestCompleted = new Subject();
 

@@ -1,6 +1,5 @@
 import { Component, OnInit, isDevMode, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tsParticles } from '@tsparticles/engine';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { MERCHANT_KEY_LIVE, MERCHANT_KEY_TEST, verifyPaymentHash } from 'src/app/util/util';

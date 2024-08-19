@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpConfigService } from './http-config.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,7 +10,7 @@ export class RoleAccessService {
 
   endpoint = environment.endpoint + '/api';
   loadJson = inject(HttpClient);
-  http = inject(HttpConfigService);
+  http = inject(HttpClient);
 
 
   getRoleAccessData(): Observable<any> {
