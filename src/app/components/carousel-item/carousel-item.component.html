@@ -36,9 +36,10 @@
       <!-- <p>#{{data?.customerId}}</p> -->
       <span class="cursor-pointer text-red-600 !text-lg" (click)="handleIsFavourite()"
         [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
-        <span class="cursor-pointer  text-blue-600" (click)="handleIsInterested()"
+      <span class="cursor-pointer  text-blue-600" (click)="handleIsInterested()"
         [ngClass]="isInterested ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"></span>
-        <span *ngIf="isLoggedIn" class="cursor-pointer  text-blue-600" (click)="exportPdf(data,data?.customerId)"
+      <span *ngIf="isLoggedIn && isPaidUser" class="cursor-pointer  text-blue-600"
+        (click)="exportPdf(data,data?.customerId)"
         [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
     </div>
   </div>
@@ -79,10 +80,11 @@
         <!-- <p>#{{data?.customerId}}</p> -->
         <span class="cursor-pointer text-red-700 !text-lg" (click)="handleIsFavourite()"
           [ngClass]="isFavourite ? 'pi pi-heart-fill' : 'pi pi-heart'"></span>
-          <span class="cursor-pointer  text-blue-600" (click)="handleIsInterested()"
+        <span class="cursor-pointer  text-blue-600" (click)="handleIsInterested()"
           [ngClass]="isInterested ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"></span>
-            <span *ngIf="isLoggedIn" class="cursor-cycle  text-blue-600" (click)="exportPdf(data,data?.customerId)"
-            [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
+        <span *ngIf="isLoggedIn && isPaidUser" class="cursor-cycle  text-blue-600"
+          (click)="exportPdf(data,data?.customerId)"
+          [ngClass]="isLoading ? 'pi pi-spin pi-spinner' :'pi pi-download'"></span>
       </div>
     </div>
   </div>
@@ -98,6 +100,21 @@
       <div class="action w-full flex items-center justify-end gap-5">
         <mt-button title="Cancel" severity="secondary" (action)="handleButtonClick()"></mt-button>
         <mt-button title="Sign In" (action)="handleButtonClick('login')" />
+      </div>
+    </div>
+  </p-dialog>
+</ng-container>
+
+<ng-container>
+  <p-dialog #sessionExpired [header]="'Payment Information'" [(visible)]="showUnpaidDialog" appendTo="body"
+    [modal]="true" [closable]="false" [style]="getDialogStyle()" [draggable]="false" [resizable]="false">
+    <div class="flex flex-col items-center justify-center h-full w-full gap-4">
+      <p class="select-none">
+        To proceed with this action, please subscribe to one of our available plans.
+      </p>
+      <div class="action w-full flex items-center justify-end gap-5">
+        <mt-button title="Cancel" severity="secondary" (action)="showUnpaidDialog = false"></mt-button>
+        <mt-button title="Payment" (action)="handleButtonClick('payment')" />
       </div>
     </div>
   </p-dialog>

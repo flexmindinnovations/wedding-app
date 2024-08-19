@@ -14,18 +14,18 @@ export class ProfileHistoryPage implements OnInit {
   profileHistory: any;
   isLoading = false;
   endpoint = environment.endpoint;
-  constructor( private sharedService: SharedService,  private alertService: AlertService) { }
+  constructor(private sharedService: SharedService, private alertService: AlertService) { }
 
   ngOnInit() {
     this.getProfileHistory();
   }
 
   handleProfileClick(profile: any) {
-    console.log('profile: ', profile);
-    
+    // console.log('profile: ', profile);
+
   }
-  
-  getProfileHistory(){
+
+  getProfileHistory() {
     this.isLoading = true;
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.sharedService.getProfileViewHistory(user.user).subscribe({

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
-import { Component, effect, HostListener, Input, OnInit } from '@angular/core';
+import { Component, effect, HostListener, inject, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { fadeIn, fadeOut, scaleIn, scaleOut, slideLeft, slideRight } from 'src/app/animations/carousel.animation';
@@ -25,6 +25,7 @@ interface ObjectType {
 }
 import { SharedService } from 'src/app/services/shared.service';
 import { utils } from 'src/app/util/util';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 
 @Component({
   selector: 'carousel-item',
@@ -46,6 +47,7 @@ export class CarouselItemComponent implements OnInit {
   imagePath: any = '';
   headerColor: string = '#ff646b';
   showLoginDialog = false;
+  showUnpaidDialog = false;
   dialogRef: DynamicDialogRef | undefined;
   isLoggedIn = false;
   isDataLoaded: boolean = false;
@@ -60,6 +62,8 @@ export class CarouselItemComponent implements OnInit {
   customerId: any;
   public screenWidth: any;
   profileInterests: any;
+  customerRegistrationService = inject(CustomerRegistrationService);
+  isPaidUser = false;
 
   constructor(
     private router: Router,
@@ -73,9 +77,9 @@ export class CarouselItemComponent implements OnInit {
 
     effect(() => {
       this.profileInterests = utils.profileIntrestList();
-      console.log('profileInterests: ', this.profileInterests);
-      
-      if(this.profileInterests?.length) {
+      // console.log('profileInterests: ', this.profileInterests);
+
+      if (this.profileInterests?.length) {
         this.profileInterests.forEach((item: any) => {
           this.isInterested = item?.customerId === this.data?.customerId;
         })
@@ -85,6 +89,7 @@ export class CarouselItemComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) this.getCustomerDetails();
     const networkImage = `${this.data.imagePath1 ? this.data.imagePath1 : this.data.imagePath2 ? this.data.imagePath2 : ''}`;
     this.imagePath = networkImage ? `${environment.endpoint}/${networkImage}` : '/assets/image/image-placeholder.png';
   }
@@ -117,7 +122,7 @@ export class CarouselItemComponent implements OnInit {
     }
   }
 
-  handleIsInterested(){
+  handleIsInterested() {
     if (this.isLoggedIn) {
       this.isInterested = !this.isInterested;
       const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -160,42 +165,46 @@ export class CarouselItemComponent implements OnInit {
 
   handleProfileClick() {
     if (this.authService.isLoggedIn()) {
-      const hasName = this.data?.fullName.replace(/\s/g, '').trim().length > 0 ? true : false;
-      const fullName = hasName ? `${this.data?.fullName}` : 'Profile Information';
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const { customerId } = this.data;
-      const HistoryData = {
-        viewHistoryId: 0,
-        viewerId: user.user,
-        viewedProfileId: customerId
-      }
-      this.sharedService.addProfileViewHistory(HistoryData).subscribe({
-        next: (response: any) => {
-          if (response) {
-            this.sharedService.isUserDetailUpdated.next(true);
-            console.log(response)
-          }
-        },
-        error: (error) => {
-          this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+      if (this.isPaidUser) {
+        const hasName = this.data?.fullName.replace(/\s/g, '').trim().length > 0 ? true : false;
+        const fullName = hasName ? `${this.data?.fullName}` : 'Profile Information';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const { customerId } = this.data;
+        const HistoryData = {
+          viewHistoryId: 0,
+          viewerId: user.user,
+          viewedProfileId: customerId
         }
-      });
-      this.dialogRef = this.dialogService.open(
-        DataExportComponent, {
-        header: `${fullName}`,
-        width: '80%',
-        height: '90%',
-        data: {
-          ...this.data
-        },
-        baseZIndex: 10000,
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw'
-        },
-        maximizable: true,
-        styleClass: 'data-export-popup'
-      })
+        this.sharedService.addProfileViewHistory(HistoryData).subscribe({
+          next: (response: any) => {
+            if (response) {
+              this.sharedService.isUserDetailUpdated.next(true);
+            }
+          },
+          error: (error) => {
+            this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+          }
+        });
+        this.dialogRef = this.dialogService.open(
+          DataExportComponent, {
+          header: `${fullName}`,
+          width: '80%',
+          height: '90%',
+          data: {
+            ...this.data
+          },
+          baseZIndex: 10000,
+          breakpoints: {
+            '960px': '75vw',
+            '640px': '90vw'
+          },
+          maximizable: true,
+          styleClass: 'data-export-popup'
+        })
+      } else {
+        this.showUnpaidDialog = true;
+      }
+
     } else {
       const { customerId } = this.data;
       sessionStorage.setItem('inquiry', customerId);
@@ -205,11 +214,15 @@ export class CarouselItemComponent implements OnInit {
 
   handleButtonClick(src?: string) {
     this.showLoginDialog = false;
+    this.showUnpaidDialog = false;
     setTimeout(() => {
       if (src == 'login') {
         this.router.navigateByUrl('login');
       } else {
         sessionStorage.removeItem('inquiry');
+      }
+      if (src == 'payment') {
+        this.router.navigateByUrl('profile/payment');
       }
     }, 300);
   }
@@ -300,6 +313,21 @@ export class CarouselItemComponent implements OnInit {
           this.isLoading = false;
           this.alertService.setAlertMessage('Error: Failed to load user details', AlertType.error);
         }
+      }
+    })
+  }
+
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.isPaidUser = data?.currentCustomerPayment.paymentStatus === 'success';
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
       }
     })
   }
@@ -753,7 +781,7 @@ export class CarouselItemComponent implements OnInit {
   }
 
   parseTimeString(timeString: any) {
-    console.log('timeString: ', timeString);
+    // console.log('timeString: ', timeString);
 
     const d = new Date();
     if (timeString) {
