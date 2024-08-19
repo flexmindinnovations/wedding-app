@@ -69,8 +69,10 @@ import { LikedProfilesComponent } from './modals/liked-profiles/liked-profiles.c
 import { CardModule } from 'primeng/card';
 import { PaymentInfoComponent } from './components/registerartion-process/payment-info/payment-info.component';
 import { HomePageWrapperComponent } from './components/home-page-wrapper/home-page-wrapper.component';
+import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
 const components = [
+  SafeUrlPipe,
   FormStepperComponent,
   PersonalInfoComponent,
   FamilyInfoComponent,
@@ -133,33 +135,38 @@ const modules: any = [
   DividerModule,
   NgHttpLoaderModule.forRoot(),
   // for Router use:
-  LoadingBarRouterModule,
+  // LoadingBarRouterModule,
   // for Core use:
-  LoadingBarModule,
-  NgxDocViewerModule,
+  // LoadingBarModule,
+  // NgxDocViewerModule,
   CardModule
 ];
 
-@NgModule({ declarations: [...components],
-    exports: [
-        CommonModule,
-        HttpClientModule,
-        FormsModule,
-        ReactiveFormsModule,
-        IonicModule,
-        FontAwesomeModule,
-        ...modules,
-        ...components
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        IonicModule,
-        ...modules,
-        FontAwesomeModule], providers: [
-        MessageService,
-        DialogService,
-        DynamicDialogRef,
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+@NgModule({
+  declarations: [...components],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule,
+    ...modules,
+    FontAwesomeModule
+  ],
+  exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule,
+    FontAwesomeModule,
+    ...modules,
+    ...components
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [
+    MessageService,
+    DialogService,
+    DynamicDialogRef,
+    provideHttpClient(withInterceptorsFromDi()),
+  ]
+})
 export class SharedModule { }

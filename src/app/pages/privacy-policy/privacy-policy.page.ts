@@ -11,6 +11,9 @@ export class PrivacyPolicyPage implements OnInit {
   isMobile: boolean = false;
   isDesktop: boolean = true;
   host = inject(ElementRef);
+
+  fileUrl = 'https://docs.google.com/document/d/1Ay6lwN0L8i5uAVp1jlpgWfQ1dFbdexbV/preview';
+
   constructor() { }
   ngOnInit(): void {
     const observer = new ResizeObserver((rect) => {
@@ -19,8 +22,8 @@ export class PrivacyPolicyPage implements OnInit {
         this.isDesktop = this.deviceService.isDesktop();
       })
     });
-  
+
     observer.observe(this.host.nativeElement);
   }
-  
+
 }
