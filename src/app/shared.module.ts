@@ -15,7 +15,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { ImagePickerComponent } from './components/image-picker/image-picker.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CarouselItemComponent } from './components/carousel-item/carousel-item.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
@@ -140,32 +140,26 @@ const modules: any = [
   CardModule
 ];
 
-@NgModule({
-  declarations: [...components],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    ...modules,
-    FontAwesomeModule,
-  ],
-  exports: [
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    FontAwesomeModule,
-    ...modules,
-    ...components
-  ],
-  providers: [
-    MessageService,
-    DialogService,
-    DynamicDialogRef,
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
+@NgModule({ declarations: [...components],
+    exports: [
+        CommonModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        FontAwesomeModule,
+        ...modules,
+        ...components
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        ...modules,
+        FontAwesomeModule], providers: [
+        MessageService,
+        DialogService,
+        DynamicDialogRef,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class SharedModule { }

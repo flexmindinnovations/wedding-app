@@ -1,9 +1,5 @@
 import { ChangeDetectorRef, Injectable, inject } from '@angular/core';
-import {
-    HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse,
-    HttpErrorResponse,
-    HttpInterceptorFn
-} from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, first, last, take, takeLast, tap } from 'rxjs/operators';
 import { SharedService } from '../services/shared.service';
