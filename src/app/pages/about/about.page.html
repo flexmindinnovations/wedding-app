@@ -15,7 +15,9 @@
             About Us
           </p>
           <h1 class="h1-gradient">
-            Welcome to {{domain}} Matrimonial Services
+            <!-- Welcome to {{domain}} Matrimonial Services -->
+            Welcome to {{domain}}.com
+            A Multi-Religious Matrimonial Service
           </h1>
           <p class="md:z-20">
             <!-- About Vasundhara Social Foundation For an extensive period, the Vasundhara Social Foundation has been at the
@@ -27,12 +29,30 @@
             these dangers? It is imperative that we reimagine our approach. Only by constructing a new framework—one
             that prioritizes sustainability and harmonizes with nature—can we secure the longevity of human life. Let us
             invoke divine blessings as we continue this vital work, ensuring a safer and more resilient future for all. -->
-            Susangam.com is the website designed especially for serving the community through {{domain}} Matrimonial Services. It is made with the purpose of easing the match making process at a nominal cost. Susangam is one of the initiatives by the reputed Farash family and a part of H.M.I Foundation. Susangam initiative is driven by visionary Mr.Zaid Farash, an Engineer by Qualification but a Social change enthusiast. A renowned corporate Trainer and Motivational Speaker. Other initiatives include Educational Support for deserving students, Training Programs to enhance Employability skills of rural students so that they acquire gainful employment.
+
+            <!-- Susangam.com is the website designed especially for serving the community through {{domain}} Matrimonial Services. It is made with the purpose of easing the match making process at a nominal cost. Susangam is one of the initiatives by the reputed Farash family and a part of H.M.I Foundation. Susangam initiative is driven by visionary Mr.Zaid Farash, an Engineer by Qualification but a Social change enthusiast. A renowned corporate Trainer and Motivational Speaker. Other initiatives include Educational Support for deserving students, Training Programs to enhance Employability skills of rural students so that they acquire gainful employment. -->
+            At Susangam.com, we believe in the power of love transcending boundaries, cultures, and religions. Our
+            mission is to help people find their perfect life partners, regardless of their religious background. We aim
+            to create a platform that respects and celebrates the diversity of our users while upholding the values of
+            unity, understanding, and mutual respect.
           </p>
-          <p>
+          <!-- <p>
             Here’s what our platform offers:
+          </p> -->
+          <p>
+            To guide us in our mission, we are privileged to have a dedicated advisory board comprising individuals of
+            high repute and diverse backgrounds. Each member brings a wealth of knowledge, experience, and a commitment
+            to fostering harmony within our multi-religious community. Their insights and expertise are instrumental in
+            shaping our services and ensuring that we remain true to our core values of inclusivity and compassion.
           </p>
-          <ol>
+          <div class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
+            @if (isLoggedIn) {
+            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
+            } @else {
+            <mt-button title="Register Now" (action)="handleRegister()" />
+            }
+          </div>
+          <!-- <ol>
             <li>
               <p>Profiles with all the details, from age to education. </p>
             </li>
@@ -45,15 +65,7 @@
             <li>
               <p>Connecting is a breeze. You can send a friendly message or even a virtual high-five.</p>
             </li>
-          </ol>
-          <div
-          class="mx-auto w-full flex items-center justify-center md:lg:justify-start">
-          @if (isLoggedIn) {
-            <mt-button title="Explore Profiles" (action)="handleExploreProfiles()" />
-            } @else {
-            <mt-button title="Register Now" (action)="handleRegister()" />
-            }
-          </div>
+          </ol> -->
         </div>
         <div class="content -z-[10] flex-grow md:w-full h-[inherit]">
           <div class="bars">
@@ -64,6 +76,39 @@
           <div class="image-container">
             <img src="/assets/icon/temp_bg.jpg" class="h-full w-[88%] object-fill rounded-full" alt="Demo Image" />
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="_features flex flex-col items-center justify-center min-h-96 p-5">
+      <div class="container p-3 flex items-center justify-center">
+        <h5 class="h5-gradient font-bold">
+          Here, we are honored to introduce the esteemed members of our advisory board, who stand
+          as pillars of wisdom
+          and guidance at {{domain}}.com
+        </h5>
+      </div>
+
+      <div class="container flex items-center justify-center flex-wrap gap-5">
+        <div class="wrapper grid grid-cols-1 md:grid-cols-2 gap-5">
+          @for (item of cardItems; track $index) {
+          <div
+            class="card p-4 flex bg-white border border-gray-300 shadow-lg 
+          transition ease-in-out delay-300 hover:shadow-inner cursor-pointer dark:bg-gray-800 dark:border-gray-600 min-h-40">
+            <div class="icon min-w-10">
+              <i></i>
+            </div>
+            <div>
+              <a href="#">
+                <h5 class="mb-2 text-xl font-bold tracking-tighter text-gray-900 dark:text-white">{{item?.title}}
+                  <span class="text-md">({{item?.designation}})</span>
+                </h5>
+              </a>
+              <p class="font-normal text-gray-500 dark:text-gray-300">{{item?.description}}</p>
+            </div>
+          </div>
+          }
+
         </div>
       </div>
     </section>
