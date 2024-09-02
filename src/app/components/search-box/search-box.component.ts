@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { CastService } from 'src/app/services/cast/cast.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { use } from 'video.js/dist/types/tech/middleware';
 
 @Component({
   selector: 'search-box',
@@ -44,6 +45,8 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   isSubCastDataAvailable: boolean = false;
   religionListOptions: any[] = [];
   isLoggedIn = false;
+  alert = inject(AlertService);
+  customerRegistrationService = inject(CustomerRegistrationService);
 
   constructor(
     private router: Router,
@@ -63,14 +66,30 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       { id: 'divorced', title: 'Divorced' },
       { id: 'widowed', title: 'Widowed' }
     ]
-    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user?.user) this.getCustomerDetails(user);
+  }
+
+  getCustomerDetails(user: any): void {
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.religionId = data?.familyInfoModel?.religionId;
+          this.getCastListReligionId(this.religionId)
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
   }
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.formGroup.reset();
     this.getMasterData();
-    
+
   }
 
   initFormGroup() {
@@ -111,14 +130,14 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
         const subCastId = event?.id;
         this.subCastId = subCastId;
         break;
-        case 'maritalStatus':
-          break;
-        case 'countryId':
-          this.getStateByCountry(event?.id);
-          break;
-        case 'stateId':
-          this.getCityByState(event?.id);
-          break;
+      case 'maritalStatus':
+        break;
+      case 'countryId':
+        this.getStateByCountry(event?.id);
+        break;
+      case 'stateId':
+        this.getCityByState(event?.id);
+        break;
     }
 
   }
@@ -169,7 +188,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     })
   }
 
-  getCastListReligionId(religionId:any) {
+  getCastListReligionId(religionId: any) {
     this.castService.getCastListByReligionId(religionId).subscribe({
       next: (response: any) => {
         if (response) {

@@ -10,9 +10,9 @@
       <div class="flex flex-col justify-center items-center gap-4">
         <div
           class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:items-end lg:justify-center">
-          <app-dropdown *ngIf="!isLoggedIn" label="Looking For" [control]="formGroupControl['gender']" formControlName="gender"
-            (onSelectionChange)="onSelectionChange($event, 'gender')" [controlValue]="formGroup.get('gender')?.value"
-            [options]="genderOptions" class="flex-auto" />
+          <app-dropdown *ngIf="!isLoggedIn" label="Looking For" [control]="formGroupControl['gender']"
+            formControlName="gender" (onSelectionChange)="onSelectionChange($event, 'gender')"
+            [controlValue]="formGroup.get('gender')?.value" [options]="genderOptions" class="flex-auto" />
 
           <app-input label="Age From" type="number" labelColor="text-gray-700"
             [controlValue]="formGroup.get('fromAge')?.value" [control]="formGroupControl['fromAge']"
@@ -22,25 +22,23 @@
             [controlValue]="formGroup.get('toAge')?.value" [control]="formGroupControl['toAge']" formControlName="toAge"
             class="flex-auto" />
 
-            @if (religionListOptions.length) {
+          <!-- @if (religionListOptions.length) {
               <app-dropdown label="Religion" [control]="formGroupControl['religionId']" formControlName="religionId"
                 (onSelectionChange)="onSelectionChange($event, 'religionId')" [options]="religionListOptions" />
-              }
-      
-              @if (castListOptions.length) {
-              <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
-                 (onSelectionChange)="onSelectionChange($event, 'cast')"
-                [options]="castListOptions" class="flex-auto" />
-              }
-      
-              @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-              <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']"
-                 formControlName="subCast"
-                (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
-                class="flex-auto" />
-              }
+              } -->
 
-          <app-dropdown *ngIf="isLoggedIn"  label="Marital Status" [control]="formGroupControl['maritalStatus']"
+          @if (castListOptions.length) {
+          <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+            (onSelectionChange)="onSelectionChange($event, 'cast')" [options]="castListOptions" class="flex-auto" />
+          }
+
+          @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
+          <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']" formControlName="subCast"
+            (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
+            class="flex-auto" />
+          }
+
+          <app-dropdown *ngIf="isLoggedIn" label="Marital Status" [control]="formGroupControl['maritalStatus']"
             formControlName="maritalStatus" [options]="maritalStatusOptions"
             (onSelectionChange)="onSelectionChange($event, 'maritalStatus')" class="w-full" />
 
@@ -69,7 +67,7 @@
 
         </div>
         <div class="h-full w-full mt-auto flex flex-auto xl:w-30 lg:w-36 md:w-36">
-          <mt-button size="large" class="w-full"  title="Search" (action)="handleOnSearch()" />
+          <mt-button size="large" class="w-full" title="Search" (action)="handleOnSearch()" />
         </div>
       </div>
     </form>

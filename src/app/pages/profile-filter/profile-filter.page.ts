@@ -11,6 +11,7 @@ import { SharedService } from 'src/app/services/shared.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { AlertType } from 'src/app/enums/alert-types';
+import { any } from 'video.js/dist/types/utils/events';
 
 @Component({
   selector: 'app-profile-filter',
@@ -62,7 +63,8 @@ export class ProfileFilterPage implements OnInit {
 
   filteredProfileList: any[] = [];
   filteredQueryParams: any;
-  isLoggedIn:boolean = false;
+  isLoggedIn: boolean = false;
+  route: any;
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -90,30 +92,35 @@ export class ProfileFilterPage implements OnInit {
 
   getCustomerDetails(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
-      next: (data: any) => {
-        if (data) {
-          this.customerData = data;
-          const { personalInfoModel } = this.customerData;
-          const oppGender = this.getFilterGender(personalInfoModel['gender']);
-          this.searchCriteria = {
-            gender: oppGender
+    if (user?.user) {
+      this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.customerData = data;
+            this.religionId = data?.familyInfoModel?.religionId;
+            this.getCastListReligionId(this.religionId);
+            const { personalInfoModel } = this.customerData;
+            const oppGender = this.getFilterGender(personalInfoModel['gender']);
+            this.searchCriteria = {
+              gender: oppGender
+            }
+            if (!this.isSearchFromQuery) {
+              this.seachFilteredProfiles(this.searchCriteria);
+              setTimeout(() => {
+                this.formGroup.patchValue(this.searchCriteria);
+              })
+            }
+            this.isDataAvailable = true;
           }
-          if (!this.isSearchFromQuery) {
-            this.seachFilteredProfiles(this.searchCriteria);
-            setTimeout(() => {
-              this.formGroup.patchValue(this.searchCriteria);
-            })
-          }
+        },
+        error: (error) => {
+          console.log('error: ', error);
           this.isDataAvailable = true;
+          this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
         }
-      },
-      error: (error) => {
-        console.log('error: ', error);
-        this.isDataAvailable = true;
-        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
-      }
-    })
+      })
+    }
+
   }
 
   getFirstItemIndex(): number {
@@ -133,6 +140,7 @@ export class ProfileFilterPage implements OnInit {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.isLoading = true;
     this.getMasterData();
+    if (this.religionId) this.getCastListReligionId(this.religionId);
     this.activatedRoute.queryParams.subscribe((query: any) => {
       if (typeof query === 'object' && Object.keys(query).length > 0) this.isSearchFromQuery = true;
       const filteredQueryParams = Object.keys(query).filter(objKey =>
@@ -142,13 +150,22 @@ export class ProfileFilterPage implements OnInit {
         }, {}
         );
       this.searchCriteria = filteredQueryParams;
-        if (this.searchCriteria && Object.keys(this.searchCriteria).length > 0) {
-          this.formGroup.patchValue(this.searchCriteria);
-          this.cdref.detectChanges();
-        }
+      if (this.searchCriteria && Object.keys(this.searchCriteria).length > 0) {
+        this.formGroup.patchValue(this.searchCriteria);
+        this.cdref.detectChanges();
+      }
       this.seachFilteredProfiles(this.searchCriteria);
+      this.initializeForm(query);
     })
   }
+
+  initializeForm(params: any) {
+    if (params.countryId) this.getStateByCountry(params.countryId);
+    if (params.stateId) this.getCityByState(params.stateId);
+    if (params.cast) this.getSubCastList(params.cast);
+    if (params.subCast) this.hasSubCast = true;
+  }
+
 
   initFormGroup() {
     this.formGroup = this.fb.group({
@@ -320,7 +337,7 @@ export class ProfileFilterPage implements OnInit {
           });
           this.isDataAvailable = true;
           this.isLoading = false;
-          if(this.authService.isLoggedIn()) this.getCustomerDetails();
+          if (this.authService.isLoggedIn()) this.getCustomerDetails();
         }
       },
       error: (error: any) => {
@@ -347,6 +364,8 @@ export class ProfileFilterPage implements OnInit {
   }
 
   getSubCastList(castId: number) {
+    console.log(castId);
+    console.log(this.formGroup.get('subCast')?.value);
     this.subCastListOptions = [];
     this.isSubCastDataAvailable = false;
     this.castService.getSubCastListByCast(castId).subscribe({
