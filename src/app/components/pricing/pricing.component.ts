@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AlertType } from 'src/app/enums/alert-types';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-pricing',
@@ -17,7 +20,9 @@ export class PricingComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private sharedService: SharedService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
@@ -25,37 +30,61 @@ export class PricingComponent implements OnInit {
   }
 
   setCardItems() {
-    this.cardItems = [
-      {
-        planName: 'Amazing Plan',
-        planType: 'Basic',
-        styleClass: '',
-        planFeature: [
-          { id: 1, text: 'Access upto 50 profiles per week' }
-        ],
-        originalAmount: 2499,
-        discountAmount: 1499,
-        actualAmount: '',
-        planStartDate: moment(new Date()),
-        actionName: 'Get Amazing Plan',
-        isActive: true
+    this.sharedService.getMembershipPlanList().subscribe({
+      next: (response) => {
+        if (response) {
+          this.cardItems = response.map((plan: any) => ({
+            planName: plan.planName || '',
+            planType: plan.planType || '',
+            styleClass: plan.styleClass || '',
+            planFeature: [
+              { id: 1, text: 'Access to unlimited profiles' }
+            ] || [],
+            originalAmount: plan.originalAmount || 0,
+            discountAmount: plan.discountAmount || 0,
+            actualAmount: plan.actualAmount || '',
+            planStartDate: moment(plan.planStartDate || new Date()),
+            actionName: `Get ${plan.planName}` || '',
+            isActive: plan.isActive || false
+          }));
+        }
       },
-      {
-        planName: 'Delux',
-        planType: 'Delux',
-        planFeature: [
-          { id: 1, text: 'Access to unlimited profiles' }
-        ],
-        styleClass: 'pricing',
-        originalAmount: 5000,
-        discountAmount: 2499,
-        actualAmount: '',
-        planStartDate: moment(new Date()),
-        actionName: 'Get Delux',
-        isActive: true
+      error: (error) => {
+        this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
       }
-    ];
+    });
+    // this.cardItems = [
+    //   {
+    //     planName: 'Amazing Plan',
+    //     planType: 'Basic',
+    //     styleClass: '',
+    //     planFeature: [
+    //       { id: 1, text: 'Access upto 50 profiles per week' }
+    //     ],
+    //     originalAmount: 2499,
+    //     discountAmount: 1499,
+    //     actualAmount: '',
+    //     planStartDate: moment(new Date()),
+    //     actionName: 'Get Amazing Plan',
+    //     isActive: true
+    //   },
+    //   {
+    //     planName: 'Delux',
+    //     planType: 'Delux',
+    //     planFeature: [
+    //       { id: 1, text: 'Access to unlimited profiles' }
+    //     ],
+    //     styleClass: 'pricing',
+    //     originalAmount: 5000,
+    //     discountAmount: 2499,
+    //     actualAmount: '',
+    //     planStartDate: moment(new Date()),
+    //     actionName: 'Get Delux',
+    //     isActive: true
+    //   }
+    // ];
   }
+
 
   handlePlanCardClick(plan: any) {
     const isLoggedIn = this.authService.isLoggedIn();

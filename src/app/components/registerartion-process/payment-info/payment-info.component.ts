@@ -1,5 +1,7 @@
 import { Component, HostListener, OnInit, isDevMode, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AlertType } from 'src/app/enums/alert-types';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
@@ -18,15 +20,18 @@ export class PaymentInfoComponent implements OnInit {
   currentPaymentDetails: any;
   paymentHistory: any;
   isLoading = false;
+  amountOptions: any = [];
+
 
 
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
-    private customerRegistrationService: CustomerRegistrationService
+    private customerRegistrationService: CustomerRegistrationService,
+    private alertService: AlertService,
   ) {
     this.onResize();
-   }
+  }
 
   ngOnInit() {
 
@@ -35,15 +40,38 @@ export class PaymentInfoComponent implements OnInit {
       lastName: ['', [Validators.required]],
       mobile: [''],
       email: ['', [Validators.required, Validators.email]],
-      amount: ['249', [Validators.required]]
+      amount: ['', [Validators.required]]
     })
-
     this.getCustomerDetails();
+    this.getPlanAmount();
   }
 
   get formGroupControl(): { [key: string]: FormControl } {
     return this.formGroup.controls as { [key: string]: FormControl };
   }
+
+  getPlanAmount() {
+    this.sharedService.getMembershipPlanList().subscribe({
+      next: (response) => {
+        if (response) {
+          this.amountOptions = response.map((plan: any) => ({
+            id: plan.actualAmount,
+            title: plan.actualAmount,
+          }));
+        }
+      },
+      error: (error) => {
+        this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error);
+      }
+    });
+  }
+
+  onSelectionChange(event: any, amount: any) {
+    if (event && event?.title) {
+      this.formGroup.patchValue({ amount: event?.title });
+    }
+  }
+
 
   getCustomerDetails(): void {
     this.isLoading = true;
@@ -69,6 +97,7 @@ export class PaymentInfoComponent implements OnInit {
           this.formGroup.disable();
           this.formGroupControl['email'].enable();
           this.formGroupControl['mobile'].enable();
+          this.formGroupControl['amount'].enable();
           this.isLoading = false;
         }
       },
@@ -109,7 +138,7 @@ export class PaymentInfoComponent implements OnInit {
 
   getPaymentMode(mode: string) {
     let paymentMode: string = '';
-    switch(mode) {
+    switch (mode) {
       case 'CC':
         paymentMode = 'Credit Card';
         break;

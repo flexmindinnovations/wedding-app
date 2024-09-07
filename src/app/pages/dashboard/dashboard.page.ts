@@ -15,6 +15,7 @@ import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { HASH_STRING, MERCHANT_KEY_TEST, PAYMENT_OBJECT, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload, setPaymentObject } from 'src/app/util/util';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -30,6 +31,7 @@ export class DashboardPage implements OnInit {
   profileList: any[] = [];
   imagePathPart = environment.endpoint;
   homeService = inject(HomeService);
+  customerRegistrationService = inject(CustomerRegistrationService);
   currentItem = 0;
   carouselButtonStyle = `absolute top-48 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-wr-600 hover:text-wr-400 focus:text-wr-400 -ml-6 focus:outline-none focus:shadow-outline disabled:bg-gray-100 disabled:text-gray-200 disabled:shadow-none disabled:cursor-not-allowed`;
 
@@ -79,7 +81,7 @@ export class DashboardPage implements OnInit {
 
     observer.observe(this.host.nativeElement);
 
-    this.getRandomProfiles();
+    this.getCustomerDetails();
   }
   ngAfterViewInit(): void {
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
@@ -121,8 +123,27 @@ export class DashboardPage implements OnInit {
   handleOnScroll(event: any) {
   }
 
-  getRandomProfiles() {
-    this.homeService.getRandomProfiles().subscribe({
+  getCustomerDetails(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          const payload = {
+            religionId: data?.familyInfoModel?.religionId,
+            gender: data?.personalInfoModel.gender,
+          }
+          this.getRandomProfiles(payload);
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
+  }
+
+  getRandomProfiles(payload: any) {
+    this.homeService.getRandomProfilesByReligion(payload).subscribe({
       next: (response: any) => {
         if (response) {
           const data = response.map((item: any) => {

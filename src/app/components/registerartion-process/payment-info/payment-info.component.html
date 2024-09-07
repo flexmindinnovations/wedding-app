@@ -138,14 +138,17 @@
       <form [formGroup]="formGroup" class="flex flex-col gap-5 w-full">
         <app-input label="First Name" type="text" [control]="formGroupControl['firstName']" formControlName="firstName"
           [controlValue]="formGroup.get('firstName')?.value" />
-        <app-input label="Last Name" type="text" [control]="formGroupControl['firstName']" formControlName="firstName"
-          [controlValue]="formGroup.get('firstName')?.value" />
+        <app-input label="Last Name" type="text" [control]="formGroupControl['lastName']" formControlName="lastName"
+          [controlValue]="formGroup.get('lastName')?.value" />
+        <app-dropdown label="Amount" [control]="formGroupControl['amount']" formControlName="amount"
+          (onSelectionChange)="onSelectionChange($event, 'amount')" [controlValue]="formGroup.get('amount')?.value"
+          [options]="amountOptions" />
         <app-input label="Email" type="text" [control]="formGroupControl['email']" formControlName="email"
           [controlValue]="formGroup.get('email')?.value" />
         <app-input label="Mobile Number" [mandatory]="false" type="text" [control]="formGroupControl['mobile']"
           formControlName="mobile" [controlValue]="formGroup.get('mobile')?.value" />
-        <app-input label="Amout" type="text" [control]="formGroupControl['amount']" formControlName="amount"
-          [controlValue]="formGroup.get('amount')?.value" />
+        <!-- <app-input label="Amount" type="text" [control]="formGroupControl['amount']" formControlName="amount"
+          [controlValue]="formGroup.get('amount')?.value" /> -->
       </form>
 
       <div class="action w-full flex items-center justify-end">
