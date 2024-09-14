@@ -17,8 +17,9 @@
         <app-input label="Date Of Birth" presentaion="date" type="date" [control]="formGroupControl['dateOfBirth']"
           formControlName="dateOfBirth" [controlValue]="formGroup.get('dateOfBirth')?.value || ''" />
 
-        <app-input label="Time Of Birth" [mandatory]="false" presentaion="time" type="date" [control]="formGroupControl['timeOfBirth']"
-          formControlName="timeOfBirth" (inputValue)="handleInputValue($event)" />
+        <app-input label="Time Of Birth" [mandatory]="false" presentaion="time" type="date"
+          [control]="formGroupControl['timeOfBirth']" formControlName="timeOfBirth"
+          (inputValue)="handleInputValue($event)" />
         <!-- 
         <app-input label="Occupation" type="text" [control]="formGroupControl['occupation']"
           formControlName="occupation" [controlValue]="formGroup.get('occupation')?.value" /> -->
@@ -61,8 +62,9 @@
         }
 
         <!--Optional-->
-        <app-input label="Hobbies" class="col-span-3 lg:col-span-4" type="text" [control]="formGroupControl['hobbies']"
-          formControlName="hobbies" [controlValue]="formGroup.get('hobbies')?.value" [isMultiline]=true />
+        <app-input label="Hobbies" [mandatory]="false" class="col-span-3 lg:col-span-4" type="text"
+          [control]="formGroupControl['hobbies']" formControlName="hobbies"
+          [controlValue]="formGroup.get('hobbies')?.value" [isMultiline]=true />
 
         <p class="flex items-center justify-start gap-3 p-1"
           [ngClass]="isReadOnly ? 'cursor-not-allowed pointer-events-none opacity-50' : ''">
@@ -115,19 +117,21 @@
         }
         }
 
-        <app-dropdown label="Food Preferences" [control]="formGroupControl['foodPreferencesId']"
+        <app-dropdown label="Food Preferences" [mandatory]="false" [control]="formGroupControl['foodPreferencesId']"
           formControlName="foodPreferencesId" (onSelectionChange)="onSelectionChange($event, 'foodPreferencesId')"
           [controlValue]="formGroup.get('foodPreferencesId')?.value" [options]="foodPreferencesListOptions" />
 
-        <app-dropdown label="Blood Group" [mandatory]="false" [control]="formGroupControl['bloodGroupId']" formControlName="bloodGroupId"
-          (onSelectionChange)="onSelectionChange($event, 'bloodGroupId')"
+        <app-dropdown label="Blood Group" [mandatory]="false" [control]="formGroupControl['bloodGroupId']"
+          formControlName="bloodGroupId" (onSelectionChange)="onSelectionChange($event, 'bloodGroupId')"
           [controlValue]="formGroup.get('bloodGroupId')?.value" [options]="bloodGroupListOptions" />
 
-        <app-input label="Location Of Birth" type="text" [control]="formGroupControl['locationOfBirth']"
-          formControlName="locationOfBirth" [controlValue]="formGroup.get('locationOfBirth')?.value || ''" />
+        <app-input label="Location Of Birth" [mandatory]="false" type="text"
+          [control]="formGroupControl['locationOfBirth']" formControlName="locationOfBirth"
+          [controlValue]="formGroup.get('locationOfBirth')?.value || ''" />
 
-        <app-input label="Shake Date" [mandatory]="false" presentaion="date" type="date" [control]="formGroupControl['shakeDate']"
-          formControlName="shakeDate" [controlValue]="formGroup.get('shakeDate')?.value || ''" />
+        <app-input label="Shake Date" [mandatory]="false" presentaion="date" type="date"
+          [control]="formGroupControl['shakeDate']" formControlName="shakeDate"
+          [controlValue]="formGroup.get('shakeDate')?.value || ''" />
       </div>
     </form>
     } @else {

@@ -54,8 +54,8 @@ export class OtherInfoComponent implements OnInit, AfterViewInit {
   initFormGroup() {
     this.formGroup = this.fb.group({
       expectations: ['', [Validators.required]],
-      extraInformation: ['', [Validators.required]],
-      motherTongueId: ['', [Validators.required,dropdownValidator()]],
+      extraInformation: ['', ![Validators.required]],
+      motherTongueId: ['', [Validators.required, dropdownValidator()]],
     })
   }
 

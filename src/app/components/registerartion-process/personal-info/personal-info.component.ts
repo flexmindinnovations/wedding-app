@@ -118,22 +118,22 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
       middleName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       // customerPassword: ['', ![Validators.required]],
-      locationOfBirth: ['', [Validators.required]],
+      locationOfBirth: ['', ![Validators.required]],
       shakeDate: !['', [Validators.required]],
-      gender: ['', [Validators.required,dropdownValidator()]],
-      heightId: ['', [Validators.required,dropdownValidator()]],
-      educationId: ['', [Validators.required,dropdownValidator()]],
+      gender: ['', [Validators.required, dropdownValidator()]],
+      heightId: ['', [Validators.required, dropdownValidator()]],
+      educationId: ['', [Validators.required, dropdownValidator()]],
       specializationId: !['', [Validators.required]],
       occupationDetailId: !['', [Validators.required]],
       dateOfBirth: [new Date(), [Validators.required]],
       timeOfBirth: ['', ![Validators.required]],
-      occupationId: ['', [Validators.required,dropdownValidator()]],
+      occupationId: ['', [Validators.required, dropdownValidator()]],
       handycapId: !['', [Validators.required]],
       otherPhysicalText: ['', ![Validators.required]],
-      maritalStatus: ['', [Validators.required,dropdownValidator()]],
-      hobbies: ['', [Validators.required]],
+      maritalStatus: ['', [Validators.required, dropdownValidator()]],
+      hobbies: ['', ![Validators.required]],
       bloodGroupId: !['', ![Validators.required]],
-      foodPreferencesId: !['', ![Validators.required]]
+      foodPreferencesId: ['', ![Validators.required]]
     });
 
     // if (this.isReadOnly) this.formGroup?.disable();
@@ -191,6 +191,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     formVal['hobbies'] = formVal['hobbies'] ? formVal['hobbies'] : "";
     formVal['dateOfBirth'] = moment(formVal['dateOfBirth']).format();
     formVal['shakeDate'] = formVal['shakeDate'] ? moment(formVal['shakeDate']).format() : null;
+    formVal['foodPreferencesId'] = formVal['foodPreferencesId'] ? formVal['foodPreferencesId'] : null;
     formVal['customerId'] = this.customerData?.customerId;
     formVal['spectacles'] = this.spectacles;
     formVal['isPatrika'] = this.showPatrika;
