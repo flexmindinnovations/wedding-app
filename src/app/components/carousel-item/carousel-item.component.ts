@@ -26,6 +26,7 @@ interface ObjectType {
 import { SharedService } from 'src/app/services/shared.service';
 import { utils } from 'src/app/util/util';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'carousel-item',
@@ -85,11 +86,20 @@ export class CarouselItemComponent implements OnInit {
         })
       }
     })
+
+    effect(() => {
+      const userDetails = utils.userDetails();
+      if (Object.keys(userDetails).length > 0) {
+        timer(1000).subscribe(() => {
+          this.isPaidUser = userDetails?.currentCustomerPayment.paymentStatus === 'success';
+        })
+      }
+    })
   }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
-    if (this.isLoggedIn) this.getCustomerDetails();
+    // if (this.isLoggedIn) this.getCustomerDetails();
     const networkImage = `${this.data.imagePath1 ? this.data.imagePath1 : this.data.imagePath2 ? this.data.imagePath2 : ''}`;
     this.imagePath = networkImage ? `${environment.endpoint}/${networkImage}` : '/assets/image/image-placeholder.png';
   }

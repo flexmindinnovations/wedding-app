@@ -27,7 +27,6 @@ export class PaymentPage implements OnInit {
     this.isLoading.set(true);
     const user = this.sharedService.getLoggedInCustomerInfo();
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('params: ', params);
       if (params && params['status'] === 'success') {
         this.queryParams.set(params);
         this.paymentDetails.update((val) => { return { ...val, email: params['email'] } })

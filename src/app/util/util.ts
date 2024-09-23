@@ -23,20 +23,23 @@ export let SALT_KEY_TEST = 'XDbX0tFwbufYsXjSrVWjxTgaB64RVnB3';
 export let SALT_KEY_LIVE = 'X4Y3GsJwPYB8OM34PrgIah1n0K8zYI2P';
 export let PAYMENT_OBJECT: any = {};
 export const utils = {
+    isPaidUser: signal<boolean>(false),
+    isLoggedIn: signal<boolean>(false),
+    userDetails: signal<any>({}),
     profileIntrestList: signal<any>([]),
     setProfileInterestList(interestList: any): any[] {
         const profileInterests = interestList.map((item: any) => {
-          const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
-          const fullPath = `${environment.endpoint}/${imagePath}`;
-          const obj = {
-            customerId: item?.customerId,
-            fullName: item?.fullName,
-            image: fullPath
-          }
-          return obj;
+            const imagePath = item.imagePath1 ? item.imagePath1 : item.imagePath2;
+            const fullPath = `${environment.endpoint}/${imagePath}`;
+            const obj = {
+                customerId: item?.customerId,
+                fullName: item?.fullName,
+                image: fullPath
+            }
+            return obj;
         });
         return profileInterests;
-      }
+    }
 }
 
 const availableLoaders: any = {
@@ -265,7 +268,7 @@ export const paymentHtmlPayload = (payment: Payment, appEnv: string) => {
     // const paymentResponse = `https://8d45-106-51-37-15.ngrok-free.app/payment/payu-confirm/RMAXZ4/`;
     const { txnid, amount, productinfo, email, firstname, phone, surl, furl, hash } = payment;
     const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
-    const actionUrl  = appEnv === 'local' ? environment.paymentTestingUrl : environment.paymentProdingUrl;
+    const actionUrl = appEnv === 'local' ? environment.paymentTestingUrl : environment.paymentProdingUrl;
     // key, txnid, amount, productinfo, firstname, email, phone, surl, furl, hash
     const htmlBody = `
     <html>
@@ -303,7 +306,6 @@ const genertateHash = ({ txnid, amount, productinfo, firstname, email, phone }: 
     const merchantKey = appEnv === 'local' ? MERCHANT_KEY_TEST : MERCHANT_KEY_LIVE;
     const saltKey = appEnv === 'local' ? SALT_KEY_TEST : SALT_KEY_LIVE;
     const hashInput = `${merchantKey}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${saltKey}`;
-    console.log('hashInput: ', hashInput);
     HASH_STRING = CryptoJs.SHA512(hashInput).toString();
 }
 

@@ -10,6 +10,9 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
 import { SharedService } from 'src/app/services/shared.service';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
+import { AlertType } from 'src/app/enums/alert-types';
 
 @Component({
   selector: 'app-more',
@@ -23,10 +26,13 @@ export class MorePage implements OnInit, AfterViewInit {
   authService = inject(AuthService);
   isLoggedIn: boolean = false;
   userId: any;
+  userName: any;
+  mobileNo: any;
   dialogService = inject(DialogService);
   dialogRef: DynamicDialogRef | undefined;
   isDesktopMode: boolean = false;
   favouriteProfiles = [];
+  customerRegistrationService = inject(CustomerRegistrationService);
 
 
   listItems = [
@@ -43,13 +49,31 @@ export class MorePage implements OnInit, AfterViewInit {
   ]
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.userId = user?.user;
     this.addHamburgerToDialogHeader();
+    this.getUserDetails();
+  }
+
+  getUserDetails() {
+    this.customerRegistrationService.getCustomerDetailsById(this.userId).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.mobileNo = data?.customerUserName;
+          const info = data?.personalInfoModel;
+          this.userName = `${info?.firstName} ${info?.lastName}`;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
   }
 
   ngAfterViewInit(): void {
@@ -59,7 +83,7 @@ export class MorePage implements OnInit, AfterViewInit {
   handleItemClick(item: { title: string; icon: string; route: string; }) {
     // this.router.navigateByUrl(item?.route);
     if (item.route) {
-      if (item.route == 'profiles/view/') item.route = `profiles/view/${this.userId}`;
+      if (item.route == 'profiles/view/') item.route = `profiles / view / ${this.userId} `;
 
       this.router.navigateForward(item?.route);
     } else {
@@ -84,7 +108,7 @@ export class MorePage implements OnInit, AfterViewInit {
       closable: true,
       width: '100%',
       height: '100%',
-      style: {'max-height': '100%'},
+      style: { 'max-height': '100%' },
       maximizable: false,
       baseZIndex: 10000,
       data: this.favouriteProfiles,
@@ -99,7 +123,7 @@ export class MorePage implements OnInit, AfterViewInit {
   }
 
   addHamburgerToDialogHeader() {
-    const modalHederTitleEl = document.getElementsByClassName('p-dialog-title')[0];    
+    const modalHederTitleEl = document.getElementsByClassName('p-dialog-title')[0];
     if (modalHederTitleEl) {
       modalHederTitleEl.classList.add('hamburgerButtonStyle')
       const hamburgerButton = document.createElement('button');

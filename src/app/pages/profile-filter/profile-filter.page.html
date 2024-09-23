@@ -78,19 +78,32 @@
                   } -->
 
                 @if (castListOptions.length) {
-                <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+                <app-dropdown label="Caste" [control]="formGroupControl['cast']" formControlName="cast"
                   (onSelectionChange)="onSelectionChange($event, 'cast')" [options]="castListOptions" class="w-full" />
                 }
 
                 @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-                <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']" formControlName="subCast"
+                <app-dropdown label="Sub Caste" [control]="formGroupControl['subCast']" formControlName="subCast"
                   (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
                   class="w-full" />
                 }
-                <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true"
+                <!-- <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true"
                   [control]="formGroupControl['motherTongue']" formControlName="motherTongue"
                   (onSelectionChange)="onSelectionChange($event, 'motherTongueId')" [options]="motherToungeList"
-                  class="w-full" />
+                  class="w-full" /> -->
+
+                <app-dropdown *ngIf="educationListOptions.length" label="Education" [showClear]="true"
+                  [control]="formGroupControl['educationId']" formControlName="educationId"
+                  [controlValue]="formGroup.get('educationId')?.value" class="w-full"
+                  (onSelectionChange)="onSelectionChange($event, 'educationId')" [options]="educationListOptions" />
+
+                @if (hasSpecialization && isSpecializationDataAvailable) {
+                <app-dropdown *ngIf="specializationListOptions.length" [showClear]="true" label="Specialization"
+                  [control]="formGroupControl['specializationId']"
+                  [controlValue]="formGroup.get('specializationId')?.value" formControlName="specializationId"
+                  (onSelectionChange)="onSelectionChange($event, 'specializationId')" class="w-full"
+                  [options]="specializationListOptions" />
+                }
 
               </form>
               } @else {
@@ -190,20 +203,20 @@
             } -->
 
           @if (castListOptions.length) {
-          <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast" class="w-full"
+          <app-dropdown label="Caste" [control]="formGroupControl['cast']" formControlName="cast" class="w-full"
             (onSelectionChange)="onSelectionChange($event, 'cast')" [options]="castListOptions" />
           }
 
           @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-          <app-dropdown label="Sub Cast" [control]="formGroupControl['subCastId']" formControlName="subCastId"
+          <app-dropdown label="Sub Caste" [control]="formGroupControl['subCastId']" formControlName="subCastId"
             (onSelectionChange)="onSelectionChange($event, 'subCastId')" [options]="subCastListOptions"
             class="w-full" />
           }
 
-          <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true"
+          <!-- <app-dropdown *ngIf="isLoggedIn" label="Mother Tongue" [showClear]="true"
             [control]="formGroupControl['motherTongue']" formControlName="motherTongue"
             (onSelectionChange)="onSelectionChange($event, 'motherTongueId')" [options]="motherToungeList"
-            class="w-full" />
+            class="w-full" /> -->
 
           <div class="w-full my-2 flex items-center justify-center">
             <mt-button class="w-1/2" title="Filter" size="small" icon="pi pi-filter"

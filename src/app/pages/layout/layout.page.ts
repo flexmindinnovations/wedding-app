@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { MENU_ITEMS, tabItems, utils } from 'src/app/util/util';
@@ -22,6 +22,7 @@ import { RegisterUserComponent } from 'src/app/modals/register-user/register-use
 import { environment } from 'src/environments/environment';
 import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
 import { DOMAIN } from 'src/app/util/theme';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 
 @Component({
   selector: 'app-layout',
@@ -59,71 +60,89 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   userService = inject(UserService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
-
+  userName: String = "user";
+  mobileNo: String = "";
+  customerRegistrationService = inject(CustomerRegistrationService);
+  items: MenuItem[] | undefined;
   constructor(
   ) {
     this.onResize();
+    effect(() => {
+      let isLoggedIn = utils.isLoggedIn();
+      if (isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+      } else {
+        this.isLoggedIn = this.authService.isLoggedIn();
+      }
+    })
   }
-
-  profileItems: MenuItem[] = [
-    {
-      items: [
-        {
-          label: 'Profile',
-          icon: 'pi pi-user',
-          command: () => {
-            this.router.navigateByUrl('profile/personal');
-            this.resetActiveClass();
-          }
-        },
-        {
-          label: 'Public Profile',
-          icon: 'pi pi-link',
-          command: () => {
-            const user = JSON.parse(localStorage.getItem('user') || '');
-            if (user) {
-              this.router.navigateByUrl(`profiles/view/${user?.user}`);
-              this.resetActiveClass();
-            }
-          }
-        },
-        {
-          label: 'Manage Favorite Profiles',
-          icon: 'pi pi-heart',
-          command: () => {
-            this.OpenLikedProfileModal();
-          }
-        },
-        {
-          label: 'Profile History',
-          icon: 'pi pi-history',
-          command: () => {
-            this.router.navigateByUrl('profile-history');
-            this.resetActiveClass();
-          }
-        },
-        {
-          separator: true
-        },
-        {
-          label: 'Logout',
-          icon: 'pi pi-sign-out',
-          styleClass: 'logout',
-          command: () => {
-            this.logoutUser();
-            this.resetActiveClass();
-          }
-        }
-      ]
-    }
-  ];
 
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
     this.handlePopState(event);
   }
 
+  handleNonClickableItemClick(event: any) {
+    // event.preventDefault()
+    event.stopImmediatePropagation();
+  }
+
   ngOnInit() {
+    this.items = [
+      {
+        separator: true
+      },
+      {
+        items: [
+          {
+            label: 'Profile',
+            icon: 'pi pi-user',
+            command: () => {
+              this.router.navigateByUrl('profile/personal');
+              this.resetActiveClass();
+            }
+          },
+          {
+            label: 'Public Profile',
+            icon: 'pi pi-link',
+            command: () => {
+              const user = JSON.parse(localStorage.getItem('user') || '');
+              if (user) {
+                this.router.navigateByUrl(`profiles/view/${user?.user}`);
+                this.resetActiveClass();
+              }
+            }
+          },
+          {
+            label: 'Manage Favorite Profiles',
+            icon: 'pi pi-heart',
+            command: () => {
+              this.OpenLikedProfileModal();
+            }
+          },
+          {
+            label: 'Profile History',
+            icon: 'pi pi-history',
+            command: () => {
+              this.router.navigateByUrl('profile-history');
+              this.resetActiveClass();
+            }
+          },
+          {
+            separator: true
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.logoutUser();
+              this.resetActiveClass();
+            }
+          }
+        ]
+      },
+    ];
+
     this.setActivePageOnRefresh();
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
@@ -139,22 +158,8 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    this.sharedService.getIsLoggedInEvent().subscribe((completed: any) => {
-      if (completed) {
-        setTimeout(() => {
-          window.location.reload();
-        })
-      }
-    })
-    this.sharedService.getIsLoggedOutEvent().subscribe((completed: any) => {
-      if (completed) {
-        setTimeout(() => {
-          window.location.reload();
-        })
-      }
-    })
     window.onload = (event: any) => {
-      AOS.refresh();
+      // AOS.refresh();
       // if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
@@ -202,6 +207,25 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       //   }
       // })
     }
+  }
+
+  getCustomerDetails() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          utils.userDetails.set(data);
+          this.mobileNo = data?.customerUserName;
+          const info = data?.personalInfoModel;
+          this.userName = `${info?.firstName} ${info?.lastName}`;
+          this.router.navigateByUrl('app');
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
   }
 
   setProfileDetails(response: any) {
@@ -270,6 +294,11 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.getCustomerDetails();
+    } else {
+      this.router.navigateByUrl('');
+    }
     this.sharedService.getRequestStatus().subscribe(isNavigate => {
       if (isNavigate) this.resetActiveClass();
     })
@@ -338,10 +367,9 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   logoutUser() {
     this.authService.logoutUser();
     this.showLogoutModal = true;
-    setTimeout(() => {
-      this.router.navigateByUrl('login');
-      this.sharedService.isLoggedOutCompleted.next(true);
-    })
+    utils.isLoggedIn.set(false);
+    this.isLoggedIn = false;
+    this.router.navigateByUrl('');
   }
 
   ngOnDestroy(): void {

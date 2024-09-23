@@ -91,7 +91,7 @@ export class PersonalInfoComponent implements OnInit, DoCheck, AfterViewInit {
     ];
 
     this.maritalStatusOptions = [
-      { id: 'married', title: 'Married' },
+      // { id: 'married', title: 'Married' },
       { id: 'single', title: 'Single' },
       { id: 'divorced', title: 'Divorced' },
       { id: 'widowed', title: 'Widowed' }

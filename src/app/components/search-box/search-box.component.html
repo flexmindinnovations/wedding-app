@@ -28,12 +28,12 @@
               } -->
 
           @if (castListOptions.length) {
-          <app-dropdown label="Cast" [control]="formGroupControl['cast']" formControlName="cast"
+          <app-dropdown label="Caste" [control]="formGroupControl['cast']" formControlName="cast"
             (onSelectionChange)="onSelectionChange($event, 'cast')" [options]="castListOptions" class="flex-auto" />
           }
 
           @if (hasSubCast && subCastListOptions.length && isSubCastDataAvailable) {
-          <app-dropdown label="Sub Cast" [control]="formGroupControl['subCast']" formControlName="subCast"
+          <app-dropdown label="Sub Caste" [control]="formGroupControl['subCast']" formControlName="subCast"
             (onSelectionChange)="onSelectionChange($event, 'subCast')" [options]="subCastListOptions"
             class="flex-auto" />
           }

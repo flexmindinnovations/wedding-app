@@ -140,20 +140,53 @@
           [controlValue]="formGroup.get('firstName')?.value" />
         <app-input label="Last Name" type="text" [control]="formGroupControl['lastName']" formControlName="lastName"
           [controlValue]="formGroup.get('lastName')?.value" />
-        <app-dropdown label="Amount" [control]="formGroupControl['amount']" formControlName="amount"
+        <!-- <app-dropdown label="Amount" [control]="formGroupControl['amount']" formControlName="amount"
           (onSelectionChange)="onSelectionChange($event, 'amount')" [controlValue]="formGroup.get('amount')?.value"
-          [options]="amountOptions" />
+          [options]="amountOptions" /> -->
         <app-input label="Email" type="text" [control]="formGroupControl['email']" formControlName="email"
           [controlValue]="formGroup.get('email')?.value" />
         <app-input label="Mobile Number" [mandatory]="false" type="text" [control]="formGroupControl['mobile']"
           formControlName="mobile" [controlValue]="formGroup.get('mobile')?.value" />
-        <!-- <app-input label="Amount" type="text" [control]="formGroupControl['amount']" formControlName="amount"
-          [controlValue]="formGroup.get('amount')?.value" /> -->
+        <div class="plans">
+          <ul class="flex flex-col items-center justify-center md:flex-row gap-2">
+            @for (item of cardItems; track $index) {
+            <li class="card p-2 rounded-lg border w-full md:flex-1 cursor-pointer" (click)="onPlanClick(item)"
+              [ngClass]="item?.isSelected ? 'border-blue-500' : ''">
+              <div>
+                <div class="header border-b mb-2 flex items-center justify-between">
+                  <h1 class="!font-normal !m-0 !text-xs text-center flex-1">
+                    {{item.planName}}
+                  </h1>
+                  <span class="text-blue-500" [ngClass]="{'invisible': !item.isSelected}">
+                    <i class="pi pi-check"></i>
+                  </span>
+                </div>
+                <div class="body">
+                  <div class="plan-info p-0">
+                    <div class="original-price flex flex-col items-center justify-start gap-2">
+                      <h1 class="h1-gradient m-0 !text-xs flex items-center justify-center">
+                        <span>Amount:&nbsp;</span>
+                        <i class="pi pi-indian-rupee !text-xs"></i>
+                        <span>{{item.discountAmount}}</span>
+                      </h1>
+                      <small class="block w-full text-center">(Billed
+                        Annually)</small>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            }
+          </ul>
+        </div>
+        <app-input label="Amount" type="text" [control]="formGroupControl['amount']" formControlName="amount"
+          [controlValue]="formGroup.get('amount')?.value" />
       </form>
 
       <div class="action w-full flex items-center justify-end">
-        <mt-button title="Close" (action)="showPaymentConfirmationDialog = false" [isCancel]="true" />
-        <mt-button [disabled]="formGroup.invalid" class="ml-5" title="Proceed to payment page"
+        <mt-button title="Close" (action)="onClosePopup()" [isCancel]="true" />
+        <mt-button [disabled]="formGroup.invalid || !isAnyCardSelected()" class="ml-5" title="Proceed to payment page"
           (action)="handlePayment()" />
       </div>
     </div>

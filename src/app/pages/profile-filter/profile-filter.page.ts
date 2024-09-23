@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { AlertType } from 'src/app/enums/alert-types';
 import { any } from 'video.js/dist/types/utils/events';
+import { EducationService } from 'src/app/services/education/education.service';
 
 @Component({
   selector: 'app-profile-filter',
@@ -65,6 +66,12 @@ export class ProfileFilterPage implements OnInit {
   filteredQueryParams: any;
   isLoggedIn: boolean = false;
   route: any;
+  isSpecializationDataAvailable = false;
+  specializationId = '';
+  hasSpecialization: boolean = false;
+  educationService = inject(EducationService);
+  educationListOptions: any = [];
+  specializationListOptions: any = [];
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -180,6 +187,8 @@ export class ProfileFilterPage implements OnInit {
       countryId: ['', [Validators.required]],
       stateId: ['', [Validators.required]],
       cityId: ['', [Validators.required]],
+      specializationId: ['', [Validators.required]],
+      occupationDetailId: ['', [Validators.required]],
     })
 
     this.formGroup.valueChanges.subscribe((control) => {
@@ -308,6 +317,14 @@ export class ProfileFilterPage implements OnInit {
       case 'stateId':
         this.getCityByState(event?.id);
         break;
+      case 'educationId':
+        this.hasSpecialization = event?.hasSpecialization;
+        if (this.hasSpecialization) this.getSpecialization(event?.id);
+        break;
+      case 'specializationId':
+        const specializationId = event?.specializationId;
+        this.specializationId = specializationId;
+        break;
     }
   }
 
@@ -318,15 +335,23 @@ export class ProfileFilterPage implements OnInit {
   getMasterData() {
     const religionListOptions = this.castService.getReligionList();
     const motherToungeList = this.sharedService.getMotherToungeList();
-    forkJoin({ religionListOptions, motherToungeList }).subscribe({
+    const education = this.educationService.getEducationList();
+    forkJoin({ education, religionListOptions, motherToungeList }).subscribe({
       next: (response: any) => {
         if (response) {
-          const { religionListOptions, motherToungeList } = response;
+          const { religionListOptions, motherToungeList, education } = response;
           this.religionListOptions = religionListOptions;
           this.religionListOptions = religionListOptions.map((item: any) => {
             return {
               id: item?.religionId,
               title: item?.religionName
+            }
+          });
+          this.educationListOptions = education.map((item: any) => {
+            return {
+              id: item?.educationId,
+              title: item?.educationName,
+              hasSpecialization: item?.hasSpecialization
             }
           });
           this.motherToungeList = motherToungeList.map((item: any) => {
@@ -364,8 +389,6 @@ export class ProfileFilterPage implements OnInit {
   }
 
   getSubCastList(castId: number) {
-    console.log(castId);
-    console.log(this.formGroup.get('subCast')?.value);
     this.subCastListOptions = [];
     this.isSubCastDataAvailable = false;
     this.castService.getSubCastListByCast(castId).subscribe({
@@ -451,5 +474,25 @@ export class ProfileFilterPage implements OnInit {
         }
       })
     }
+  }
+  getSpecialization(educationId: number) {
+    this.educationService.getSpecializationListByEducationId(educationId).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.specializationListOptions = data.map((item: any) => {
+            return {
+              id: item?.specializationId,
+              title: item?.specializationName,
+              educationId,
+              specializationId: item?.specializationId
+            }
+          });
+          this.isSpecializationDataAvailable = true;
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+      }
+    })
   }
 }
