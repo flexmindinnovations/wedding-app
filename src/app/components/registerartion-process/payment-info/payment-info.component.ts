@@ -39,7 +39,7 @@ export class PaymentInfoComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       amount: ['', [Validators.required]],
-      mobile: [''],
+      mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       email: ['', [Validators.required, Validators.email]],
     });
     this.getPlanAmount();
@@ -60,7 +60,7 @@ export class PaymentInfoComponent implements OnInit {
             styleClass: plan.styleClass || '',
             planFeature: [
               { id: 1, text: 'Access to unlimited profiles' }
-            ] || [],
+            ],
             originalAmount: plan.originalAmount || 0,
             discountAmount: plan.discountAmount || 0,
             actualAmount: plan.actualAmount || '',
@@ -69,6 +69,12 @@ export class PaymentInfoComponent implements OnInit {
             isActive: plan.isActive || false,
             isSelected: false
           }));
+          this.cardItems = this.cardItems.sort((plan1: any, plan2: any) => plan1.discountAmount - plan2.discountAmount);
+          if (this.cardItems && this.cardItems.length > 0) {
+            this.cardItems[0].isSelected = true;
+            const amount = this.cardItems[0]?.discountAmount;
+            this.formGroup.patchValue({ amount });
+          }
         }
       },
       error: (error) => {
