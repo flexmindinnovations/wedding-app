@@ -16,6 +16,9 @@ import { RegisterUserComponent } from 'src/app/modals/register-user/register-use
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
 import { UserService } from 'src/app/services/user/user.service';
 import { utils } from 'src/app/util/util';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { EncryptionService } from 'src/app/services/encryption/encryption.service';
+import { ProfileStatus } from 'src/app/enums/profile-status';
 
 
 export enum ValidationStep {
@@ -88,6 +91,9 @@ export class LoginPage implements OnInit {
   isPasswordUpdated = false;
   isOTPError = false;
   isEmailError = false;
+  alertService = inject(AlertService);
+  customerRegistrationService = inject(CustomerRegistrationService);
+  encryptionService = inject(EncryptionService);
 
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
@@ -161,28 +167,34 @@ export class LoginPage implements OnInit {
         if (response) {
           const data = response?.customerResponse;
           const { token, customerId, profileStatus, isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } = data;
-          localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
           localStorage.setItem('token', token);
-          this.sharedService.userDetails.set(data);
-          this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
-          of(true)
-            .pipe(
-              delay(500)
-            ).subscribe(() => {
-              this.isLoading = false;
-              this.isLoggedIn = true;
-              of(true).
-                pipe(
-                  delay(1000)
+          this.getCustomerDetails(customerId)
+            .then((data) => {
+              this.sharedService.userDetails.set(data);
+              this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
+              of(true)
+                .pipe(
+                  delay(500)
                 ).subscribe(() => {
-                  this.messageService.clear();
-                  utils.isLoggedIn.set(true);
-                  this.router.navigateForward('app');
-                  sessionStorage.setItem('isLoggedInCompleted', 'true');
-                  setTimeout(() => {
-                    this.sharedService.isLoggedInCompleted.next(true);
-                  }, 500);
+                  this.isLoading = false;
+                  this.isLoggedIn = true;
+                  of(true).
+                    pipe(
+                      delay(1000)
+                    ).subscribe(() => {
+                      this.messageService.clear();
+                      utils.isLoggedIn.set(true);
+                      this.router.navigateForward('app');
+                      sessionStorage.setItem('isLoggedInCompleted', 'true');
+                      setTimeout(() => {
+                        this.sharedService.isLoggedInCompleted.next(true);
+                      }, 500);
+                    });
                 });
+            })
+            .catch((error) => {
+              console.log('error catch block: ', error);
+
             });
         }
       },
@@ -465,5 +477,28 @@ export class LoginPage implements OnInit {
     } else {
       return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
+  }
+
+  getCustomerDetails(userId: any) {
+    return new Promise((resolve, reject) => {
+      this.customerRegistrationService.getCustomerDetailsById(userId).subscribe({
+        next: (data: any) => {
+          if (data) {
+            const mobileNo = data?.customerUserName;
+            const info = data?.personalInfoModel;
+            const userName = `${info?.firstName} ${info?.lastName}`;
+            const encryptedMobileNo = this.encryptionService.encryptData(mobileNo);
+            const encryptedUserName = this.encryptionService.encryptData(userName);
+            localStorage.setItem('user', JSON.stringify({ user: data?.customerId, ProfileStatus: data?.profileStatus, mobileNo: encryptedMobileNo, userName: encryptedUserName }));
+            resolve(data);
+          }
+        },
+        error: (error) => {
+          console.log('error: ', error);
+          reject(error);
+          this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+        }
+      });
+    })
   }
 }

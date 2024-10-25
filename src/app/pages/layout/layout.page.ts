@@ -23,6 +23,7 @@ import { environment } from 'src/environments/environment';
 import { LikedProfilesComponent } from 'src/app/modals/liked-profiles/liked-profiles.component';
 import { DOMAIN } from 'src/app/util/theme';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { EncryptionService } from 'src/app/services/encryption/encryption.service';
 
 @Component({
   selector: 'app-layout',
@@ -63,17 +64,21 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   userName: String = "user";
   mobileNo: String = "";
   customerRegistrationService = inject(CustomerRegistrationService);
+  encryptionService = inject(EncryptionService);
   items: MenuItem[] | undefined;
   constructor(
+    private cdRef: ChangeDetectorRef
   ) {
     this.onResize();
     effect(() => {
       let isLoggedIn = utils.isLoggedIn();
       if (isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
+
       } else {
         this.isLoggedIn = this.authService.isLoggedIn();
       }
+      this.setUserDetails();
     })
   }
 
@@ -88,6 +93,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.items = [
       {
         separator: true
@@ -179,6 +185,18 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  setUserDetails() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.cdRef.detectChanges();
+    if (user.mobileNo) {
+      const decryptedMobileNo = this.encryptionService.decryptData(user.mobileNo);
+      const decryptedUserName = this.encryptionService.decryptData(user.userName);
+      this.mobileNo = decryptedMobileNo !== '' ? decryptedMobileNo : '';
+      this.userName = decryptedUserName !== '' ? decryptedUserName : 'user';
+      console.log(this.mobileNo, this.userName);
+    }
+  }
+
   handleSignIn() {
     this.logoutUser();
   }
@@ -215,9 +233,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
       next: (data: any) => {
         if (data) {
           utils.userDetails.set(data);
-          this.mobileNo = data?.customerUserName;
-          const info = data?.personalInfoModel;
-          this.userName = `${info?.firstName} ${info?.lastName}`;
           this.router.navigateByUrl('app');
         }
       },
