@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutPage } from './layout.page';
+import { DashboardPage } from '../dashboard/dashboard.page';
 
 const isLoggedIn = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -15,38 +16,8 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        matcher: url => {
-          if (isLoggedIn()) {
-            return url.length ? { consumed: [] } : { consumed: url };
-          }
-          return null
-        },
+        path: '',
         loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
-      },
-      {
-        matcher: url => {
-          if (!isLoggedIn()) {
-            return url.length ? { consumed: [] } : { consumed: url };
-          }
-          return null
-        },
-        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
-      },
-      {
-        path: 'blog',
-        loadChildren: () => import('../blog/blog.module').then(m => m.BlogPageModule)
-      },
-      {
-        path: 'events',
-        loadChildren: () => import('../events/events.module').then(m => m.EventsPageModule)
-      },
-      {
-        path: 'about',
-        loadChildren: () => import('../about/about.module').then(m => m.AboutPageModule)
-      },
-      {
-        path: 'contact',
-        loadChildren: () => import('../contact/contact.module').then(m => m.ContactPageModule)
       },
       {
         path: 'profile',

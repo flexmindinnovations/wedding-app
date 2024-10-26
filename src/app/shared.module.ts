@@ -69,6 +69,7 @@ import { PricingComponent } from './components/pricing/pricing.component';
 import { LikedProfilesComponent } from './modals/liked-profiles/liked-profiles.component';
 import { CardModule } from 'primeng/card';
 import { PaymentInfoComponent } from './components/registerartion-process/payment-info/payment-info.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const components = [
   FormStepperComponent,
@@ -95,6 +96,7 @@ const components = [
   PricingComponent,
   PaymentInfoComponent,
   LikedProfilesComponent,
+  HeaderComponent
 ]
 
 const modules: any = [

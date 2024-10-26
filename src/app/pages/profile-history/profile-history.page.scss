@@ -29,8 +29,13 @@
 }
 
 ::ng-deep .history-avatar {
-  // .p-avatar-image {
-    height: 2.5rem !important;
-    width: 2.5rem !important;
-  // }
+  height: 2.5rem !important;
+  width: 2.5rem !important;
+}
+
+@media (max-width: 640px) {
+  ::ng-deep .history-avatar {
+    height: 5rem !important;
+    width: 5rem !important;
+  }
 }

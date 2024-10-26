@@ -10,11 +10,11 @@ import { COLOR_SCHEME, buttonThemeVariables, iconSize, themeVariables } from 'sr
 export class ButtonComponent implements OnInit {
   @Input() title: string = '';
   @Input() icon: string = '';
-  @Input() severity: string = '';
+  @Input() severity: ButtonTypes = 'primary';
   @Input() iconPos: ButtonIconPosition = 'left';
   @Input() textOnly = false;
   @Input() iconOnly = false;
-  @Input() buttonType: ButtonTypes = 'default';
+  @Input() buttonType: ButtonTypes = 'primary';
   @Input('iconSlot') iconSlot: 'start' | 'end' = 'start';
   @Input('disabled') isDisabled = false;
   @Input() size: ButtonSize = 'small';
@@ -46,5 +46,17 @@ export class ButtonComponent implements OnInit {
 }
 
 type ButtonSize = 'small' | 'large';
-type ButtonTypes = 'normal' | 'default' | 'danger' | 'success';
+type ButtonTypes = "success" | "info" | "warning" | "danger" | "help" | "primary" | "secondary" | "contrast" | null | undefined;
 type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';
+
+
+export enum ButtonType {
+  success = 'success',
+  info = "info",
+  warning = "warning",
+  danger = "danger",
+  help = "help",
+  primary = "primary",
+  secondary = "secondary",
+  contrast = "contrast"
+}

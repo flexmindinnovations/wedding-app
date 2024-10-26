@@ -10,6 +10,8 @@ import { LayoutPage } from './layout.page';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouteReuseStrategy } from '@angular/router';
 import { SharedModule } from 'src/app/shared.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CustomHttpInterceptor } from 'src/app/interceptors/http.interceptor';
 
 @NgModule({
   imports: [
@@ -20,6 +22,13 @@ import { SharedModule } from 'src/app/shared.module';
     SharedModule
   ],
   declarations: [LayoutPage],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }]
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useFactory: CustomHttpInterceptor,
+      multi: true
+    }
+  ]
 })
 export class LayoutPageModule { }

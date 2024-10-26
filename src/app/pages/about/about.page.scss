@@ -9,6 +9,22 @@
         margin: 0 auto;
     }
 }
+
+.h5-gradient {
+    font-family: "Overpass", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    @apply xl:text-2xl m-0;
+    background: rgb(247, 0, 104);
+    background: -moz-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+    background: -webkit-linear-gradient(to left, rgba(247, 0, 104, 1) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+    background: linear-gradient(to left, rgba(247, 0, 104) 0%, rgba(68, 16, 102, 1) 25%, rgba(247, 0, 104, 1) 75%, rgba(68, 16, 102, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F70068', endColorstr='#441066', GradientType=1);
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 section._register {
 
     p.about {
@@ -48,7 +64,7 @@ section._register {
         @apply -z-[1] lg:z-[1] xl:z-[1];
 
         .bars {
-            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1] opacity-20 lg:xl:opacity-100;
+            @apply flex flex-col justify-center gap-3 rotate-[150deg] h-full w-[90%] lg:xl:w-[50%] absolute top-0 right-0 lg:xl:-top-4 lg:xl:-right-7 bottom-0 z-[1] opacity-20;
             will-change: auto;
             animation: shake 45s linear infinite;
 

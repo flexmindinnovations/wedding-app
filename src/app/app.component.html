@@ -3,7 +3,11 @@
 </ng-http-loader> -->
 <app-alert></app-alert>
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <div class="w-full block" *ngIf="isDesktopMode">
+    <app-header />
+  </div>
+  <!-- <ion-router-outlet></ion-router-outlet> -->
+   <router-outlet></router-outlet>
 </ion-app>
 
 <!-- [filteredUrlPatterns]="['\\d', '[a-zA-Z]', 'createcustomerToken']" -->

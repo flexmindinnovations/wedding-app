@@ -13,7 +13,7 @@
           [controlValue]="formGroup.get('expectations')?.value" [control]="formGroupControl['expectations']"
           formControlName="expectations" [isMultiline]=true />
 
-        <app-input label="Extra Information" class="flex-grow col-span-4" type="text"
+        <app-input label="Extra Information" [mandatory]="false" class="flex-grow col-span-4" type="text"
           [controlValue]="formGroup.get('extraInformation')?.value" [control]="formGroupControl['extraInformation']"
           formControlName="extraInformation" [isMultiline]=true />
       </div>

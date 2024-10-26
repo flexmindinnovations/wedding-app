@@ -15,7 +15,7 @@
           [controlValue]="formGroup.get('whatsUpNumber')?.value" [control]="formGroupControl['whatsUpNumber']"
           formControlName="whatsUpNumber" />
 
-        <app-input label="Email" class="flex-grow" [mandatory]="false" type="email" [controlValue]="formGroup.get('emailId')?.value"
+        <app-input label="Email" class="flex-grow" type="email" [controlValue]="formGroup.get('emailId')?.value"
           [control]="formGroupControl['emailId']" formControlName="emailId" />
 
         @if (countryList.length) {
