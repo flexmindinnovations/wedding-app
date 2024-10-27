@@ -26,19 +26,12 @@ export class BlogPage implements OnInit, AfterViewInit, OnDestroy {
 
   endpoint = environment.endpoint;
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    this.handlePopState();
-  }
-
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
-    this.getBlogList();
-  }
-
-  handlePopState() {
+    console.log('blog ngAfterViewInit');
+    
     this.getBlogList();
   }
 

@@ -114,6 +114,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "hmr": {
+              "hmr": true
+            },
             "production": {
               "buildTarget": "app:build:production"
             },

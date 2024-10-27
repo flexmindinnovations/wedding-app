@@ -70,7 +70,7 @@ export const tabItems = {
         {
             "id": 1,
             "title": "Home",
-            "route": "",
+            "route": "home",
             "isActive": false,
             "icon": homeIcon
         },
@@ -142,7 +142,7 @@ export const MENU_ITEMS = [
     {
         "id": 1,
         "title": "Home",
-        "route": "",
+        "route": "home",
         "isActive": false,
         "icon": homeIcon
     },

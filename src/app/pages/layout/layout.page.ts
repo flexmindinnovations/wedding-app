@@ -118,14 +118,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     }
   ];
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    this.handlePopState(event);
-  }
-
   ngOnInit() {
-    console.log('called LayoutPage');
-    
     this.setActivePageOnRefresh();
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
@@ -142,7 +135,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     });
     window.onload = (event: any) => {
       AOS.refresh();
-      // if (this.authService.isLoggedIn()) this.getUserDetails();
     }
 
     this.sharedService.isUnAuthorizedRequest.subscribe((isUnAuthorizedRequest: any) => {
@@ -270,12 +262,6 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
     else this.setActivePageById(this.tabs[0].id);
   }
 
-  handlePopState(event: any) {
-    setTimeout(() => {
-      this.setActivePageOnRefresh();
-    });
-  }
-
   navigateToPage(item: any) {
     this.setActivePageById(item.id);
     this.navController.navigateForward(item.route);
@@ -310,7 +296,7 @@ export class LayoutPage implements OnInit, AfterViewInit, OnDestroy {
 
   redirectToHome() {
     this.resetActiveClass();
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/home');
     this.setActivePageById(this.tabs[0].id);
   }
 

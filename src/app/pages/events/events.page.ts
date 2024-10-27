@@ -27,19 +27,10 @@ export class EventsPage implements OnInit {
 
   endpoint = environment.endpoint;
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    this.handlePopState();
-  }
-
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
-    this.getEventList();
-  }
-
-  handlePopState() {
     this.getEventList();
   }
 

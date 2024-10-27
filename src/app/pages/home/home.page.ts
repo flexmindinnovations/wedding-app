@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, Observer, share } from 'rxjs';
@@ -19,7 +19,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit, AfterViewInit {
+export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   deviceService = inject(DeviceDetectorService);
   host = inject(ElementRef);
   ngZone = inject(NgZone);
@@ -49,7 +49,6 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   showLaunchOfferBanner = false;
-
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
     this.handleOnScroll(event);
@@ -72,8 +71,6 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log('called HomePage');
-    
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
         this.isMobile = this.deviceService.isMobile();
@@ -82,11 +79,12 @@ export class HomePage implements OnInit, AfterViewInit {
     });
 
     observer.observe(this.host.nativeElement);
-
     this.getRandomProfiles();
   }
 
   ngAfterViewInit(): void {
+    console.log('called homepage');
+    
     this.isLoggedIn = this.authService.isLoggedIn();
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
@@ -174,11 +172,15 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   getDialogStyle() {
-    if (this.screenWidth < 640) {  // Example breakpoint for small devices
-      return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
+    if (this.screenWidth < 640) {
+      return { width: '90vw', padding: '0' };
     } else {
-      return { width: '25vw', padding: '0' }; // Default to 25% of screen width on larger screens
+      return { width: '25vw', padding: '0' };
     }
+  }
 
+  ngOnDestroy(): void {
+    console.log('called on Destroy');
+    
   }
 }

@@ -1,7 +1,7 @@
 <div class="hidden desktop border md:flex lg:flex xl:flex w-full relative rounded-md shadow-md min-h-96">
   <div class="item-container flex flex-col w-full">
     <div class="image-container relative max-h-52 flex-auto rounded-t-md">
-      <img class="w-full h-60 rounded-t-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" />
+      <img class="w-full h-60 rounded-t-md object-fill object-center" [src]="imagePath" [alt]="data?.customerId" loading="lazy" />
       <div class="absolute inset-0 w-full rounded-t-md max-h-60 h-full
       bg-dark-700/70 flex items-start justify-end p-4 z-10">
         <div
