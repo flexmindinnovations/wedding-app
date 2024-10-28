@@ -66,11 +66,11 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       // contactOf: ['', [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       whatsUpNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
-      emailId: [''],
+      emailId: ['', [Validators.required, Validators.email]],
       homeAddress: ['', [Validators.required]],
-      countryId: ['', [Validators.required,dropdownValidator()]],
-      stateId: ['', [Validators.required,dropdownValidator()]],
-      cityId: ['', [Validators.required,dropdownValidator()]],
+      countryId: ['', [Validators.required, dropdownValidator()]],
+      stateId: ['', [Validators.required, dropdownValidator()]],
+      cityId: ['', [Validators.required, dropdownValidator()]],
     })
     this.getCountryList();
 
@@ -294,5 +294,5 @@ export class ContactInfoComponent implements OnInit, AfterViewInit {
       }
     })
   }
-  
+
 }

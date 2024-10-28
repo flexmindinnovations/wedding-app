@@ -15,4 +15,7 @@ export class HomeService {
   getRandomProfiles(): Observable<any> {
     return this.http.get(`${this.endpoint}/Dashboard/getRandomCustomerList`);
   }
+  getRandomProfilesByReligion(payload: any): Observable<any> {
+    return this.http.get(`${this.endpoint}/Dashboard/getRandomCustomerListReligionIdWise?religionId=${payload.religionId}&gender=${payload.gender}`);
+  }
 }

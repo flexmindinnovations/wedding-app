@@ -1,5 +1,8 @@
 import { Component, HostListener, OnInit, isDevMode, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import { AlertType } from 'src/app/enums/alert-types';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { generateTxnId, paymentHtmlPayload } from 'src/app/util/util';
@@ -18,32 +21,126 @@ export class PaymentInfoComponent implements OnInit {
   currentPaymentDetails: any;
   paymentHistory: any;
   isLoading = false;
+  amountOptions: any = [];
+  cardItems: any[] = [];
 
 
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
-    private customerRegistrationService: CustomerRegistrationService
+    private customerRegistrationService: CustomerRegistrationService,
+    private alertService: AlertService,
   ) {
     this.onResize();
-   }
+  }
 
   ngOnInit() {
-
     this.formGroup = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      mobile: [''],
+      amount: ['', [Validators.required]],
+      mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      amount: ['249', [Validators.required]]
-    })
-
+    });
+    this.getPlanAmount();
+    this.setCardItems();
     this.getCustomerDetails();
   }
 
   get formGroupControl(): { [key: string]: FormControl } {
     return this.formGroup.controls as { [key: string]: FormControl };
   }
+  setCardItems() {
+    this.sharedService.getMembershipPlanList().subscribe({
+      next: (response) => {
+        if (response) {
+          this.cardItems = response.map((plan: any) => ({
+            planName: plan.planName || '',
+            planType: plan.planType || '',
+            styleClass: plan.styleClass || '',
+            planFeature: [
+              { id: 1, text: 'Access to unlimited profiles' }
+            ],
+            originalAmount: plan.originalAmount || 0,
+            discountAmount: plan.discountAmount || 0,
+            actualAmount: plan.actualAmount || '',
+            planStartDate: moment(plan.planStartDate || new Date()),
+            actionName: `Get ${plan.planName}` || '',
+            isActive: plan.isActive || false,
+            isSelected: false
+          }));
+          this.cardItems = this.cardItems.sort((plan1: any, plan2: any) => plan1.discountAmount - plan2.discountAmount);
+          if (this.cardItems && this.cardItems.length > 0) {
+            this.cardItems[0].isSelected = true;
+            const amount = this.cardItems[0]?.discountAmount;
+            this.formGroup.patchValue({ amount });
+          }
+        }
+      },
+      error: (error) => {
+        this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error)
+      }
+    });
+    // this.cardItems = [
+    //   {
+    //     planName: 'Amazing Plan',
+    //     planType: 'Basic',
+    //     styleClass: '',
+    //     planFeature: [
+    //       { id: 1, text: 'Access upto 50 profiles per week' }
+    //     ],
+    //     originalAmount: 2499,
+    //     discountAmount: 1499,
+    //     actualAmount: '',
+    //     planStartDate: moment(new Date()),
+    //     actionName: 'Get Amazing Plan',
+    //     isActive: true
+    //   },
+    //   {
+    //     planName: 'Delux',
+    //     planType: 'Delux',
+    //     planFeature: [
+    //       { id: 1, text: 'Access to unlimited profiles' }
+    //     ],
+    //     styleClass: 'pricing',
+    //     originalAmount: 5000,
+    //     discountAmount: 2499,
+    //     actualAmount: '',
+    //     planStartDate: moment(new Date()),
+    //     actionName: 'Get Delux',
+    //     isActive: true
+    //   }
+    // ];
+  }
+  getPlanAmount() {
+    this.sharedService.getMembershipPlanList().subscribe({
+      next: (response) => {
+        if (response) {
+          this.amountOptions = response.map((plan: any) => ({
+            id: plan.actualAmount,
+            title: plan.actualAmount,
+          }));
+        }
+      },
+      error: (error) => {
+        this.alertService.setAlertMessage('Error: Something went wrong ', AlertType.error);
+      }
+    });
+  }
+
+  onPlanClick(item: any) {
+    this.cardItems.forEach((each) => each.isSelected = false);
+    item.isSelected = true;
+    const amount = item?.discountAmount;
+    this.formGroup.patchValue({ amount });
+  }
+
+  // onSelectionChange(event: any, amount: any) {
+  //   if (event && event?.title) {
+  //     this.formGroup.patchValue({ amount: event?.title });
+  //   }
+  // }
+
 
   getCustomerDetails(): void {
     this.isLoading = true;
@@ -109,7 +206,7 @@ export class PaymentInfoComponent implements OnInit {
 
   getPaymentMode(mode: string) {
     let paymentMode: string = '';
-    switch(mode) {
+    switch (mode) {
       case 'CC':
         paymentMode = 'Credit Card';
         break;
@@ -135,6 +232,12 @@ export class PaymentInfoComponent implements OnInit {
     this.screenWidth = window.innerWidth;
   }
 
+  onClosePopup() {
+    this.showPaymentConfirmationDialog = false;
+    this.cardItems.forEach((each) => each.isSelected = false);
+    this.formGroup.get('amount')?.reset();
+  }
+
 
   getDialogStyle() {
     if (this.screenWidth < 640) {  // Example breakpoint for small devices
@@ -143,5 +246,7 @@ export class PaymentInfoComponent implements OnInit {
       return { width: '30vw', padding: '0' }; // Default to 25% of screen width on larger screens
     }
   }
-
+  isAnyCardSelected(): boolean {
+    return this.cardItems.some(item => item.isSelected);
+  }
 }

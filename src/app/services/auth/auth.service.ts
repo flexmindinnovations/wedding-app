@@ -34,6 +34,10 @@ export class AuthService {
     return this.http.post(`${this.endpoint}/signUp`, payload);
   }
 
+  getAuthToken(): string {
+    return localStorage.getItem('token') || '';
+  }
+
   logoutUser() {
     localStorage.removeItem('token');
     localStorage.removeItem('profile');
@@ -41,7 +45,5 @@ export class AuthService {
     localStorage.removeItem('userId');
     localStorage.removeItem('role');
     localStorage.clear();
-    localStorage.clear();
-    localStorage.removeItem('role');
   }
 }

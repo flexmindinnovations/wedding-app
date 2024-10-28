@@ -14,6 +14,11 @@ import { AlertType } from 'src/app/enums/alert-types';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RegisterUserComponent } from 'src/app/modals/register-user/register-user.component';
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
+import { UserService } from 'src/app/services/user/user.service';
+import { utils } from 'src/app/util/util';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
+import { EncryptionService } from 'src/app/services/encryption/encryption.service';
+import { ProfileStatus } from 'src/app/enums/profile-status';
 
 
 export enum ValidationStep {
@@ -75,11 +80,21 @@ export class LoginPage implements OnInit {
   isResetFormLoading = false;
   validationSteps = ValidationStep;
   currentStep = ValidationStep.FIRST;
-  isEmailAvailable: boolean = false;
+  isEmailAvailable: boolean = true;
   otpValue: any;
   resetPasswordEmail: string = '';
   initialHeight: number = 0;
   resetPasswordFormGroup!: FormGroup;
+  isOTPSent = false;
+  isTimerStopped = false;
+  otpTimer = 60;
+  isPasswordUpdated = false;
+  isOTPError = false;
+  isEmailError = false;
+  alertService = inject(AlertService);
+  customerRegistrationService = inject(CustomerRegistrationService);
+  encryptionService = inject(EncryptionService);
+
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
     this.screenWidth = window.innerWidth;
@@ -91,8 +106,11 @@ export class LoginPage implements OnInit {
 
   constructor(
     private messageService: MessageService,
+    private userService: UserService,
     private dialogService: DialogService,
-  ) { }
+  ) {
+    this.onResize();
+  }
 
   ngOnInit() {
     // this.initialHeight = this.dynamicHeightPopup.nativeElement.clientHeight;
@@ -127,7 +145,7 @@ export class LoginPage implements OnInit {
     this.resetPasswordFormGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       emailOtp: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]]
     })
   }
@@ -149,27 +167,34 @@ export class LoginPage implements OnInit {
         if (response) {
           const data = response?.customerResponse;
           const { token, customerId, profileStatus, isFamilyInfoFill, isImagesAdded, isOtherInfoFill, isPersonInfoFill, isContactInfoFill } = data;
-          localStorage.setItem('user', JSON.stringify({ user: customerId, profileStatus }));
           localStorage.setItem('token', token);
-          this.sharedService.userDetails.set(data);
-          this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
-          of(true)
-            .pipe(
-              delay(500)
-            ).subscribe(() => {
-              this.isLoading = false;
-              this.isLoggedIn = true;
-              of(true).
-                pipe(
-                  delay(1000)
+          this.getCustomerDetails(customerId)
+            .then((data) => {
+              this.sharedService.userDetails.set(data);
+              this.alert.setAlertMessage('User authenticated successfully', AlertType.success);
+              of(true)
+                .pipe(
+                  delay(500)
                 ).subscribe(() => {
-                  this.messageService.clear();
-                  this.router.navigateForward('');
-                  sessionStorage.setItem('isLoggedInCompleted', 'true');
-                  setTimeout(() => {
-                    this.sharedService.isLoggedInCompleted.next(true);
-                  }, 500);
+                  this.isLoading = false;
+                  this.isLoggedIn = true;
+                  of(true).
+                    pipe(
+                      delay(1000)
+                    ).subscribe(() => {
+                      this.messageService.clear();
+                      utils.isLoggedIn.set(true);
+                      this.router.navigateForward('app');
+                      sessionStorage.setItem('isLoggedInCompleted', 'true');
+                      setTimeout(() => {
+                        this.sharedService.isLoggedInCompleted.next(true);
+                      }, 500);
+                    });
                 });
+            })
+            .catch((error) => {
+              console.log('error catch block: ', error);
+
             });
         }
       },
@@ -190,7 +215,7 @@ export class LoginPage implements OnInit {
   }
 
   showAlert(message: string, type: string) {
-    this.messageService.add({ severity: type, summary: type === 'success' ? 'Success' : 'Error', detail: message });
+    this.messageService.add({ severity: type, summary: type === 'success' ? 'Success' : 'Error', detail: message, });
   }
 
   handlePasswordVisiblity(event?: any) {
@@ -200,6 +225,10 @@ export class LoginPage implements OnInit {
 
   handleResetPassword() {
     // this.initResetFormGroup();
+    this.isPasswordUpdated = false;
+    this.isResetFormLoading = false;
+    this.isEmailAvailable = true;
+    this.currentStep = ValidationStep.FIRST;
     this.showResetPasswordPopup = true;
   }
 
@@ -207,23 +236,21 @@ export class LoginPage implements OnInit {
     this.currentStep = ValidationStep.FIRST;
     this.showResetPasswordPopup = false;
     this.isResetFormLoading = false;
+    this.isOTPError = false;
   }
 
   processResetPasswordForm() {
-    this.isResetFormLoading = true;
+
     switch (this.currentStep) {
       case ValidationStep.FIRST:
-        setTimeout(() => {
-          this.currentStep = ValidationStep.SECOND;
-          this.isResetFormLoading = false;
-        }, 1500);
+        this.isPasswordUpdated = false;
+        this.verifyEmail();
         break;
       case ValidationStep.SECOND:
-        setTimeout(() => {
-          this.currentStep = ValidationStep.THIRD;
-          this.isResetFormLoading = false;
-        }, 1500);
-
+        this.verifyOTP();
+        break;
+      case ValidationStep.THIRD:
+        this.resetPasswordApi();
         break;
     }
     presentStep = this.currentStep;
@@ -245,8 +272,121 @@ export class LoginPage implements OnInit {
     return stepNumber;
   }
 
-  callResetPasswordApi() {
+  verifyEmail(isResend: boolean = false) {
+    const userEmail = this.resetPasswordFormGroup.get('email')?.value;
+    if (userEmail.replace(/\s/g, '') !== '') {
+      this.isResetFormLoading = true;
+      this.userService.verifyUserEmail(userEmail).subscribe({
+        next: (response) => {
+          if (response) {
+            if (response?.status === true) {
+              this.resetPasswordEmail = userEmail;
+              if (!isResend) {
+                this.currentStep = ValidationStep.SECOND;
+              }
+              this.isEmailError = false;
+              this.isOTPSent = true;
+              this.startOTPTimer(false);
+              this.isResetFormLoading = false;
+            } else {
+              this.isOTPSent = false;
+              this.isEmailAvailable = false;
+              this.isResetFormLoading = false;
+              this.isEmailError = true;
+            }
+          }
+        },
+        error: (error) => {
+          this.isOTPSent = false;
+          this.isEmailAvailable = true;
+          this.isResetFormLoading = false;
+          this.isEmailError = true;
+          this.showAlert('Something went wrong!', 'error');
+        }
+      })
+    }
+  }
 
+  resentOTP() {
+    this.resetPasswordFormGroup.get('emailOtp')?.reset();
+    this.resetPasswordFormGroup.get('emailOtp')?.enable();
+    this.startOTPTimer(true);
+    this.verifyEmail(true);
+    this.isOTPError = false;
+  }
+
+  startOTPTimer(isReset: boolean) {
+    const otpInterval = setInterval(() => {
+      if (this.otpTimer <= 0) {
+        clearInterval(otpInterval);
+        this.otpTimer = 60;
+        this.isTimerStopped = true;
+        this.resetPasswordFormGroup.get('emailOtp')?.reset();
+        this.resetPasswordFormGroup.get('emailOtp')?.disable();
+      } else {
+        this.isTimerStopped = false;
+        this.otpTimer = this.otpTimer - 1;
+      }
+    }, 1000);
+    if (isReset) {
+      clearInterval(otpInterval);
+      this.otpTimer = 60;
+    }
+  }
+
+  verifyOTP() {
+    const userOTP = this.resetPasswordFormGroup.get('emailOtp')?.value;
+    if (userOTP) {
+      this.isResetFormLoading = true;
+      this.userService.verifyOTP(this.resetPasswordEmail, userOTP).subscribe({
+        next: (response) => {
+          if (response) {
+            if (response?.status === true) {
+              this.currentStep = ValidationStep.THIRD;
+              this.isResetFormLoading = false;
+              this.isOTPError = false;
+            } else {
+              this.isOTPError = true;
+              this.isEmailAvailable = false;
+              this.isResetFormLoading = false;
+            }
+          }
+        },
+        error: (error) => {
+          this.isOTPError = true;
+          this.isEmailAvailable = true;
+          this.isResetFormLoading = false;
+          this.resetPasswordFormGroup.get('emailOtp')?.reset();
+          this.showAlert('Something went wrong!', 'error');
+        }
+      })
+    }
+  }
+
+  resetPasswordApi() {
+    const userPassword = this.resetPasswordFormGroup.get('password')?.value;
+    const confirmPassword = this.resetPasswordFormGroup.get('confirmPassword')?.value;
+    if (userPassword === confirmPassword) {
+      this.isResetFormLoading = true;
+      this.userService.updateUserPassword(this.resetPasswordEmail, userPassword).subscribe({
+        next: (response) => {
+          if (response) {
+            this.isPasswordUpdated = true;
+            this.isResetFormLoading = false;
+            this.currentStep = ValidationStep.FIRST;
+            // this.handlePopupCancel();
+          }
+        },
+        error: (error) => {
+          this.isPasswordUpdated = false;
+          this.isOTPSent = false;
+          this.isEmailAvailable = false;
+          this.isResetFormLoading = false;
+          this.handlePopupCancel();
+          this.showAlert('Something went wrong!', 'error');
+        }
+      })
+    }
   }
 
 
@@ -257,7 +397,7 @@ export class LoginPage implements OnInit {
         buttonTitle = 'Next';
         break;
       case ValidationStep.SECOND:
-        buttonTitle = 'Validate OTP';
+        buttonTitle = 'Confirm';
         break;
       case ValidationStep.THIRD:
         buttonTitle = 'Update Password';
@@ -319,6 +459,18 @@ export class LoginPage implements OnInit {
     return icon;
   }
 
+  getPopupTitle() {
+    let title = `Reset Password - Step ${this.getStepNumber()} of 3`;
+    if (!this.isEmailAvailable) {
+      title = 'Email not available!';
+    }
+    //  else if(!this.isOTPError) {
+    //   title = 'Incorrect OTP';
+    // }
+
+    return title;
+  }
+
   getDialogStyle() {
     if (this.screenWidth < 640) {  // Example breakpoint for small devices
       return { width: '90vw', padding: '0' }; // Use 90% of screen width on small devices
@@ -327,4 +479,26 @@ export class LoginPage implements OnInit {
     }
   }
 
+  getCustomerDetails(userId: any) {
+    return new Promise((resolve, reject) => {
+      this.customerRegistrationService.getCustomerDetailsById(userId).subscribe({
+        next: (data: any) => {
+          if (data) {
+            const mobileNo = data?.customerUserName;
+            const info = data?.personalInfoModel;
+            const userName = `${info?.firstName} ${info?.lastName}`;
+            const encryptedMobileNo = this.encryptionService.encryptData(mobileNo);
+            const encryptedUserName = this.encryptionService.encryptData(userName);
+            localStorage.setItem('user', JSON.stringify({ user: data?.customerId, ProfileStatus: data?.profileStatus, mobileNo: encryptedMobileNo, userName: encryptedUserName }));
+            resolve(data);
+          }
+        },
+        error: (error) => {
+          console.log('error: ', error);
+          reject(error);
+          this.alertService.setAlertMessage('Error: ' + error, AlertType.error);
+        }
+      });
+    })
+  }
 }

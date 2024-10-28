@@ -1,11 +1,15 @@
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, OnInit, effect, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, timer } from 'rxjs';
 import { AlertType } from 'src/app/enums/alert-types';
 import { AlertService } from 'src/app/services/alert/alert.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { CastService } from 'src/app/services/cast/cast.service';
+import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { utils } from 'src/app/util/util';
+import { use } from 'video.js/dist/types/tech/middleware';
 
 @Component({
   selector: 'search-box',
@@ -19,7 +23,6 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   castService = inject(CastService);
   sharedService = inject(SharedService);
-
   religionList: any[] = [];
   motherToungeList: any[] = [];
   castList: any[] = [];
@@ -42,11 +45,30 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   religionId: any;
   isSubCastDataAvailable: boolean = false;
   religionListOptions: any[] = [];
+  isLoggedIn = false;
+  alert = inject(AlertService);
+  customerRegistrationService = inject(CustomerRegistrationService);
 
   constructor(
     private router: Router,
-    private alertService: AlertService
-  ) { }
+    private alertService: AlertService,
+    private authService: AuthService,
+  ) {
+
+    effect(() => {
+      const userDetails = utils.userDetails();
+      if (Object.keys(userDetails).length > 0) {
+        timer(1000).subscribe(() => {
+          const religionId = userDetails?.familyInfoModel?.religionId;
+          if (religionId) {
+            this.religionId = religionId;
+            this.getCastListReligionId(this.religionId)
+          }
+        })
+      }
+    })
+
+  }
 
   ngOnInit() {
     this.initFormGroup();
@@ -60,12 +82,30 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       { id: 'divorced', title: 'Divorced' },
       { id: 'widowed', title: 'Widowed' }
     ]
+    // const user = JSON.parse(localStorage.getItem('user') || '{}');
+    // if (user?.user) this.getCustomerDetails(user);
+  }
+
+  getCustomerDetails(user: any): void {
+    this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.religionId = data?.familyInfoModel?.religionId;
+          this.getCastListReligionId(this.religionId)
+        }
+      },
+      error: (error) => {
+        console.log('error: ', error);
+        this.alert.setAlertMessage('Error: ' + error, AlertType.error);
+      }
+    })
   }
 
   ngAfterViewInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.formGroup.reset();
     this.getMasterData();
-    
+
   }
 
   initFormGroup() {
@@ -106,21 +146,21 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
         const subCastId = event?.id;
         this.subCastId = subCastId;
         break;
-        case 'maritalStatus':
-          break;
-        case 'countryId':
-          this.getStateByCountry(event?.id);
-          break;
-        case 'stateId':
-          this.getCityByState(event?.id);
-          break;
+      case 'maritalStatus':
+        break;
+      case 'countryId':
+        this.getStateByCountry(event?.id);
+        break;
+      case 'stateId':
+        this.getCityByState(event?.id);
+        break;
     }
 
   }
 
   handleOnSearch() {
     const formVal = this.formGroup.value;
-    if (this.formGroup.invalid) {
+    if (!this.isLoggedIn && this.formGroup.invalid) {
       this.alertService.setAlertMessage('Please provide filter criteria', AlertType.warning);
       return;
     }
@@ -164,7 +204,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     })
   }
 
-  getCastListReligionId(religionId:any) {
+  getCastListReligionId(religionId: any) {
     this.castService.getCastListByReligionId(religionId).subscribe({
       next: (response: any) => {
         if (response) {

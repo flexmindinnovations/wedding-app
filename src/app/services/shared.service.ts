@@ -156,13 +156,20 @@ export class SharedService {
     return this.http.get(`${this.endpoint}/MotherTongue/getMotherTongueList`);
   }
 
-  getProfileViewHistory(customerId:any):Observable<any>{
+  getProfileViewHistory(customerId: any): Observable<any> {
     return this.http.get(`${this.endpoint}/ProfileViewHistory/getProfileViewHistoryListbyCustomerId?customerId=${customerId}`);
   }
 
-  addProfileViewHistory(payload:any):Observable<any>{
-    return this.http.post(`${this.endpoint}/ProfileViewHistory/addProfileViewHistory`,payload);
+
+  getMembershipPlanList(): Observable<any> {
+    return this.http.get(`${this.endpoint}/MembershipPlan/getMembershipPlanList`);
   }
+
+  addProfileViewHistory(payload: any): Observable<any> {
+    return this.http.post(`${this.endpoint}/ProfileViewHistory/addProfileViewHistory`, payload);
+  }
+
+
 
   getPaymentObj(appEnv: string, payload: any): Observable<any> {
     const origin = window.location.href;

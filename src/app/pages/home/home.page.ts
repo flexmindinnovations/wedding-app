@@ -97,6 +97,9 @@ export class HomePage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.router.navigateByUrl('app');
+    }
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');
     if (futurDate.diff(currentDate, 'days') > 0) {
