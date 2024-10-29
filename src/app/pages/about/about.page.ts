@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnInit, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, inject } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DOMAIN } from 'src/app/util/theme';
 import { Message } from 'primeng/api';
@@ -58,10 +58,12 @@ export class AboutPage implements OnInit, AfterViewInit {
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
+    // console.log('called about');
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
         this.isMobile = this.deviceService.isMobile();
@@ -74,6 +76,7 @@ export class AboutPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.cdr.detectChanges();
   }
 
   handleRegister() {

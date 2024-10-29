@@ -329,6 +329,9 @@ export class CarouselItemComponent implements OnInit {
 
   getCustomerDetails(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userData = this.sharedService.userDetails();
+    // console.log('userData carousel: ', userData);
+
     this.customerRegistrationService.getCustomerDetailsById(user?.user).subscribe({
       next: (data: any) => {
         if (data) {

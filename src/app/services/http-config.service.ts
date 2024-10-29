@@ -14,78 +14,86 @@ export class HttpConfigService {
   constructor() { }
 
   get(url: string, modelType?: any): Observable<any> {
-    return this.http.get(url, { observe: 'events', reportProgress: true, })
-      .pipe(
-        tap((data: any) => { }),
-        map((response) => {
-          if (response.type === 4 && response.body) {
-            return response?.body;
-          }
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        })
-      );
+    // return this.http.get(url, { observe: 'events', reportProgress: true, })
+    //   .pipe(
+    //     tap((data: any) => { }),
+    //     map((response) => {
+    //       if (response.type === 4 && response.body) {
+    //         return response?.body;
+    //       }
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error)
+    //     })
+    //   );
+    return this.http.get(url);
   }
 
   post(url: string, payload: any): Observable<any> {
-    return this.http.post(url, payload, { observe: 'events', reportProgress: true })
-      .pipe(
-        tap((data: any) => { }),
-        map((response) => {
-          if (response.type === 4 && response?.body) {
-            return response.body;
-          }
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        })
-      );
+    // return this.http.post(url, payload, { observe: 'events', reportProgress: true })
+    //   .pipe(
+    //     tap((data: any) => { }),
+    //     map((response) => {
+    //       if (response.type === 4 && response?.body) {
+    //         return response.body;
+    //       }
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error)
+    //     })
+    //   );
+
+    return this.http.post(url, payload);
   }
 
   put(url: string, payload: any): Observable<any> {
-    return this.http.put(url, payload, { observe: 'events', reportProgress: true })
-      .pipe(
-        tap((data: any) => { }),
-        map((response) => {
-          if (response.type === 4) {
-            return response.body;
-          }
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        })
-      );
+    // return this.http.put(url, payload, { observe: 'events', reportProgress: true })
+    //   .pipe(
+    //     tap((data: any) => { }),
+    //     map((response) => {
+    //       if (response.type === 4) {
+    //         return response.body;
+    //       }
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error)
+    //     })
+    //   );
+
+    return this.http.put(url, payload);
   }
 
   delete(url: string): Observable<any> {
-    return this.http.delete(url, { observe: 'events', reportProgress: true })
-      .pipe(
-        tap((data: any) => { }),
-        map((response) => {
-          if (response.type === 4) {
-            return response.body;
-          }
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        })
-      );
+    // return this.http.delete(url, { observe: 'events', reportProgress: true })
+    //   .pipe(
+    //     tap((data: any) => { }),
+    //     map((response) => {
+    //       if (response.type === 4) {
+    //         return response.body;
+    //       }
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error)
+    //     })
+    //   );
+
+    return this.http.delete(url);
   }
 
   postImage(url: string, payload: any): Observable<any> {
-    return this.http.post(url, payload, { observe: 'events', reportProgress: true })
-      .pipe(
-        tap((data: any) => { }),
-        map((response) => {
-          if (response.type === 4) {
-            return response.body;
-          }
-        }),
-        catchError((error) => {
-          return throwError(() => error)
-        })
-      );
+    // return this.http.post(url, payload, { observe: 'events', reportProgress: true })
+    //   .pipe(
+    //     tap((data: any) => { }),
+    //     map((response) => {
+    //       if (response.type === 4) {
+    //         return response.body;
+    //       }
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error)
+    //     })
+    //   );
+      return this.http.post(url, payload);
   }
 
   getHeaders({ isImage }: { isImage: boolean }): HttpHeaders {

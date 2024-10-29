@@ -14,7 +14,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { HASH_STRING, MERCHANT_KEY_TEST, PAYMENT_OBJECT, PaymentProvider, SECRET_KEY, generateTxnId, paymentHtmlPayload, setPaymentObject, utils } from 'src/app/util/util';
+import { utils } from 'src/app/util/util';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 @Component({
   selector: 'app-dashboard',
@@ -56,8 +56,6 @@ export class DashboardPage implements OnInit {
   showOfferMarqueue = false;
   showQRPopup = false;
   dialogRef: DynamicDialogRef | undefined;
-
-
   alert = inject(AlertService);
   @HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
@@ -80,12 +78,15 @@ export class DashboardPage implements OnInit {
           }
         })
       } else {
-        this.getCustomerDetails();
+        // console.log('called else effect');
+
+        // this.getCustomerDetails();
       }
     })
   }
 
   ngOnInit() {
+    // console.log('called dashboardpage');
     const observer = new ResizeObserver((rect) => {
       rect.forEach((box) => {
         this.isMobile = this.deviceService.isMobile();
@@ -156,6 +157,8 @@ export class DashboardPage implements OnInit {
   }
 
   getRandomProfiles(payload: any) {
+    // console.log('payload********: ', payload);
+
     this.homeService.getRandomProfilesByReligion(payload).subscribe({
       next: (response: any) => {
         if (response) {

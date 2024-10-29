@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, effect, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, effect, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { forkJoin, timer } from 'rxjs';
@@ -53,6 +53,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     private router: Router,
     private alertService: AlertService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {
 
     effect(() => {
@@ -105,7 +106,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.formGroup.reset();
     this.getMasterData();
-
+    this.cdr.detectChanges();
   }
 
   initFormGroup() {

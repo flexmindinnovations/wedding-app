@@ -79,15 +79,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const observer = new ResizeObserver((rect) => {
-      rect.forEach((box) => {
-        this.isMobile = this.deviceService.isMobile();
-        this.isDesktop = this.deviceService.isDesktop();
-      })
-    });
-
-    observer.observe(this.host.nativeElement);
-
+    // console.log('called homepage');
     this.getRandomProfiles();
 
     this.ngParticlesService.init(async (engine) => {
@@ -98,7 +90,7 @@ export class HomePage implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     if (this.isLoggedIn) {
-      this.router.navigateByUrl('app');
+      // this.router.navigateByUrl('app');
     }
     const currentDate = moment('Fri Apr 19 2024 16:17:26 GMT+0530');
     const futurDate = moment(currentDate).add(2, 'days');

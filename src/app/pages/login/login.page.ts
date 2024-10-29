@@ -19,6 +19,7 @@ import { utils } from 'src/app/util/util';
 import { CustomerRegistrationService } from 'src/app/services/customer-registration.service';
 import { EncryptionService } from 'src/app/services/encryption/encryption.service';
 import { ProfileStatus } from 'src/app/enums/profile-status';
+import { ButtonType } from 'src/app/components/button/button.component';
 
 
 export enum ValidationStep {
@@ -184,6 +185,7 @@ export class LoginPage implements OnInit {
                     ).subscribe(() => {
                       this.messageService.clear();
                       utils.isLoggedIn.set(true);
+                      this.formGroup.reset();
                       this.router.navigateForward('app');
                       sessionStorage.setItem('isLoggedInCompleted', 'true');
                       setTimeout(() => {
@@ -193,7 +195,7 @@ export class LoginPage implements OnInit {
                 });
             })
             .catch((error) => {
-              console.log('error catch block: ', error);
+              // console.log('error catch block: ', error);
 
             });
         }
@@ -436,13 +438,13 @@ export class LoginPage implements OnInit {
   }
 
   getSeverity() {
-    let severity = '';
+    let severity = null;
     if (this.isLoading) {
-      severity = 'secondary';
+      severity = ButtonType.secondary;
     } else if (this.isLoggedIn) {
-      severity = 'success';
+      severity = ButtonType.success;
     } else {
-      severity = '';
+      severity = ButtonType.primary;
     }
     return severity;
   }
